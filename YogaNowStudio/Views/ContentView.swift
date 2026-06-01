@@ -9,61 +9,65 @@ import SwiftUI
 struct ContentView: View {
     
     var body: some View {
-        
-        ZStack {
-            
-            Image("BackgroundYoga")
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
-            
-            VStack {
+        NavigationStack{
+            ZStack {
                 
-                HStack {
+                Image("BackgroundYoga")
+                    .resizable()
+                    .scaledToFill()
+                    .ignoresSafeArea()
+                
+                VStack {
+                    
+                    HStack {
+                        
+                        Spacer()
+                        
+                        HStack(spacing: 6) {
+                            
+                            Image(systemName: "globe")
+                            
+                            Text("DE")
+                        }
+                        .foregroundColor(.yogaGreen)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 8)
+                        .background(.white.opacity(0.85))
+                        .clipShape(Capsule())
+                    }
+                    .padding()
                     
                     Spacer()
                     
-                    HStack(spacing: 6) {
+                    Image("LogoYogaNow")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 340)
+                    
+                    VStack(spacing: 20) {
                         
-                        Image(systemName: "globe")
+                        NavigationLink {
+                            YogaLibraryView()
+                        } label: {
+                            NavigationCard(
+                                title: "Yoga Library",
+                                iconName: "IconLibrary"
+                            )
+                        }
                         
-                        Text("DE")
+                        NavigationCard(
+                            title: "Kurse buchen",
+                            iconName: "IconCourse"
+                        )
                     }
-                    .foregroundColor(.yogaGreen)
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 8)
-                    .background(.white.opacity(0.85))
-                    .clipShape(Capsule())
-                }
-                .padding()
-                
-                Spacer()
-                
-                Image("LogoYogaNow")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 340)
-                
-                VStack(spacing: 20) {
+                    .padding(.top, 20)
                     
-                    NavigationCard(
-                        title: "Yoga Library",
-                        iconName: "IconLibrary"
-                    )
-                    
-                    NavigationCard(
-                        title: "Kurse buchen",
-                        iconName: "IconCourse"
-                    )
+                    Spacer()
                 }
-                .padding(.top, 20)
-                
-                Spacer()
             }
         }
     }
 }
-
 
 #Preview {
     ContentView()

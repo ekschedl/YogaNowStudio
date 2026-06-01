@@ -25,60 +25,68 @@ struct YogaLibraryView: View {
                     .font(.largeTitle)
                     .fontWeight(.semibold)
                     .foregroundColor(.yogaGreen)
-                
+
                 HStack {
+
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.gray)
+
                     TextField("Kurse suchen...", text: $searchText)
                 }
-
                 .padding()
                 .background(Color.white.opacity(0.9))
                 .cornerRadius(20)
-                .padding(.horizontal)
-                
+
                 HStack(spacing: 10) {
+
                     FilterButton(title: "Anfänger")
                     FilterButton(title: "Fortgeschritten")
                     FilterButton(title: "Profi")
                 }
-                
+
                 ScrollView {
 
                     VStack(spacing: 15) {
 
-                        VideoCard(
-                            title: "Deep Backend Flow",
-                            level: "Profi",
-                            duration: "60 Min"
-                        )
+                        NavigationLink {
+
+                            VideoDetailView()
+
+                        } label: {
+
+                            VideoCard(
+                                title: "Deep Backend Flow",
+                                level: "Profi",
+                                duration: "60 Min"
+                            )
+                        }
+                        .buttonStyle(.plain)
 
                         VideoCard(
                             title: "Arm Balance Workshop",
-                            level: "Fortgeschritten"
-                        ,
+                            level: "Fortgeschritten",
                             duration: "45 Min"
                         )
 
                         VideoCard(
-                            title: "Inversion Flow",
-                            level: "Profi",
-                            duration: "50 Min"
+                            title: "Morning Flow",
+                            level: "Anfänger",
+                            duration: "30 Min"
                         )
-
                     }
                     .padding(.top)
                 }
-                .padding(.horizontal)
 
                 Spacer()
-
             }
+            .padding(.horizontal)
             .padding(.top, 50)
         }
     }
 }
 
 #Preview {
-    YogaLibraryView()
+    NavigationStack {
+        YogaLibraryView()
+    }
 }
