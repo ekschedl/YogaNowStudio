@@ -11,7 +11,9 @@ import SwiftUI
 struct YogaNowStudioApp: App {
     var body: some Scene {
         WindowGroup {
+
             ContentView()
+
         }
     }
 }
