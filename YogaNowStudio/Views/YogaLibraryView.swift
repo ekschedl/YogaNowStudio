@@ -48,31 +48,22 @@ struct YogaLibraryView: View {
 
                     VStack(spacing: 15) {
 
-                        NavigationLink {
+                        ForEach(mockVideos) { video in
 
-                            VideoDetailView()
+                            NavigationLink {
 
-                        } label: {
+                                VideoDetailView()
 
-                            VideoCard(
-                                title: "Deep Backend Flow",
-                                level: "Profi",
-                                duration: "60 Min"
-                            )
+                            } label: {
+
+                                VideoCard(video: video)
+
+                            }
+
+                            .buttonStyle(.plain)
+
                         }
-                        .buttonStyle(.plain)
 
-                        VideoCard(
-                            title: "Arm Balance Workshop",
-                            level: "Fortgeschritten",
-                            duration: "45 Min"
-                        )
-
-                        VideoCard(
-                            title: "Morning Flow",
-                            level: "Anfänger",
-                            duration: "30 Min"
-                        )
                     }
                     .padding(.top)
                 }

@@ -8,40 +8,44 @@ import SwiftUI
 
 struct VideoCard: View {
 
-    let title: String
-    let level: String
-    let duration: String
+    let video: Video
 
     var body: some View {
 
-        HStack(spacing: 15) {
+        HStack(spacing: 12) {
 
-            RoundedRectangle(cornerRadius: 15)
-                .fill(Color.yogaCream)
-                .frame(width: 90, height: 70)
-                .overlay(
-                    Image(systemName: "play.circle.fill")
-                        .font(.title)
-                        .foregroundColor(.yogaGold)
-                )
+            Image(video.imageName)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 120, height: 90)
+                .clipped()
+                .cornerRadius(12)
 
             VStack(alignment: .leading, spacing: 6) {
 
-                Text(title)
+                Text(video.title)
                     .font(.headline)
                     .foregroundColor(.yogaGreen)
 
+                Text(video.subtitle)
+                    .font(.caption)
+                    .foregroundColor(.gray)
+                    .lineLimit(2)
+
                 HStack {
 
-                    Label(level, systemImage: "leaf.fill")
+                    Label(video.level,
+                          systemImage: "chart.bar.fill")
                         .font(.caption)
+                        .foregroundColor(.yogaGold)
 
                     Spacer()
 
-                    Label(duration, systemImage: "clock")
+                    Label(video.duration,
+                          systemImage: "clock")
                         .font(.caption)
+                        .foregroundColor(.gray)
                 }
-                .foregroundColor(.gray)
             }
 
             Spacer()

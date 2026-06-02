@@ -53,6 +53,7 @@ struct ContentView: View {
                                 title: "Yoga Library",
                                 iconName: "IconLibrary"
                             )
+
                         }
                         
                         NavigationCard(
