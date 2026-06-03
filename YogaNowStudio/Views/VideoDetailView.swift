@@ -50,7 +50,7 @@ struct VideoDetailView: View {
                         .background(Color.yogaGreen)
                         .cornerRadius(15)
                 }
-                .padding(.horizontal)
+                .padding(30)
 
                 Spacer()
             }

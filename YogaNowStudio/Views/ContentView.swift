@@ -11,26 +11,21 @@ struct ContentView: View {
     var body: some View {
         NavigationStack{
             ZStack {
-                
+            
                 Image("BackgroundYoga")
                     .resizable()
                     .scaledToFill()
                     .ignoresSafeArea()
                 
                 VStack {
-                    
                     HStack {
-                        
                         Spacer()
-                        
                         HStack(spacing: 6) {
-                            
                             Image(systemName: "globe")
-                            
                             Text("DE")
                         }
                         .foregroundColor(.yogaGreen)
-                        .padding(.horizontal, 14)
+                        .padding(.horizontal, 10)
                         .padding(.vertical, 8)
                         .background(.white.opacity(0.85))
                         .clipShape(Capsule())
@@ -53,16 +48,15 @@ struct ContentView: View {
                                 title: "Yoga Library",
                                 iconName: "IconLibrary"
                             )
-
                         }
-                        
                         NavigationCard(
                             title: "Kurse buchen",
                             iconName: "IconCourse"
                         )
                     }
-                    .padding(.top, 20)
+                    .padding(.top, 10)
                     
+                    Spacer()
                     Spacer()
                 }
             }

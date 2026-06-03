@@ -1,14 +1,26 @@
 //
 //  YogaLibraryView.swift
 //  YogaNowStudio
-//
+
 //  Created by Kaaatkina on 01.06.26.
 //
 import SwiftUI
 
 struct YogaLibraryView: View {
+    @Environment(\.dismiss) private var dismiss
 
     @State private var searchText = ""
+
+    var filteredVideos: [Video] {
+
+        if searchText.isEmpty {
+            return mockVideos
+        }
+
+        return mockVideos.filter {
+            $0.title.localizedCaseInsensitiveContains(searchText)
+        }
+    }
 
     var body: some View {
 
@@ -21,11 +33,17 @@ struct YogaLibraryView: View {
 
             VStack(spacing: 15) {
 
+                Image("LogoYogaNow")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 280)
+
                 Text("Yoga Library")
                     .font(.largeTitle)
                     .fontWeight(.semibold)
                     .foregroundColor(.yogaGreen)
 
+              
                 HStack {
 
                     Image(systemName: "magnifyingglass")
@@ -37,10 +55,12 @@ struct YogaLibraryView: View {
                 .background(Color.white.opacity(0.9))
                 .cornerRadius(20)
 
-                HStack(spacing: 10) {
+                HStack(spacing: 15) {
 
                     FilterButton(title: "Anfänger")
+
                     FilterButton(title: "Fortgeschritten")
+
                     FilterButton(title: "Profi")
                 }
 
@@ -48,30 +68,22 @@ struct YogaLibraryView: View {
 
                     VStack(spacing: 15) {
 
-                        ForEach(mockVideos) { video in
-
+                        ForEach(filteredVideos) { video in
                             NavigationLink {
-
                                 VideoDetailView()
-
                             } label: {
-
                                 VideoCard(video: video)
-
                             }
-
                             .buttonStyle(.plain)
-
                         }
-
                     }
                     .padding(.top)
                 }
-
                 Spacer()
             }
             .padding(.horizontal)
-            .padding(.top, 50)
+            .padding(.top, 30)
+            
         }
     }
 }
