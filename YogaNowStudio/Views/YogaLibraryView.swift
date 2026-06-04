@@ -57,11 +57,26 @@ struct YogaLibraryView: View {
 
                 HStack(spacing: 15) {
 
-                    FilterButton(title: "Anfänger")
+                    NavigationLink {
+                        AnfängerView()
+                    } label: {
+                        FilterButton(title: "Anfänger")
+                    }
+                    .buttonStyle(.plain)
 
-                    FilterButton(title: "Fortgeschritten")
+                    NavigationLink {
+                        FortgeschrittenView()
+                    } label: {
+                        FilterButton(title: "Fortgeschritten")
+                    }
+                    .buttonStyle(.plain)
 
-                    FilterButton(title: "Profi")
+                    NavigationLink {
+                        ProfiView()
+                    } label: {
+                        FilterButton(title: "Profi")
+                    }
+                    .buttonStyle(.plain)
                 }
 
                 ScrollView {
