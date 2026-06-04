@@ -9,10 +9,11 @@ import SwiftUI
 struct FlowGridCard: View {
 
     let video: Video
+    @Environment(FavoritesStore.self) var favorites
 
     var leafCount: Int {
         switch video.level {
-        case "Anfänger":       return 1
+        case "Anfänger":        return 1
         case "Fortgeschritten": return 2
         case "Profi":           return 3
         default:                return 1
@@ -26,6 +27,20 @@ struct FlowGridCard: View {
                 .scaledToFill()
                 .frame(height: 110)
                 .clipped()
+                .overlay(alignment: .topTrailing) {
+                    Button {
+                        favorites.toggle(video)
+                    } label: {
+                        Image(systemName: favorites.isFavorite(video) ? "heart.fill" : "heart")
+                            .foregroundColor(favorites.isFavorite(video) ? .red : .white)
+                            .font(.system(size: 14, weight: .semibold))
+                            .padding(6)
+                            .background(Color.black.opacity(0.3))
+                            .clipShape(Circle())
+                    }
+                    .buttonStyle(.borderless)
+                    .padding(6)
+                }
 
             VStack(alignment: .leading, spacing: 6) {
                 Text(video.title)

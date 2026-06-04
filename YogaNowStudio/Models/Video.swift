@@ -8,8 +8,7 @@ import Foundation
 
 struct Video: Identifiable {
 
-    let id = UUID()
-
+    let id: UUID
     let title: String
     let subtitle: String
     let level: String
