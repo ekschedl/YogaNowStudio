@@ -91,4 +91,5 @@ struct ProfiView: View {
     NavigationStack {
         ProfiView()
     }
+    .environment(FavoritesStore())
 }

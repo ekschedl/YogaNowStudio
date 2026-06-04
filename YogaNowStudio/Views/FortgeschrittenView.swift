@@ -91,4 +91,5 @@ struct FortgeschrittenView: View {
     NavigationStack {
         FortgeschrittenView()
     }
+    .environment(FavoritesStore())
 }

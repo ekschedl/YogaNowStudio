@@ -91,4 +91,5 @@ struct AnfängerView: View {
     NavigationStack {
         AnfängerView()
     }
+    .environment(FavoritesStore())
 }
