@@ -82,69 +82,71 @@ struct TrainerCalendarView: View {
                             }
                         }
                         .padding()
-                    
-                        VStack(alignment: .leading, spacing: 15) {
+                    }
 
-                            Text("Heute")
-                                .font(.title3)
-                                .fontWeight(.semibold)
+                VStack(alignment: .leading, spacing: 15) {
+
+                    Text("Heute")
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.yogaGreen)
+
+                    NavigationLink {
+                        TrainerDayView()
+                    } label: {
+
+                        VStack(alignment: .leading, spacing: 8) {
+
+                            Text("Morning Flow")
+                                .font(.headline)
                                 .foregroundColor(.yogaGreen)
 
-                            NavigationLink {
-                                TrainerDayView()
-                            } label: {
-
-                                VStack(alignment: .leading, spacing: 8) {
-
-                                    Text("Morning Flow")
-                                        .font(.headline)
-                                        .foregroundColor(.yogaGreen)
-
-                                    Text("08:30 - 09:30")
-                                        .foregroundColor(.gray)
-                                }
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding()
-                                .background(
-                                    Color(
-                                        red: 252/255,
-                                        green: 250/255,
-                                        blue: 246/255
-                                    )
-                                )
-                                .cornerRadius(20)
-                            }
-
-                            NavigationLink {
-                                TrainerDayView()
-                            } label: {
-
-                                VStack(alignment: .leading, spacing: 8) {
-
-                                    Text("Yin Yoga")
-                                        .font(.headline)
-                                        .foregroundColor(.yogaGreen)
-
-                                    Text("17:30 - 18:30")
-                                        .foregroundColor(.gray)
-                                }
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding()
-                                .background(
-                                    Color(
-                                        red: 252/255,
-                                        green: 250/255,
-                                        blue: 246/255
-                                    )
-                                )
-                                .cornerRadius(20)
-                            }
+                            Text("08:30 - 09:30")
+                                .foregroundColor(.gray)
                         }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .background(
+                            Color(
+                                red: 252/255,
+                                green: 250/255,
+                                blue: 246/255
+                            )
+                        )
+                        .cornerRadius(20)
                     }
+
+                    NavigationLink {
+                        TrainerDayView()
+                    } label: {
+
+                        VStack(alignment: .leading, spacing: 8) {
+
+                            Text("Yin Yoga")
+                                .font(.headline)
+                                .foregroundColor(.yogaGreen)
+
+                            Text("17:30 - 18:30")
+                                .foregroundColor(.gray)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .background(
+                            Color(
+                                red: 252/255,
+                                green: 250/255,
+                                blue: 246/255
+                            )
+                        )
+                        .cornerRadius(20)
+                    }
+                }
 
                 Spacer()
             }
             .padding()
+            .padding(.horizontal)
+            .padding(.top, 50)
         }
     }
 }
