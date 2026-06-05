@@ -22,9 +22,9 @@ extension Color {
     )
 
     static let yogaCream = Color(
-        red: 251/255,
-        green: 245/255,
-        blue: 230/255
+        red: 250/255,
+        green: 238/255,
+        blue: 228/255
     )
     
     static let yogaError = Color(

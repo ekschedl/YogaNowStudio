@@ -13,37 +13,64 @@ struct TrainerDashboardView: View {
 
             ScrollView(showsIndicators: false) {
 
-                VStack(spacing: 10) {
+                VStack(spacing: 16) {
 
-                    Image("LogoYogaNow")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 260)
+                    HStack {
+                        Spacer()
+                        Image("LogoYogaNow")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 140)
+                    }
+        
+                    
+                    VStack(spacing: 10) {
 
-                    VStack(spacing: 18) {
+                        Text("Namasté")
+                            .font(.headline)
+                            .foregroundColor(.yogaGreen)
 
-                        Text("Namasté, Valerie")
+                        Text("Valerie")
                             .font(
                                 .system(
-                                    size: 28,
+                                    size: 34,
                                     weight: .semibold,
                                     design: .serif
                                 )
                             )
                             .foregroundColor(.yogaGold)
 
-                        Text("Deine Gruppen heute")
-                            .font(.title3)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.yogaGreen)
-                            .frame(
-                                maxWidth: .infinity,
-                                alignment: .leading
-                            )
+                        Text("3 Kurse heute • 26 Teilnehmer")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                            .padding(.top, 20)
+                    }
+              
+                    VStack(spacing: 20) {
 
+                        VStack(alignment: .leading, spacing: 4) {
+
+                            Text("Heute")
+                                .font(.caption)
+                                .foregroundColor(.yogaGold)
+
+                            Text("Dein Kursplan")
+                                .font(
+                                    .system(
+                                        size: 24,
+                                        weight: .semibold,
+                                        design: .serif
+                                    )
+                                )
+                                .foregroundColor(.yogaGreen)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         NavigationLink {
+
                             DayView()
+
                         } label: {
+
                             CourseCardView(
                                 imageName: "ImageCourse01",
                                 title: "Morning Flow",
@@ -53,19 +80,25 @@ struct TrainerDashboardView: View {
                         }
 
                         NavigationLink {
+
                             DayView()
+
                         } label: {
+
                             CourseCardView(
                                 imageName: "ImageCourse02",
-                                title: "Evening Flow",
+                                title: "Yin Yoga",
                                 time: "17:30 Uhr",
                                 participants: 6
                             )
                         }
 
                         NavigationLink {
+
                             DayView()
+
                         } label: {
+
                             CourseCardView(
                                 imageName: "ImageCourse03",
                                 title: "Deep Balance",
@@ -74,50 +107,35 @@ struct TrainerDashboardView: View {
                             )
                         }
 
-                        NavigationLink {
-                            CalendarView()
-                        } label: {
-                            HStack {
-                                Image(systemName: "calendar")
-                                Text("Kalender öffnen")
-                            }
-                            .fontWeight(.semibold)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 16)
-                            .background(Color.yogaGreen)
-                            .cornerRadius(14)
-                        }
                     }
-                    .padding(30)
+                    .padding(28)
+                   
                     .background(
-                        Color(
-                            red: 254/255,
-                            green: 253/255,
-                            blue: 250/255
-                        )
+                        Color.yogaCream.opacity(0.95)
                     )
-                    .cornerRadius(30)
+                    .cornerRadius(32)
                     .shadow(
-                        color: Color.yogaGold.opacity(0.08),
-                        radius: 20,
-                        y: 8
+                        color: .black.opacity(0.05),
+                        radius: 15,
+                        y: 6
                     )
                     .padding(.horizontal)
-                    .offset(y: -30)
+                    .padding(.top, 40)
                 }
-             
-            
+           
+                .padding(.top, -20)
+                .padding(.bottom, 70)
             }
 
             FooterView()
-                .zIndex(1000)
         }
     }
 }
 
 #Preview {
+
     NavigationStack {
+
         TrainerDashboardView()
     }
 }

@@ -41,10 +41,14 @@ struct FooterView: View {
             Spacer()
         }
         .foregroundColor(.yogaGreen)
-        .padding(.vertical, 12)
         .frame(maxWidth: .infinity)
          .frame(height: 70)
-        .background(.ultraThinMaterial)
+         .background(Color.yogaCream)
+         .shadow(
+             color: .black.opacity(0.08),
+             radius: 10,
+             y: 4
+         )
     }
     
 }
