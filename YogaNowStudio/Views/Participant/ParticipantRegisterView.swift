@@ -7,7 +7,7 @@
 // wird später gemacht
 import SwiftUI
 
-struct ParticipantRegisterView: View {
+struct ParticipantDashboardView: View {
 
     var body: some View {
 
@@ -26,5 +26,5 @@ struct ParticipantRegisterView: View {
 }
 
 #Preview {
-    ParticipantRegisterView()
+    ParticipantDashboardView()
 }

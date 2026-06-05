@@ -19,11 +19,11 @@ struct LoginView: View {
         ZStack {
 
             NavigationLink("", isActive: $navigateTrainer) {
-                TrainerWelcomeView()
+                TrainerDashboardView()
             }
 
             NavigationLink("", isActive: $navigateParticipant) {
-                ParticipantWelcomeView()
+                ParticipantDashboardView()
             }
 
             Image("BackgroundYoga")
