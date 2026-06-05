@@ -118,18 +118,20 @@ struct LoginView: View {
 
                     if showError {
 
-                        HStack {
+                        HStack(alignment: .top, spacing: 10) {
 
                             Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundColor(.red)
 
-                            Text("Etwas ist schiefgelaufen. Versuche es noch einmal.")
+                            Text("Etwas ist schiefgelaufen. Versuche es erneut.")
+                                .font(.subheadline)
+                                .foregroundColor(.red)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
-                        .font(.footnote)
-                        .foregroundColor(.red)
                         .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.red.opacity(0.08))
-                        .cornerRadius(12)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.yogaErrorBackground)
+                        .cornerRadius(14)
                     }
 
                     Button {

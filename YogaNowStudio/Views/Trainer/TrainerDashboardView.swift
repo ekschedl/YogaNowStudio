@@ -13,51 +13,50 @@ struct TrainerDashboardView: View {
 
             ScrollView(showsIndicators: false) {
 
-                VStack(spacing: 16) {
+                VStack() {
 
                     HStack {
                         Spacer()
                         Image("LogoYogaNow")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 140)
+                            .frame(width: 100)
+                            .padding(.top, 20)
                     }
         
                     
-                    VStack(spacing: 10) {
-
+                    VStack(spacing: 4) {
                         Text("Namasté")
-                            .font(.headline)
+                            .font(.subheadline)
                             .foregroundColor(.yogaGreen)
-
+                        
                         Text("Valerie")
                             .font(
                                 .system(
-                                    size: 34,
-                                    weight: .semibold,
+                                    size: 32,
+                                    weight: .bold,
                                     design: .serif
                                 )
                             )
                             .foregroundColor(.yogaGold)
 
                         Text("3 Kurse heute • 26 Teilnehmer")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                            .padding(.top, 20)
+                            .font(.footnote)
+                            .foregroundColor(.gray.opacity(0.9))
                     }
-              
+                   
                     VStack(spacing: 20) {
-
-                        VStack(alignment: .leading, spacing: 4) {
-
-                            Text("Heute")
-                                .font(.caption)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("HEUTE")
+                                .font(.caption2)
+                                .fontWeight(.medium)
                                 .foregroundColor(.yogaGold)
+                                .tracking(2)
 
                             Text("Dein Kursplan")
                                 .font(
                                     .system(
-                                        size: 24,
+                                        size: 28,
                                         weight: .semibold,
                                         design: .serif
                                     )
@@ -65,12 +64,10 @@ struct TrainerDashboardView: View {
                                 .foregroundColor(.yogaGreen)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        
                         NavigationLink {
-
                             DayView()
-
                         } label: {
-
                             CourseCardView(
                                 imageName: "ImageCourse01",
                                 title: "Morning Flow",
@@ -80,11 +77,8 @@ struct TrainerDashboardView: View {
                         }
 
                         NavigationLink {
-
                             DayView()
-
                         } label: {
-
                             CourseCardView(
                                 imageName: "ImageCourse02",
                                 title: "Yin Yoga",
@@ -94,11 +88,8 @@ struct TrainerDashboardView: View {
                         }
 
                         NavigationLink {
-
                             DayView()
-
                         } label: {
-
                             CourseCardView(
                                 imageName: "ImageCourse03",
                                 title: "Deep Balance",
@@ -108,25 +99,19 @@ struct TrainerDashboardView: View {
                         }
 
                     }
-                    .padding(28)
-                   
-                    .background(
-                        Color.yogaCream.opacity(0.95)
-                    )
-                    .cornerRadius(32)
+                    .padding(24)
+                    .background(Color.yogaCream.opacity(0.97))
+                    .cornerRadius(36)
                     .shadow(
-                        color: .black.opacity(0.05),
-                        radius: 15,
-                        y: 6
+                        color: .black.opacity(0.04),
+                        radius: 12,
+                        y: 4
                     )
                     .padding(.horizontal)
-                    .padding(.top, 40)
                 }
-           
                 .padding(.top, -20)
-                .padding(.bottom, 70)
+                .padding(.bottom, 110)
             }
-
             FooterView()
         }
     }
