@@ -26,4 +26,16 @@ extension Color {
         green: 245/255,
         blue: 230/255
     )
+    
+    static let yogaError = Color(
+        red: 185/255,
+        green: 92/255,
+        blue: 92/255
+    )
+
+    static let yogaErrorBackground = Color(
+        red: 252/255,
+        green: 242/255,
+        blue: 242/255
+    )
 }
