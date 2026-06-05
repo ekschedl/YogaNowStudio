@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TrainerCalendarView: View {
+struct CalendarView: View {
 
     var body: some View {
 
@@ -92,7 +92,7 @@ struct TrainerCalendarView: View {
                         .foregroundColor(.yogaGreen)
 
                     NavigationLink {
-                        TrainerDayView()
+                        DayView()
                     } label: {
 
                         VStack(alignment: .leading, spacing: 8) {
@@ -117,7 +117,7 @@ struct TrainerCalendarView: View {
                     }
 
                     NavigationLink {
-                        TrainerDayView()
+                        DayView()
                     } label: {
 
                         VStack(alignment: .leading, spacing: 8) {
@@ -153,6 +153,6 @@ struct TrainerCalendarView: View {
 
 #Preview {
     NavigationStack {
-        TrainerCalendarView()
+        CalendarView()
     }
 }

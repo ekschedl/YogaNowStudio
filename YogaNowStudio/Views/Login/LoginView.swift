@@ -1,67 +1,72 @@
-//
-//  TrainerLoginView.swift
-//  YogaNowStudio
-//
-//  Created by Kaaatkina on 04.06.26.
-//
 import SwiftUI
 
-struct TrainerLoginView: View {
-    
+struct LoginView: View {
+
     @State private var email = ""
     @State private var password = ""
     @State private var showPassword = false
-    
+    @State private var showError = false
+
+    @State private var navigateTrainer = false
+    @State private var navigateParticipant = false
+
+    var isTrainer: Bool {
+        email.lowercased().hasSuffix("@yoganow.at")
+    }
+
     var body: some View {
-        
+
         ZStack {
+
+            NavigationLink("", isActive: $navigateTrainer) {
+                TrainerWelcomeView()
+            }
+
+            NavigationLink("", isActive: $navigateParticipant) {
+                ParticipantWelcomeView()
+            }
+
             Image("BackgroundYoga")
                 .resizable()
                 .scaledToFill()
                 .ignoresSafeArea()
-            
+
             VStack {
+
                 Image("LogoYogaNow")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 320)
                     .offset(y: -35)
-                
+
                 VStack(alignment: .leading, spacing: 22) {
-                    
+
                     VStack(spacing: 10) {
-                        
-                        Text("Trainer Login")
-                            .font(
-                                .system(
-                                    size: 28,
-                                    weight: .semibold,
-                                    design: .serif
-                                )
-                            )
+
+                        Text("Login")
+                            .font(.system(size: 28, weight: .semibold, design: .serif))
                             .foregroundColor(.yogaGreen)
-                        
+
                         Rectangle()
                             .fill(Color.yogaGold.opacity(0.25))
                             .frame(width: 80, height: 1)
                     }
                     .frame(maxWidth: .infinity)
-                    
+
                     VStack(alignment: .leading, spacing: 8) {
-                        
+
                         Text("E-Mail-Adresse")
                             .font(.subheadline.weight(.medium))
                             .foregroundColor(.yogaGreen)
-                        
+
                         HStack {
-                            
+
                             Image(systemName: "envelope")
                                 .foregroundColor(.gray.opacity(0.7))
-                            
-                            TextField(
-                                "E-Mail-Adresse",
-                                text: $email
-                            )
+
+                            TextField("E-Mail-Adresse", text: $email)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled()
                         }
                         .padding()
                         .background(Color.white.opacity(0.9))
@@ -71,40 +76,29 @@ struct TrainerLoginView: View {
                                 .stroke(Color.yogaGold.opacity(0.15))
                         )
                     }
-                    
+
                     VStack(alignment: .leading, spacing: 8) {
-                        
+
                         Text("Passwort")
                             .font(.subheadline.weight(.medium))
                             .foregroundColor(.yogaGreen)
-                        
+
                         HStack {
-                            
+
                             Image(systemName: "lock")
                                 .foregroundColor(.gray.opacity(0.7))
-                            
+
                             if showPassword {
-                                TextField(
-                                    "Passwort",
-                                    text: $password
-                                )
+                                TextField("Passwort", text: $password)
                             } else {
-                                SecureField(
-                                    "Passwort",
-                                    text: $password
-                                )
+                                SecureField("Passwort", text: $password)
                             }
-                            
+
                             Button {
                                 showPassword.toggle()
                             } label: {
-                                Image(
-                                    systemName:
-                                        showPassword
-                                    ? "eye.slash"
-                                    : "eye"
-                                )
-                                .foregroundColor(.gray.opacity(0.7))
+                                Image(systemName: showPassword ? "eye.slash" : "eye")
+                                    .foregroundColor(.gray.opacity(0.7))
                             }
                         }
                         .padding()
@@ -115,18 +109,51 @@ struct TrainerLoginView: View {
                                 .stroke(Color.yogaGold.opacity(0.15))
                         )
                     }
-                    
+
                     Button("Passwort vergessen?") {
-                        
                     }
                     .font(.footnote)
                     .foregroundColor(.yogaGreen)
                     .frame(maxWidth: .infinity)
-                    
+
+                    if showError {
+
+                        HStack {
+
+                            Image(systemName: "exclamationmark.triangle.fill")
+
+                            Text("Etwas ist schiefgelaufen. Versuche es noch einmal.")
+                        }
+                        .font(.footnote)
+                        .foregroundColor(.red)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.red.opacity(0.08))
+                        .cornerRadius(12)
+                    }
+
                     Button {
-                        
+
+                        if email.isEmpty || password.isEmpty {
+
+                            showError = true
+
+                        } else {
+
+                            showError = false
+
+                            if isTrainer {
+
+                                navigateTrainer = true
+
+                            } else {
+
+                                navigateParticipant = true
+                            }
+                        }
+
                     } label: {
-                        
+
                         Text("Anmelden")
                             .fontWeight(.semibold)
                             .foregroundColor(.white)
@@ -135,7 +162,7 @@ struct TrainerLoginView: View {
                             .background(Color.yogaGreen)
                             .cornerRadius(14)
                     }
-                    
+
                     Text("Noch keinen Zugang? Bitte im Studio melden.")
                         .font(.footnote)
                         .foregroundColor(.gray)
@@ -150,20 +177,20 @@ struct TrainerLoginView: View {
                     )
                 )
                 .frame(maxWidth: .infinity)
-                .frame(height: 480)
+                .frame(height: 540)
                 .cornerRadius(30)
-                .shadow(
-                    color: .black.opacity(0.05),
-                    radius: 15,
-                    y: 5
-                )
+                .shadow(color: .black.opacity(0.05), radius: 15, y: 5)
                 .padding(.horizontal)
                 .offset(y: -25)
             }
+            .padding(.horizontal, 20)
         }
     }
+       
 }
 
 #Preview {
-    TrainerLoginView()
+    NavigationStack {
+        LoginView()
+    }
 }

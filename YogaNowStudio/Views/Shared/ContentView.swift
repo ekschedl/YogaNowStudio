@@ -49,12 +49,17 @@ struct ContentView: View {
                                 iconName: "IconLibrary"
                             )
                         }
-                        NavigationCard(
-                            title: "Kurse buchen",
-                            iconName: "IconCourse"
-                        )
+                        NavigationLink {
+                            LoginView()
+                        } label: {
+                            NavigationCard(
+                                title: "YogaNow Plattform",
+                                iconName: "IconCourse"
+                            )
+                        }
                     }
-                    .padding(.top, 10)
+                    .padding(30)
+             
                     
                     Spacer()
                     Spacer()

@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-struct TrainerDayView: View {
+struct DayView: View {
 
     var body: some View {
 
@@ -35,6 +35,6 @@ struct TrainerDayView: View {
 
 #Preview {
     NavigationStack {
-        TrainerDayView()
+        DayView()
     }
 }
