@@ -36,6 +36,7 @@ struct CourseDetailView: View {
                             Button {
                                 dismiss()
                             } label: {
+
                                 Image(systemName: "chevron.left")
                                     .font(.title3)
                                     .foregroundColor(.yogaGold)
@@ -53,34 +54,50 @@ struct CourseDetailView: View {
                     VStack(alignment: .leading, spacing: 20) {
 
                         Text(title)
-                            .font(.system(size: 30, weight: .semibold, design: .serif))
+                            .font(
+                                .system(
+                                    size: 30,
+                                    weight: .semibold,
+                                    design: .serif
+                                )
+                            )
                             .foregroundColor(.yogaGreen)
 
                         HStack(spacing: 25) {
 
-                            Label(time, systemImage: "clock")
+                            Label(
+                                time,
+                                systemImage: "clock"
+                            )
 
-                            Label(duration, systemImage: "timer")
+                            Label(
+                                duration,
+                                systemImage: "timer"
+                            )
                         }
                         .foregroundColor(.gray)
 
                         HStack {
 
-                            VStack(alignment: .leading, spacing: 5) {
+                            VStack(
+                                alignment: .leading,
+                                spacing: 5
+                            ) {
 
                                 Text("Level")
                                     .foregroundColor(.gray)
-
                                 Text(level)
                             }
 
                             Spacer()
 
-                            VStack(alignment: .leading, spacing: 5) {
+                            VStack(
+                                alignment: .leading,
+                                spacing: 5
+                            ) {
 
                                 Text("Trainer")
                                     .foregroundColor(.gray)
-
                                 Text(trainer)
                             }
                         }
@@ -100,15 +117,20 @@ struct CourseDetailView: View {
 
                                 Spacer()
 
-                                Text("\(maxParticipants - participants) von \(maxParticipants)")
+                                Text(
+                                    "\(maxParticipants - participants) von \(maxParticipants)"
+                                )
                             }
 
                             Button {
+
                             } label: {
 
                                 HStack {
 
-                                    Image(systemName: "calendar.badge.plus")
+                                    Image(
+                                        systemName: "calendar.badge.plus"
+                                    )
 
                                     Text("Kurs buchen")
                                 }
@@ -123,24 +145,21 @@ struct CourseDetailView: View {
                         } else {
 
                             HStack {
-
                                 Text("Teilnehmer")
-
                                 Spacer()
-
-                                Text("\(participants) Teilnehmer")
+                                Text(
+                                    "\(participants) Teilnehmer"
+                                )
                             }
 
                             NavigationLink {
-
                                 Text("Teilnehmerliste")
 
                             } label: {
-
                                 HStack {
-
-                                    Image(systemName: "person.2.fill")
-
+                                    Image(
+                                        systemName: "person.2.fill"
+                                    )
                                     Text("Teilnehmer anzeigen")
                                 }
                                 .fontWeight(.semibold)
@@ -152,17 +171,29 @@ struct CourseDetailView: View {
                             }
                         }
                     }
-                    .padding(25)
-                    .background(Color.yogaCream)
-                
+                    .padding(
+                        EdgeInsets(
+                            top: 30,
+                            leading: 40,
+                            bottom: 120,
+                            trailing: 40
+                        )
+
+                    )
+                    .background(.white.opacity(0.9))
                     .offset(y: -25)
                 }
-                .padding(.bottom, 50)
+                .padding(.bottom, 20)
             }
 
-            FooterView()
-    .navigationBarTitle("", displayMode: .inline)
+            FooterView(
+                selectedTab: .home
+            )
         }
+        .navigationBarTitle(
+            "",
+            displayMode: .inline
+        )
         .ignoresSafeArea(edges: .top)
         .navigationBarBackButtonHidden(true)
     }

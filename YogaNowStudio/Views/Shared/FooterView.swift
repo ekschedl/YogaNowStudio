@@ -1,6 +1,15 @@
 import SwiftUI
 
+enum FooterTab {
+    case home
+    case calendar
+    case library
+    case profile
+}
+
 struct FooterView: View {
+
+    let selectedTab: FooterTab
 
     var body: some View {
 
@@ -8,41 +17,40 @@ struct FooterView: View {
 
             Spacer()
 
-            VStack(spacing: 4) {
-                Image(systemName: "house")
-                Text("Heute")
-                    .font(.caption)
-            }
+            footerItem(
+                icon: "house",
+                title: "Heute",
+                active: selectedTab == .home
+            )
 
             Spacer()
 
-            VStack(spacing: 4) {
-                Image(systemName: "calendar")
-                Text("Kalender")
-                    .font(.caption)
-            }
+            footerItem(
+                icon: "calendar",
+                title: "Kalender",
+                active: selectedTab == .calendar
+            )
 
             Spacer()
 
-            VStack(spacing: 4) {
-                Image(systemName: "book")
-                Text("Library")
-                    .font(.caption)
-            }
+            footerItem(
+                icon: "book",
+                title: "Library",
+                active: selectedTab == .library
+            )
 
             Spacer()
 
-            VStack(spacing: 4) {
-                Image(systemName: "person")
-                Text("Profil")
-                    .font(.caption)
-            }
+            footerItem(
+                icon: "person",
+                title: "Profil",
+                active: selectedTab == .profile
+            )
 
             Spacer()
         }
-        .foregroundColor(.yogaGreen)
         .padding(.top, 12)
-        .padding(.bottom, 24)
+        .padding(.bottom, 12)
         .frame(maxWidth: .infinity)
         .background(Color.yogaCream)
         .shadow(
@@ -51,8 +59,37 @@ struct FooterView: View {
             y: -2
         )
     }
+
+    @ViewBuilder
+    private func footerItem(
+        icon: String,
+        title: String,
+        active: Bool
+    ) -> some View {
+
+        Button {
+
+        } label: {
+
+            VStack(spacing: 4) {
+
+                Image(systemName: icon)
+
+                Text(title)
+                    .font(.caption)
+            }
+            .foregroundColor(
+                active
+                ? .yogaGreen
+                : .gray
+            )
+        }
+    }
 }
 
 #Preview {
-    FooterView()
+
+    FooterView(
+        selectedTab: .home
+    )
 }

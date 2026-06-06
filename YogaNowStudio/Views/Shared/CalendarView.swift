@@ -9,150 +9,296 @@ import SwiftUI
 
 struct CalendarView: View {
 
+    @State private var selectedDay = 12
+
+    let courseDays = [2, 5, 9, 12, 16, 19, 23]
+
     var body: some View {
 
-        ZStack {
+        ZStack(alignment: .bottom) {
 
             Image("BackgroundYoga")
                 .resizable()
                 .scaledToFill()
                 .ignoresSafeArea()
 
-            VStack(spacing: 25) {
+            ScrollView(showsIndicators: false) {
 
-                Text("Kalender")
-                    .font(.system(size: 30, weight: .semibold, design: .serif))
-                    .foregroundColor(.yogaGreen)
+                VStack(spacing: 24) {
 
-                RoundedRectangle(cornerRadius: 25)
-                    .fill(
-                        Color(
-                            red: 252/255,
-                            green: 250/255,
-                            blue: 246/255
-                        )
-                    )
-                    .frame(height: 320)
-                    .overlay {
+                    VStack(spacing: 4) {
 
-                        VStack(spacing: 20) {
+                        Text("Dein Kalender")
+                            .font(
+                                .system(
+                                    size: 30,
+                                    weight: .semibold,
+                                    design: .serif
+                                )
+                            )
+                            .foregroundColor(.yogaGreen)
+                    }
 
-                            Text("Juni 2026")
-                                .font(.title3)
-                                .fontWeight(.semibold)
+                    HStack {
+
+                        Button {
+
+                        } label: {
+
+                            Image(systemName: "chevron.left")
                                 .foregroundColor(.yogaGreen)
+                                .font(.headline)
+                        }
 
-                            HStack {
-                                Text("Mo")
-                                Spacer()
-                                Text("Di")
-                                Spacer()
-                                Text("Mi")
-                                Spacer()
-                                Text("Do")
-                                Spacer()
-                                Text("Fr")
-                                Spacer()
-                                Text("Sa")
-                                Spacer()
-                                Text("So")
+                        Spacer()
+
+                        Text("JUNI 2026")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.yogaGreen)
+                            .tracking(2)
+
+                        Spacer()
+
+                        Button {
+
+                        } label: {
+
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.yogaGreen)
+                                .font(.headline)
+                        }
+                    }
+                    .padding(.horizontal)
+
+                    VStack(spacing: 20) {
+
+                        HStack {
+
+                            ForEach(
+                                ["Mo","Di","Mi","Do","Fr","Sa","So"],
+                                id: \.self
+                            ) { day in
+
+                                Text(day)
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                                    .frame(maxWidth: .infinity)
                             }
-                            .foregroundColor(.gray)
+                        }
 
-                            LazyVGrid(
-                                columns: Array(repeating: GridItem(.flexible()), count: 7),
-                                spacing: 15
-                            ) {
+                        LazyVGrid(
+                            columns: Array(
+                                repeating: GridItem(.flexible()),
+                                count: 7
+                            ),
+                            spacing: 18
+                        ) {
 
-                                ForEach(1...30, id: \.self) { day in
+                            ForEach(1...30, id: \.self) { day in
 
-                                    VStack(spacing: 3) {
+                                Button {
 
-                                        Text("\(day)")
-                                            .foregroundColor(.yogaGreen)
+                                    selectedDay = day
 
-                                        if [2, 5, 9, 12, 16, 19, 23].contains(day) {
+                                } label: {
+
+                                    VStack(spacing: 4) {
+
+                                        if selectedDay == day {
 
                                             Circle()
-                                                .fill(Color.yogaGold)
-                                                .frame(width: 6, height: 6)
+                                                .fill(Color.yogaGreen)
+                                                .frame(
+                                                    width: 38,
+                                                    height: 38
+                                                )
+                                                .overlay {
+
+                                                    Text("\(day)")
+                                                        .foregroundColor(.white)
+                                                        .fontWeight(.semibold)
+                                                }
+
+                                        } else {
+
+                                            Text("\(day)")
+                                                .foregroundColor(
+                                                    courseDays.contains(day)
+                                                    ? .yogaGold
+                                                    : .yogaGreen
+                                                )
+                                                .fontWeight(
+                                                    courseDays.contains(day)
+                                                    ? .semibold
+                                                    : .regular
+                                                )
+                                                .frame(
+                                                    width: 38,
+                                                    height: 38
+                                                )
+                                                .background(
+                                                    courseDays.contains(day)
+                                                    ? Color.yogaGold.opacity(0.12)
+                                                    : Color.clear
+                                                )
+                                                .clipShape(Circle())
                                         }
                                     }
                                 }
                             }
                         }
-                        .padding()
                     }
+                    .padding(24)
+                    .background(Color.yogaCream)
+                    .cornerRadius(32)
+                    .shadow(
+                        color: .black.opacity(0.05),
+                        radius: 12,
+                        y: 4
+                    )
 
-                VStack(alignment: .leading, spacing: 15) {
+                    VStack(
+                        alignment: .leading,
+                        spacing: 4
+                    ) {
 
-                    Text("Heute")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .foregroundColor(.yogaGreen)
+                        Text("\(selectedDay). JUNI")
+                            .font(.caption)
+                            .foregroundColor(.yogaGold)
+                            .tracking(2)
+
+                        Text("Kurse an diesem Tag")
+                            .font(
+                                .system(
+                                    size: 24,
+                                    weight: .semibold,
+                                    design: .serif
+                                )
+                            )
+                            .foregroundColor(.yogaGreen)
+                    }
+                    .frame(
+                        maxWidth: .infinity,
+                        alignment: .leading
+                    )
 
                     NavigationLink {
+
                         DayView()
+
                     } label: {
 
-                        VStack(alignment: .leading, spacing: 8) {
+                        HStack {
 
-                            Text("Morning Flow")
-                                .font(.headline)
-                                .foregroundColor(.yogaGreen)
+                            VStack(
+                                alignment: .leading,
+                                spacing: 6
+                            ) {
 
-                            Text("08:30 - 09:30")
-                                .foregroundColor(.gray)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
-                        .background(
-                            Color(
-                                red: 252/255,
-                                green: 250/255,
-                                blue: 246/255
+                                Text("Morning Flow")
+                                    .font(.headline)
+                                    .foregroundColor(.yogaGreen)
+
+                                Text("08:30 - 09:30")
+                                    .foregroundColor(.gray)
+                            }
+
+                            Spacer()
+
+                            Image(
+                                systemName: "chevron.right"
                             )
-                        )
-                        .cornerRadius(20)
+                            .foregroundColor(.yogaGold)
+                        }
+                        .padding()
+                        .background(Color.yogaCream)
+                        .cornerRadius(22)
                     }
 
                     NavigationLink {
+
                         DayView()
+
                     } label: {
 
-                        VStack(alignment: .leading, spacing: 8) {
+                        HStack {
 
-                            Text("Yin Yoga")
-                                .font(.headline)
-                                .foregroundColor(.yogaGreen)
+                            VStack(
+                                alignment: .leading,
+                                spacing: 6
+                            ) {
 
-                            Text("17:30 - 18:30")
-                                .foregroundColor(.gray)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
-                        .background(
-                            Color(
-                                red: 252/255,
-                                green: 250/255,
-                                blue: 246/255
+                                Text("Yin Yoga")
+                                    .font(.headline)
+                                    .foregroundColor(.yogaGreen)
+
+                                Text("17:30 - 18:30")
+                                    .foregroundColor(.gray)
+                            }
+
+                            Spacer()
+
+                            Image(
+                                systemName: "chevron.right"
                             )
-                        )
-                        .cornerRadius(20)
+                            .foregroundColor(.yogaGold)
+                        }
+                        .padding()
+                        .background(Color.yogaCream)
+                        .cornerRadius(22)
+                    }
+
+                    NavigationLink {
+
+                        DayView()
+
+                    } label: {
+
+                        HStack {
+
+                            VStack(
+                                alignment: .leading,
+                                spacing: 6
+                            ) {
+
+                                Text("Deep Balance")
+                                    .font(.headline)
+                                    .foregroundColor(.yogaGreen)
+
+                                Text("19:00 - 20:00")
+                                    .foregroundColor(.gray)
+                            }
+
+                            Spacer()
+
+                            Image(
+                                systemName: "chevron.right"
+                            )
+                            .foregroundColor(.yogaGold)
+                        }
+                        .padding()
+                        .background(Color.yogaCream)
+                        .cornerRadius(22)
                     }
                 }
-
-                Spacer()
+                .padding(.horizontal)
+                .padding(.top, 50)
+                .padding(.bottom, 100)
             }
-            .padding()
-            .padding(.horizontal)
-            .padding(.top, 50)
+
+            FooterView(
+                selectedTab: .calendar
+            )
         }
     }
-}
-
-#Preview {
-    NavigationStack {
-        CalendarView()
     }
+#Preview {
+
+    NavigationStack {
+
+        CalendarView()
+
+    }
+
 }

@@ -42,7 +42,7 @@ struct TrainerDashboardView: View {
 
                         Text("3 Kurse heute • 26 Teilnehmer")
                             .font(.footnote)
-                            .foregroundColor(.gray.opacity(0.9))
+                            .foregroundColor(.yogaGold)
                     }
                    
                     VStack(spacing: 20) {
@@ -112,7 +112,9 @@ struct TrainerDashboardView: View {
                 .padding(.top, -20)
                 .padding(.bottom, 110)
             }
-            FooterView()
+            FooterView(
+                selectedTab: .home
+            )
         }
     }
 }

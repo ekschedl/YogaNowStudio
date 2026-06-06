@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		45550FAB2FD3728900624B6B /* ElegantCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 45550FAA2FD3728900624B6B /* ElegantCalendar */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		45E9285B2FCE2EEE00404612 /* YogaNowStudio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YogaNowStudio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				45550FAB2FD3728900624B6B /* ElegantCalendar in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = YogaNowStudio;
 			packageProductDependencies = (
+				45550FAA2FD3728900624B6B /* ElegantCalendar */,
 			);
 			productName = YogaNowStudio;
 			productReference = 45E9285B2FCE2EEE00404612 /* YogaNowStudio.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = 45E928522FCE2EEE00404612;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				45550FA92FD3728900624B6B /* XCRemoteSwiftPackageReference "ElegantCalendar" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 45E9285C2FCE2EEE00404612 /* Products */;
 			projectDirPath = "";
@@ -332,6 +341,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		45550FA92FD3728900624B6B /* XCRemoteSwiftPackageReference "ElegantCalendar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ThasianX/ElegantCalendar";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.3.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		45550FAA2FD3728900624B6B /* ElegantCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 45550FA92FD3728900624B6B /* XCRemoteSwiftPackageReference "ElegantCalendar" */;
+			productName = ElegantCalendar;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 45E928532FCE2EEE00404612 /* Project object */;
 }
