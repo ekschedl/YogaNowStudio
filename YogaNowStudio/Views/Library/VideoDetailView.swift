@@ -9,6 +9,8 @@ import SwiftUI
 
 struct VideoDetailView: View {
 
+    let video: Video
+
     var body: some View {
 
         ZStack {
@@ -29,15 +31,14 @@ struct VideoDetailView: View {
                             .foregroundColor(.yogaGold)
                     )
 
-                Text("Deep Backend Flow")
+                Text(video.title)
                     .font(.title2)
+                    .fontWeight(.semibold)
                     .foregroundColor(.yogaGreen)
 
-                Text("""
-                Öffne dein Herz und verbessere deine Beweglichkeit mit diesem Flow.
-                """)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
+                Text(video.subtitle)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
 
                 Button {
 
@@ -60,5 +61,5 @@ struct VideoDetailView: View {
 }
 
 #Preview {
-    VideoDetailView()
+    VideoDetailView(video: mockVideos[0])
 }

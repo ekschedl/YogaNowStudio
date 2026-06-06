@@ -104,7 +104,7 @@ private struct LibraryCell<Destination: View>: View {
 
             if let video {
                 NavigationLink {
-                    VideoDetailView()
+                    VideoDetailView(video: video)
                 } label: {
                     FlowGridCard(video: video)
                 }
@@ -159,7 +159,7 @@ private struct FavoritenCell: View {
                 ForEach(0..<4, id: \.self) { i in
                     if let video = slots[i] {
                         NavigationLink {
-                            VideoDetailView()
+                            VideoDetailView(video: video)
                         } label: {
                             MiniFlowCard(video: video)
                         }

@@ -50,7 +50,7 @@ struct FavoritenView: View {
                         LazyVGrid(columns: columns, spacing: 12) {
                             ForEach(favoriteVideos) { video in
                                 NavigationLink {
-                                    VideoDetailView()
+                                    VideoDetailView(video: video)
                                 } label: {
                                     FlowGridCard(video: video)
                                 }

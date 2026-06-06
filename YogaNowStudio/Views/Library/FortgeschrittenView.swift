@@ -55,7 +55,7 @@ struct FortgeschrittenView: View {
                     LazyVGrid(columns: columns, spacing: 12) {
                         ForEach(filteredVideos) { video in
                             NavigationLink {
-                                VideoDetailView()
+                                VideoDetailView(video: video)
                             } label: {
                                 FlowGridCard(video: video)
                             }
