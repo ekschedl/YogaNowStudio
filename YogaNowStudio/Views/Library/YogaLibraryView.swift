@@ -19,16 +19,49 @@ struct YogaLibraryView: View {
                 .scaledToFill()
                 .ignoresSafeArea()
 
-            VStack(spacing: 15) {
+            VStack(spacing: 10) {
                 Image("LogoYogaNow")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 280)
+                    .frame(width: 200)
 
                 Text("Yoga Library")
                     .font(.largeTitle)
                     .fontWeight(.semibold)
                     .foregroundColor(.yogaGreen)
+
+                // ASANAS Banner
+                NavigationLink {
+                    AsanasView()
+                } label: {
+                  VStack(spacing: 2) {
+                    Text("ASANAS")
+                      .font(.subheadline)
+                      .fontWeight(.bold)
+                      .foregroundColor(.white)
+                      .tracking(4)
+                    Text("Master the Basics")
+                      .font(.caption2)
+                      .italic()
+                      .foregroundColor(Color(red: 255/255, green: 235/255, blue: 195/255))
+                  }
+                  .frame(maxWidth: .infinity)
+                  .padding(.vertical, 15)
+                    .shadow(color: .black.opacity(0.12), radius: 5, y: 2)
+                    .background(RoundedRectangle(cornerRadius: 14)
+                      .fill(
+                        LinearGradient(
+                          colors: [
+                            Color(red: 160/255, green: 118/255, blue: 75/255),
+                            Color(red: 196/255, green: 158/255, blue: 110/255)
+                          ],
+                          startPoint: .leading,
+                          endPoint: .trailing
+                        )
+                      ))
+                }
+                .buttonStyle(.plain)
+
 
                 VStack(spacing: 16) {
                     HStack(alignment: .top, spacing: 16) {
@@ -57,7 +90,7 @@ struct YogaLibraryView: View {
                 Spacer()
             }
             .padding(.horizontal)
-            .padding(.top, 30)
+            .padding(.top, 8)
         }
     }
 }

@@ -31,11 +31,11 @@ struct ProfiView: View {
                 .scaledToFill()
                 .ignoresSafeArea()
 
-            VStack(spacing: 15) {
+            VStack(spacing: 10) {
                 Image("LogoYogaNow")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 280)
+                    .frame(width: 200)
 
                 Text("Profi")
                     .font(.largeTitle)
@@ -68,7 +68,7 @@ struct ProfiView: View {
                 Spacer()
             }
             .padding(.horizontal)
-            .padding(.top, 30)
+            .padding(.top, 8)
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
