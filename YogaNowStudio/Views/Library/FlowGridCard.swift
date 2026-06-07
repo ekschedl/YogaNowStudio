@@ -9,6 +9,7 @@ import SwiftUI
 struct FlowGridCard: View {
 
     let video: Video
+    var embedded: Bool = false
     @Environment(FavoritesStore.self) var favorites
 
     var leafCount: Int {
@@ -71,7 +72,7 @@ struct FlowGridCard: View {
             .padding(10)
         }
         .background(Color.white.opacity(0.95))
-        .cornerRadius(16)
-        .shadow(color: .black.opacity(0.07), radius: 5)
+        .cornerRadius(embedded ? 0 : 16)
+        .shadow(color: embedded ? .clear : .black.opacity(0.07), radius: embedded ? 0 : 5)
     }
 }

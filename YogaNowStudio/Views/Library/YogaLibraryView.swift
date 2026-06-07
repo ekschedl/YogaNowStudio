@@ -63,6 +63,26 @@ struct YogaLibraryView: View {
                 .buttonStyle(.plain)
 
 
+                VStack(spacing: 6) {
+                    Text("Unsere aktuellsten Flows")
+                        .font(.custom("Georgia", size: 16))
+                        .foregroundColor(.yogaGreen)
+                        .frame(maxWidth: .infinity, alignment: .center)
+
+                    HStack(spacing: 6) {
+                        Rectangle()
+                            .fill(Color.yogaGold.opacity(0.7))
+                            .frame(height: 0.8)
+                        Image(systemName: "leaf.fill")
+                            .font(.system(size: 7))
+                            .foregroundColor(.yogaGold.opacity(0.8))
+                        Rectangle()
+                            .fill(Color.yogaGold.opacity(0.7))
+                            .frame(height: 0.8)
+                    }
+                }
+                .padding(.top, 10)
+
                 VStack(spacing: 16) {
                     HStack(alignment: .top, spacing: 16) {
                         LibraryCell(
@@ -85,7 +105,7 @@ struct YogaLibraryView: View {
                         FavoritenCell()
                     }
                 }
-                .padding(.top, 8)
+                .padding(.top, 4)
 
                 Spacer()
             }
@@ -111,39 +131,37 @@ private struct LibraryCell<Destination: View>: View {
     }
 
     var body: some View {
-        VStack(spacing: 8) {
-            NavigationLink {
-                destination
-            } label: {
-                VStack(spacing: 2) {
-                    Text(topLabel)
-                        .italic()
-                        .font(.caption)
-                        .foregroundColor(.yogaGreen)
-                    Text(flowTitle)
-                        .font(.caption)
-                        .fontWeight(.semibold)
-                        .foregroundColor(.yogaGreen)
-                }
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 10)
-                .frame(maxWidth: .infinity)
-                .background(Color.white.opacity(0.92))
-                .cornerRadius(12)
-                .shadow(color: .black.opacity(0.05), radius: 3)
-            }
-            .buttonStyle(.borderless)
-
+        VStack(spacing: 0) {
             if let video {
                 NavigationLink {
                     VideoDetailView(video: video)
                 } label: {
-                    FlowGridCard(video: video)
+                    FlowGridCard(video: video, embedded: true)
                 }
                 .buttonStyle(.borderless)
             }
+
+            NavigationLink {
+                destination
+            } label: {
+                VStack(spacing: 1) {
+                    Text(topLabel)
+                        .italic()
+                        .font(.caption2)
+                        .foregroundColor(.yogaGreen.opacity(0.8))
+                    Text(flowTitle)
+                        .font(.caption2)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.yogaGreen)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 7)
+                .background(Color(red: 245/255, green: 242/255, blue: 236/255))
+            }
+            .buttonStyle(.borderless)
         }
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .shadow(color: .black.opacity(0.07), radius: 5)
         .frame(maxWidth: .infinity)
     }
 }
@@ -164,30 +182,7 @@ private struct FavoritenCell: View {
     }
 
     var body: some View {
-        VStack(spacing: 8) {
-            NavigationLink {
-                FavoritenView()
-            } label: {
-                VStack(spacing: 2) {
-                    Text("meine")
-                        .italic()
-                        .font(.caption)
-                        .foregroundColor(.yogaGreen)
-                    Text("Favoriten")
-                        .font(.caption)
-                        .fontWeight(.semibold)
-                        .foregroundColor(.yogaGreen)
-                }
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 10)
-                .frame(maxWidth: .infinity)
-                .background(Color.white.opacity(0.92))
-                .cornerRadius(12)
-                .shadow(color: .black.opacity(0.05), radius: 3)
-            }
-            .buttonStyle(.borderless)
-
+        VStack(spacing: 0) {
             LazyVGrid(columns: columns, spacing: 4) {
                 ForEach(0..<4, id: \.self) { i in
                     if let video = slots[i] {
@@ -204,9 +199,28 @@ private struct FavoritenCell: View {
             }
             .padding(6)
             .background(Color.white.opacity(0.95))
-            .cornerRadius(16)
-            .shadow(color: .black.opacity(0.07), radius: 5)
+
+            NavigationLink {
+                FavoritenView()
+            } label: {
+                VStack(spacing: 1) {
+                    Text("meine")
+                        .italic()
+                        .font(.caption2)
+                        .foregroundColor(.yogaGreen.opacity(0.8))
+                    Text("Favoriten")
+                        .font(.caption2)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.yogaGreen)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 7)
+                .background(Color(red: 245/255, green: 242/255, blue: 236/255))
+            }
+            .buttonStyle(.borderless)
         }
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .shadow(color: .black.opacity(0.07), radius: 5)
         .frame(maxWidth: .infinity)
     }
 }
