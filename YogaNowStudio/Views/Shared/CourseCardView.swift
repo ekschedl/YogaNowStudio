@@ -14,7 +14,7 @@ struct CourseCardView: View {
             Image(imageName)
                 .resizable()
                 .scaledToFill()
-                .frame(width: 120, height: 90)
+                .frame(width: 120, height: 100)
                 .clipped()
                 .cornerRadius(15)
 

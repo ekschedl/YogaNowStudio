@@ -185,7 +185,7 @@ struct CalendarView: View {
 
                     NavigationLink {
 
-                        DayView()
+                        
 
                     } label: {
 
@@ -218,7 +218,7 @@ struct CalendarView: View {
 
                     NavigationLink {
 
-                        DayView()
+                    
 
                     } label: {
 
@@ -251,7 +251,7 @@ struct CalendarView: View {
 
                     NavigationLink {
 
-                        DayView()
+                      
 
                     } label: {
 

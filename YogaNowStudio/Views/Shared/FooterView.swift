@@ -17,73 +17,95 @@ struct FooterView: View {
 
             Spacer()
 
-            footerItem(
-                icon: "house",
-                title: "Heute",
-                active: selectedTab == .home
-            )
+            NavigationLink {
+                TrainerDashboardView()
+            } label: {
+                footerLabel(
+                    icon: "house",
+                    title: "Heute",
+                    active: selectedTab == .home
+                )
+            }
 
             Spacer()
 
-            footerItem(
-                icon: "calendar",
-                title: "Kalender",
-                active: selectedTab == .calendar
-            )
+            NavigationLink {
+                CalendarView()
+            } label: {
+                footerLabel(
+                    icon: "calendar",
+                    title: "Kalender",
+                    active: selectedTab == .calendar
+                )
+            }
 
             Spacer()
 
-            footerItem(
-                icon: "book",
-                title: "Library",
-                active: selectedTab == .library
-            )
+            NavigationLink {
+                YogaLibraryView()
+            } label: {
+                footerLabel(
+                    icon: "book",
+                    title: "Library",
+                    active: selectedTab == .library
+                )
+            }
 
             Spacer()
 
-            footerItem(
-                icon: "person",
-                title: "Profil",
-                active: selectedTab == .profile
-            )
+            NavigationLink {
+           
+            } label: {
+                footerLabel(
+                    icon: "person",
+                    title: "Profil",
+                    active: selectedTab == .profile
+                )
+            }
 
             Spacer()
-        }
-        .padding(.top, 12)
-        .padding(.bottom, 12)
+           }
+        .padding(.vertical, 6)
         .frame(maxWidth: .infinity)
+        .frame(height: 60)
         .background(Color.yogaCream)
         .shadow(
             color: .black.opacity(0.08),
             radius: 10,
             y: -2
         )
+
+        .ignoresSafeArea(.container, edges: .bottom)
     }
 
     @ViewBuilder
-    private func footerItem(
+
+    private func footerLabel(
+
         icon: String,
+
         title: String,
+
         active: Bool
+
     ) -> some View {
 
-        Button {
+        VStack(spacing: 4) {
 
-        } label: {
+            Image(systemName: icon)
 
-            VStack(spacing: 4) {
+            Text(title)
 
-                Image(systemName: icon)
+                .font(.caption)
 
-                Text(title)
-                    .font(.caption)
-            }
-            .foregroundColor(
-                active
-                ? .yogaGreen
-                : .gray
-            )
         }
+
+        .foregroundColor(
+
+            active ? .yogaGreen : .gray
+
+        )
+
     }
 }
 

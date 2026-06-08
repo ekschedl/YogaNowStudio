@@ -171,24 +171,18 @@ struct CourseDetailView: View {
                             }
                         }
                     }
-                    .padding(
-                        EdgeInsets(
-                            top: 30,
-                            leading: 40,
-                            bottom: 120,
-                            trailing: 40
-                        )
-
-                    )
+                    .padding(40)
                     .background(.white.opacity(0.9))
-                    .offset(y: -25)
+                
                 }
-                .padding(.bottom, 20)
+    
             }
 
-            FooterView(
-                selectedTab: .home
-            )
+        
+                FooterView(
+                    selectedTab: .home
+                )
+            
         }
         .navigationBarTitle(
             "",

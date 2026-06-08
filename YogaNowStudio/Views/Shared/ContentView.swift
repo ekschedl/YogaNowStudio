@@ -27,7 +27,7 @@ struct ContentView: View {
                         .foregroundColor(.yogaGreen)
                         .padding(.horizontal, 10)
                         .padding(.vertical, 8)
-                        .background(.white.opacity(0.85))
+                        .background(.white.opacity(0.5))
                         .clipShape(Capsule())
                     }
                     .padding()
