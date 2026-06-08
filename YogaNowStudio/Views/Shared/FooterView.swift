@@ -54,7 +54,7 @@ struct FooterView: View {
             Spacer()
 
             NavigationLink {
-           
+                Text("Profil")
             } label: {
                 footerLabel(
                     icon: "person",

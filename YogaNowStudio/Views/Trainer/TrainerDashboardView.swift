@@ -149,10 +149,8 @@ struct TrainerDashboardView: View {
 }
 
 #Preview {
-
     NavigationStack {
-
         TrainerDashboardView()
-
     }
+    .environment(FavoritesStore())
 }
