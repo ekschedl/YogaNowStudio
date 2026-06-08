@@ -17,21 +17,23 @@ struct CalendarView: View {
 
             ScrollView(showsIndicators: false) {
 
-                VStack(spacing: 24) {
+                VStack(spacing: 20) {
 
                     HStack {
-
                         Button {
-
                         } label: {
-
                             Image(systemName: "chevron.left")
-                                .font(.headline)
+                                .font(.title3)
                                 .foregroundColor(.yogaGreen)
+                                .padding(12)
+                                .background(.white.opacity(0.9))
+                                .clipShape(Circle())
+                                .shadow(
+                                    color: .black.opacity(0.08),
+                                    radius: 6
+                                )
                         }
-
                         Spacer()
-
                         VStack(spacing: 4) {
 
                             Text("Juni 2026")
@@ -43,16 +45,19 @@ struct CalendarView: View {
                                 .font(.caption)
                                 .foregroundColor(.gray)
                         }
-
                         Spacer()
-
                         Button {
-
                         } label: {
-
                             Image(systemName: "chevron.right")
-                                .font(.headline)
+                                .font(.title3)
                                 .foregroundColor(.yogaGreen)
+                                .padding(12)
+                                .background(.white.opacity(0.9))
+                                .clipShape(Circle())
+                                .shadow(
+                                    color: .black.opacity(0.08),
+                                    radius: 6
+                                )
                         }
                     }
                     .padding(.horizontal)
@@ -80,19 +85,12 @@ struct CalendarView: View {
                             ),
                             spacing: 14
                         ) {
-
                             ForEach(1...30, id: \.self) { day in
-
                                 Button {
-
                                     selectedDay = day
-
                                 } label: {
-
                                     VStack(spacing: 2) {
-
                                         if selectedDay == day {
-
                                             Circle()
                                                 .fill(Color.yogaGreen)
                                                 .frame(width: 34, height: 34)

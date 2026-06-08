@@ -39,7 +39,7 @@ struct CourseDetailView: View {
 
                                 Image(systemName: "chevron.left")
                                     .font(.title3)
-                                    .foregroundColor(.yogaGold)
+                                    .foregroundColor(.yogaGreen)
                                     .padding(12)
                                     .background(.white.opacity(0.9))
                                     .clipShape(Circle())
@@ -64,12 +64,10 @@ struct CourseDetailView: View {
                             .foregroundColor(.yogaGreen)
 
                         HStack(spacing: 25) {
-
                             Label(
                                 time,
                                 systemImage: "clock"
                             )
-
                             Label(
                                 duration,
                                 systemImage: "timer"
@@ -153,7 +151,9 @@ struct CourseDetailView: View {
                             }
 
                             NavigationLink {
-                                Text("Teilnehmerliste")
+                                ParticipantListView(
+                                      courseTitle: title
+                                  )
 
                             } label: {
                                 HStack {

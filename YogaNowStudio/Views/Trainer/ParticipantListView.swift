@@ -4,10 +4,13 @@
 //
 //  Created by Kaaatkina on 05.06.26.
 //
-
 import SwiftUI
 
 struct ParticipantListView: View {
+
+    @Environment(\.dismiss) private var dismiss
+
+    let courseTitle: String
 
     let participants = [
         "Anna Berger",
@@ -33,22 +36,48 @@ struct ParticipantListView: View {
                 .scaledToFill()
                 .ignoresSafeArea()
 
+            VStack {
+
+                HStack {
+
+                    Button {
+
+                        dismiss()
+
+                    } label: {
+
+                        Image(systemName: "chevron.left")
+                            .font(.title3)
+                            .foregroundColor(.yogaGreen)
+                            .padding(12)
+                            .background(.white.opacity(0.9))
+                            .clipShape(Circle())
+                    }
+
+                    Spacer()
+                }
+                .padding(.horizontal)
+                .padding(.top, 60)
+
+                Spacer()
+            }
+
             ScrollView(showsIndicators: false) {
 
                 VStack(spacing: 24) {
 
-                    VStack(spacing: 6) {
+                    VStack(spacing: 10) {
 
-                        Text("MORNING FLOW")
-                            .font(.caption2)
+                        Text(courseTitle.uppercased())
+                            .font(.caption)
                             .fontWeight(.semibold)
                             .foregroundColor(.yogaGold)
-                            .tracking(2)
+                            .tracking(3)
 
                         Text("Teilnehmerliste")
                             .font(
                                 .system(
-                                    size: 30,
+                                    size: 32,
                                     weight: .semibold,
                                     design: .serif
                                 )
@@ -56,49 +85,75 @@ struct ParticipantListView: View {
                             .foregroundColor(.yogaGreen)
 
                         Text("\(participants.count) Teilnehmer")
-                            .font(.footnote)
+                            .font(.subheadline)
                             .foregroundColor(.gray)
                     }
 
-                    VStack(spacing: 3) {
+                 
+
+                    VStack(spacing: 10) {
 
                         ForEach(participants, id: \.self) { participant in
 
-                            HStack {
+                            HStack(spacing: 14) {
 
                                 Circle()
-                                    .fill(Color.yogaGold.opacity(0.25))
-                                    .frame(width: 42, height: 42)
+                                    .fill(
+                                        LinearGradient(
+                                            colors: [
+                                                Color.yogaGold.opacity(0.35),
+                                                Color.yogaGold.opacity(0.15)
+                                            ],
+                                            startPoint: .top,
+                                            endPoint: .bottom
+                                        )
+                                    )
+                                    .frame(width: 48, height: 48)
                                     .overlay {
 
                                         Image(systemName: "person.fill")
                                             .foregroundColor(.yogaGold)
                                     }
 
-                                Text(participant)
-                                    .foregroundColor(.yogaGreen)
+                                VStack(
+                                    alignment: .leading,
+                                    spacing: 2
+                                ) {
+
+                                    Text(participant)
+                                        .fontWeight(.medium)
+                                        .foregroundColor(.yogaGreen)
+
+                                    Text("Angemeldet")
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
+                                }
 
                                 Spacer()
 
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(.green)
+                                Circle()
+                                    .fill(.green)
+                                    .frame(width: 12, height: 12)
                             }
                             .padding()
-                            
-                            .background(Color.white.opacity(0.9))
+                            .background(.white.opacity(0.92))
                             .cornerRadius(18)
+                            .shadow(
+                                color: .black.opacity(0.03),
+                                radius: 4,
+                                y: 2
+                            )
                         }
                     }
                 }
                 .padding()
                 .padding(.top, 70)
-                .padding(.bottom, 160)
+                .padding(.bottom, 120)
             }
 
-            FooterView(
-                selectedTab: .home
-            )
+         
         }
+        .navigationBarBackButtonHidden(true)
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -108,7 +163,9 @@ struct ParticipantListView: View {
 
     NavigationStack {
 
-        ParticipantListView()
-
-    }.environment(FavoritesStore())
+        ParticipantListView(
+            courseTitle: "Morning Flow"
+        )
+    }
+    .environment(FavoritesStore())
 }

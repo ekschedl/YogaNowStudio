@@ -2,6 +2,8 @@ import SwiftUI
 
 struct LoginView: View {
 
+    @Environment(\.dismiss) private var dismiss
+
     @State private var email = ""
     @State private var password = ""
 
@@ -12,17 +14,34 @@ struct LoginView: View {
     @State private var showParticipantDashboard = false
 
     var isTrainer: Bool {
-        email.lowercased().hasSuffix("@yoganow.at")
+        email.lowercased().hasSuffix("@yoga")
     }
 
     var body: some View {
 
-        ZStack {
+        ZStack(alignment: .topLeading) {
 
             Image("BackgroundYoga")
                 .resizable()
                 .scaledToFill()
                 .ignoresSafeArea()
+
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: "chevron.left")
+                    .font(.title3)
+                    .foregroundColor(.yogaGreen)
+                    .padding(12)
+                    .background(.white.opacity(0.9))
+                    .clipShape(Circle())
+                    .shadow(
+                        color: .black.opacity(0.08),
+                        radius: 6
+                    )
+            }
+            .padding(.leading, 25)
+            .padding(.top, 60)
 
             VStack {
 
@@ -30,7 +49,7 @@ struct LoginView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 320)
-                    .offset(y: -35)
+                   
 
                 VStack(alignment: .leading, spacing: 22) {
 
@@ -182,7 +201,7 @@ struct LoginView: View {
                             .foregroundColor(.red)
 
                             Text(
-                                "Etwas ist schiefgelaufen. Versuche es erneut."
+                                "Bitte E-Mail und Passwort eingeben."
                             )
                             .font(.subheadline)
                             .foregroundColor(.red)
@@ -256,6 +275,7 @@ struct LoginView: View {
             }
             .padding(.horizontal, 20)
         }
+        .navigationBarBackButtonHidden(true)
         .navigationDestination(
             isPresented: $showTrainerDashboard
         ) {
@@ -275,4 +295,5 @@ struct LoginView: View {
 
         LoginView()
     }
+    .environment(FavoritesStore())
 }
