@@ -74,7 +74,6 @@ struct FavoritenView: View {
                 } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "chevron.left")
-                        Text("Zurück")
                     }
                     .foregroundColor(.yogaGreen)
                 }

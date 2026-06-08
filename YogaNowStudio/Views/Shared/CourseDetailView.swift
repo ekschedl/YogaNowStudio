@@ -196,7 +196,6 @@ struct CourseDetailView: View {
 #Preview {
 
     NavigationStack {
-
         CourseDetailView(
             role: .trainer,
             imageName: "ImageCourse01",
@@ -209,5 +208,5 @@ struct CourseDetailView: View {
             participants: 12,
             maxParticipants: 15
         )
-    }
+    }.environment(FavoritesStore())
 }

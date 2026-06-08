@@ -66,5 +66,7 @@ struct AsanasView: View {
 #Preview {
     NavigationStack {
         AsanasView()
-    }
+    }.environment(FavoritesStore())
 }
+
+

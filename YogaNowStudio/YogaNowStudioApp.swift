@@ -9,15 +9,12 @@ import SwiftUI
 
 @main
 struct YogaNowStudioApp: App {
-
-    @State private var favoritesStore = FavoritesStore()
+    @State private var favorites = FavoritesStore()
 
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                LoginView()
-            }
-            .environment(favoritesStore)
+            ContentView()
+                .environment(favorites)
         }
     }
 }

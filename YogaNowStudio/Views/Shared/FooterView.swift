@@ -17,54 +17,98 @@ struct FooterView: View {
 
             Spacer()
 
-            NavigationLink {
-                TrainerDashboardView()
-            } label: {
+            if selectedTab == .home {
+
                 footerLabel(
                     icon: "house",
                     title: "Heute",
-                    active: selectedTab == .home
+                    active: true
                 )
+
+            } else {
+
+                NavigationLink {
+                    TrainerDashboardView()
+                } label: {
+                    footerLabel(
+                        icon: "house",
+                        title: "Heute",
+                        active: false
+                    )
+                }
             }
 
             Spacer()
 
-            NavigationLink {
-                CalendarView()
-            } label: {
+            if selectedTab == .calendar {
+
                 footerLabel(
                     icon: "calendar",
                     title: "Kalender",
-                    active: selectedTab == .calendar
+                    active: true
                 )
+
+            } else {
+
+                NavigationLink {
+                    CalendarView()
+                } label: {
+                    footerLabel(
+                        icon: "calendar",
+                        title: "Kalender",
+                        active: false
+                    )
+                }
             }
 
             Spacer()
 
-            NavigationLink {
-                YogaLibraryView()
-            } label: {
+            if selectedTab == .library {
+
                 footerLabel(
                     icon: "book",
                     title: "Library",
-                    active: selectedTab == .library
+                    active: true
                 )
+
+            } else {
+
+                NavigationLink {
+                    YogaLibraryView()
+                } label: {
+                    footerLabel(
+                        icon: "book",
+                        title: "Library",
+                        active: false
+                    )
+                }
             }
 
             Spacer()
 
-            NavigationLink {
-                Text("Profil")
-            } label: {
+            if selectedTab == .profile {
+
                 footerLabel(
                     icon: "person",
                     title: "Profil",
-                    active: selectedTab == .profile
+                    active: true
                 )
+
+            } else {
+
+                NavigationLink {
+                    Text("Profil")
+                } label: {
+                    footerLabel(
+                        icon: "person",
+                        title: "Profil",
+                        active: false
+                    )
+                }
             }
 
             Spacer()
-           }
+        }
         .padding(.vertical, 6)
         .frame(maxWidth: .infinity)
         .frame(height: 60)
@@ -74,20 +118,14 @@ struct FooterView: View {
             radius: 10,
             y: -2
         )
-
         .ignoresSafeArea(.container, edges: .bottom)
     }
 
     @ViewBuilder
-
     private func footerLabel(
-
         icon: String,
-
         title: String,
-
         active: Bool
-
     ) -> some View {
 
         VStack(spacing: 4) {
@@ -95,23 +133,22 @@ struct FooterView: View {
             Image(systemName: icon)
 
             Text(title)
-
                 .font(.caption)
-
         }
-
         .foregroundColor(
-
-            active ? .yogaGreen : .gray
-
+            active
+            ? .yogaGreen
+            : .gray
         )
-
     }
 }
 
 #Preview {
 
-    FooterView(
-        selectedTab: .home
-    )
+    NavigationStack {
+
+        FooterView(
+            selectedTab: .home
+        ).environment(FavoritesStore())
+    }
 }

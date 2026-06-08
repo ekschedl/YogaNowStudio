@@ -143,5 +143,5 @@ struct VideoDetailView: View {
 #Preview {
     NavigationStack {
         VideoDetailView(video: mockVideos[0])
-    }
+    }.environment(FavoritesStore())
 }

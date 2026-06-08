@@ -1,10 +1,3 @@
-//
-//  TrainerCalendarView.swift
-//  YogaNowStudio
-//
-//  Created by Kaaatkina on 05.06.26.
-//  !!!    NOCH KEIN ECHTER CALENDER
-
 import SwiftUI
 
 struct CalendarView: View {
@@ -26,19 +19,6 @@ struct CalendarView: View {
 
                 VStack(spacing: 24) {
 
-                    VStack(spacing: 4) {
-
-                        Text("Dein Kalender")
-                            .font(
-                                .system(
-                                    size: 30,
-                                    weight: .semibold,
-                                    design: .serif
-                                )
-                            )
-                            .foregroundColor(.yogaGreen)
-                    }
-
                     HStack {
 
                         Button {
@@ -46,17 +26,23 @@ struct CalendarView: View {
                         } label: {
 
                             Image(systemName: "chevron.left")
-                                .foregroundColor(.yogaGreen)
                                 .font(.headline)
+                                .foregroundColor(.yogaGreen)
                         }
 
                         Spacer()
 
-                        Text("JUNI 2026")
-                            .font(.caption)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.yogaGreen)
-                            .tracking(2)
+                        VStack(spacing: 4) {
+
+                            Text("Juni 2026")
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.yogaGreen)
+
+                            Text("7 geplante Kurse")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                        }
 
                         Spacer()
 
@@ -65,13 +51,13 @@ struct CalendarView: View {
                         } label: {
 
                             Image(systemName: "chevron.right")
-                                .foregroundColor(.yogaGreen)
                                 .font(.headline)
+                                .foregroundColor(.yogaGreen)
                         }
                     }
                     .padding(.horizontal)
 
-                    VStack(spacing: 20) {
+                    VStack(spacing: 14) {
 
                         HStack {
 
@@ -81,7 +67,7 @@ struct CalendarView: View {
                             ) { day in
 
                                 Text(day)
-                                    .font(.caption)
+                                    .font(.caption2)
                                     .foregroundColor(.gray)
                                     .frame(maxWidth: .infinity)
                             }
@@ -92,7 +78,7 @@ struct CalendarView: View {
                                 repeating: GridItem(.flexible()),
                                 count: 7
                             ),
-                            spacing: 18
+                            spacing: 14
                         ) {
 
                             ForEach(1...30, id: \.self) { day in
@@ -103,26 +89,25 @@ struct CalendarView: View {
 
                                 } label: {
 
-                                    VStack(spacing: 4) {
+                                    VStack(spacing: 2) {
 
                                         if selectedDay == day {
 
                                             Circle()
                                                 .fill(Color.yogaGreen)
-                                                .frame(
-                                                    width: 38,
-                                                    height: 38
-                                                )
+                                                .frame(width: 34, height: 34)
                                                 .overlay {
 
                                                     Text("\(day)")
-                                                        .foregroundColor(.white)
+                                                        .font(.caption)
                                                         .fontWeight(.semibold)
+                                                        .foregroundColor(.white)
                                                 }
 
                                         } else {
 
                                             Text("\(day)")
+                                                .font(.caption)
                                                 .foregroundColor(
                                                     courseDays.contains(day)
                                                     ? .yogaGold
@@ -133,10 +118,7 @@ struct CalendarView: View {
                                                     ? .semibold
                                                     : .regular
                                                 )
-                                                .frame(
-                                                    width: 38,
-                                                    height: 38
-                                                )
+                                                .frame(width: 34, height: 34)
                                                 .background(
                                                     courseDays.contains(day)
                                                     ? Color.yogaGold.opacity(0.12)
@@ -144,29 +126,34 @@ struct CalendarView: View {
                                                 )
                                                 .clipShape(Circle())
                                         }
+
+                                        if courseDays.contains(day) {
+
+                                            Circle()
+                                                .fill(Color.yogaGold)
+                                                .frame(width: 4, height: 4)
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-                    .padding(24)
+                    .padding(20)
                     .background(Color.yogaCream)
-                    .cornerRadius(32)
+                    .cornerRadius(24)
                     .shadow(
                         color: .black.opacity(0.05),
-                        radius: 12,
-                        y: 4
+                        radius: 8,
+                        y: 3
                     )
 
-                    VStack(
-                        alignment: .leading,
-                        spacing: 4
-                    ) {
+                    VStack(alignment: .leading, spacing: 4) {
 
-                        Text("\(selectedDay). JUNI")
+                        Text("\(selectedDay). Juni")
                             .font(.caption)
-                            .foregroundColor(.yogaGold)
+                            .foregroundColor(.yogaGreen)
                             .tracking(2)
+                            
 
                         Text("Kurse an diesem Tag")
                             .font(
@@ -185,101 +172,77 @@ struct CalendarView: View {
 
                     NavigationLink {
 
-                        
+                        CourseDetailView(
+                            role: .trainer,
+                            imageName: "ImageCourse01",
+                            title: "Morning Flow",
+                            time: "08:30 - 09:30",
+                            duration: "60 Min.",
+                            level: "Alle Levels",
+                            trainer: "Laura",
+                            description: "Starte deinen Tag mit einer belebenden Yoga-Praxis für Körper und Geist.",
+                            participants: 12,
+                            maxParticipants: 15
+                        )
 
                     } label: {
 
-                        HStack {
-
-                            VStack(
-                                alignment: .leading,
-                                spacing: 6
-                            ) {
-
-                                Text("Morning Flow")
-                                    .font(.headline)
-                                    .foregroundColor(.yogaGreen)
-
-                                Text("08:30 - 09:30")
-                                    .foregroundColor(.gray)
-                            }
-
-                            Spacer()
-
-                            Image(
-                                systemName: "chevron.right"
-                            )
-                            .foregroundColor(.yogaGold)
-                        }
-                        .padding()
-                        .background(Color.yogaCream)
-                        .cornerRadius(22)
+                        CourseCardView(
+                            imageName: "ImageCourse01",
+                            title: "Morning Flow",
+                            time: "08:30 Uhr",
+                            participants: 12
+                        )
                     }
 
                     NavigationLink {
 
-                    
+                        CourseDetailView(
+                            role: .trainer,
+                            imageName: "ImageCourse02",
+                            title: "Yin Yoga",
+                            time: "17:30 - 18:30",
+                            duration: "60 Min.",
+                            level: "Anfänger",
+                            trainer: "Sarah",
+                            description: "Sanfte Yoga-Einheit für Entspannung und Beweglichkeit.",
+                            participants: 6,
+                            maxParticipants: 12
+                        )
 
                     } label: {
 
-                        HStack {
-
-                            VStack(
-                                alignment: .leading,
-                                spacing: 6
-                            ) {
-
-                                Text("Yin Yoga")
-                                    .font(.headline)
-                                    .foregroundColor(.yogaGreen)
-
-                                Text("17:30 - 18:30")
-                                    .foregroundColor(.gray)
-                            }
-
-                            Spacer()
-
-                            Image(
-                                systemName: "chevron.right"
-                            )
-                            .foregroundColor(.yogaGold)
-                        }
-                        .padding()
-                        .background(Color.yogaCream)
-                        .cornerRadius(22)
+                        CourseCardView(
+                            imageName: "ImageCourse02",
+                            title: "Yin Yoga",
+                            time: "17:30 Uhr",
+                            participants: 6
+                        )
                     }
 
                     NavigationLink {
 
-                      
+                        CourseDetailView(
+                            role: .trainer,
+                            imageName: "ImageCourse03",
+                            title: "Deep Balance",
+                            time: "19:00 - 20:00",
+                            duration: "60 Min.",
+                            level: "Fortgeschritten",
+                            trainer: "Emma",
+                            description: "Balance, Kraft und Fokus für Körper und Geist.",
+                            participants: 8,
+                            maxParticipants: 12
+                        )
 
                     } label: {
 
-                        HStack {
-
-                            VStack(
-                                alignment: .leading,
-                                spacing: 6
-                            ) {
-
-                                Text("Deep Balance")
-                                    .font(.headline)
-                                    .foregroundColor(.yogaGreen)
-
-                                Text("19:00 - 20:00")
-                                    .foregroundColor(.gray)
-                            }
-
-                            Spacer()
-
-                            Image(
-                                systemName: "chevron.right"
-                            )
-                            .foregroundColor(.yogaGold)
-                        }
-                        .padding()
-                        .background(Color.yogaCream)
-                        .cornerRadius(22)
+                        CourseCardView(
+                            imageName: "ImageCourse03",
+                            title: "Deep Balance",
+                            time: "19:00 Uhr",
+                            participants: 8
+                        )
                     }
                 }
                 .padding(.horizontal)
@@ -292,13 +255,19 @@ struct CalendarView: View {
             )
         }
     }
-    }
+}
+
 #Preview {
 
     NavigationStack {
 
-        CalendarView()
+        NavigationStack {
+
+               CalendarView()
+
+           }
+
+           .environment(FavoritesStore())
 
     }
-
 }
