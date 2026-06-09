@@ -144,8 +144,7 @@ struct TrainerDashboardView: View {
             FooterView(
                 selectedTab: .home
             )
-        }
-        .ignoresSafeArea(edges: .all)
+        }        .ignoresSafeArea(edges: .all)
 
     }
 }

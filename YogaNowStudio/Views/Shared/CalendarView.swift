@@ -2,9 +2,7 @@ import SwiftUI
 
 struct CalendarView: View {
 
-    @State private var selectedDay = 12
-
-    let courseDays = [2, 5, 9, 12, 16, 19, 23]
+    @State private var selectedDate = Date()
 
     var body: some View {
 
@@ -19,124 +17,40 @@ struct CalendarView: View {
 
                 VStack(spacing: 24) {
 
-                    // MARK: Header
+                    VStack(spacing: 6) {
+                        Text("Dein Kalender")
+                            .font(
+                                .system(
+                                    size: 30,
+                                    weight: .semibold,
+                                    design: .serif
+                                )
+                            )
+                            .foregroundColor(.yogaGreen)
 
-            
+                        Text("Wähle einen Kurstag")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                    }
+                    .padding(24)
 
-                    // MARK: Kalenderkarte
+                    VStack(spacing: 16) {
 
-                    VStack(spacing: 20) {
+                        DatePicker(
+                            "Datum wählen",
+                            selection: $selectedDate,
+                            displayedComponents: [.date]
+                        )
+                        .datePickerStyle(.graphical)
+                        .labelsHidden()
+                        .accentColor(.yogaGreen)
+                        .environment(\.locale, Locale(identifier: "de_DE"))
 
-                        HStack {
-
-                            Button {
-
-                            } label: {
-
-                                Image(systemName: "chevron.left")
-                                    .foregroundColor(.yogaGreen)
-                                    .padding(10)
-                                    .background(.white.opacity(0.9))
-                                    .clipShape(Circle())
-                            }
-
-                            Spacer()
-
-                            Text("Juni")
-                                .font(.headline)
-                                .foregroundColor(.yogaGreen)
-
-                            Spacer()
-
-                            Button {
-
-                            } label: {
-
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(.yogaGreen)
-                                    .padding(10)
-                                    .background(.white.opacity(0.9))
-                                    .clipShape(Circle())
-                            }
-                        }
-
-                        HStack {
-
-                            ForEach(
-                                ["Mo","Di","Mi","Do","Fr","Sa","So"],
-                                id: \.self
-                            ) { day in
-
-                                Text(day)
-                                    .font(.caption2)
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(.gray)
-                                    .frame(maxWidth: .infinity)
-                            }
-                        }
-
-                        LazyVGrid(
-                            columns: Array(
-                                repeating: GridItem(.flexible()),
-                                count: 7
-                            ),
-                            spacing: 16
-                        ) {
-
-                            ForEach(1...30, id: \.self) { day in
-
-                                Button {
-
-                                    selectedDay = day
-
-                                } label: {
-
-                                    VStack(spacing: 4) {
-
-                                        if selectedDay == day {
-
-                                            Circle()
-                                                .fill(Color.yogaGreen)
-                                                .frame(width: 40, height: 40)
-                                                .overlay {
-
-                                                    Text("\(day)")
-                                                        .fontWeight(.bold)
-                                                        .foregroundColor(.white)
-                                                }
-
-                                        } else {
-
-                                            Text("\(day)")
-                                                .foregroundColor(
-                                                    courseDays.contains(day)
-                                                    ? .yogaGold
-                                                    : .yogaGreen
-                                                )
-                                                .frame(width: 40, height: 40)
-                                                .background(
-                                                    courseDays.contains(day)
-                                                    ? Color.yogaGold.opacity(0.12)
-                                                    : Color.clear
-                                                )
-                                                .clipShape(Circle())
-                                        }
-
-                                        if courseDays.contains(day) {
-
-                                            Circle()
-                                                .fill(Color.yogaGold)
-                                                .frame(width: 5, height: 5)
-                                        }
-                                    }
-                                }
-                            }
-                        }
                     }
                     .padding(24)
                     .background(
                         RoundedRectangle(cornerRadius: 30)
-                            .fill(Color.yogaCream.opacity(0.96))
+                            .fill(Color.yogaCream.opacity(0.95))
                     )
                     .shadow(
                         color: .black.opacity(0.08),
@@ -144,19 +58,24 @@ struct CalendarView: View {
                         y: 5
                     )
 
-                    // MARK: Kurse Header
-
                     VStack(
                         alignment: .leading,
                         spacing: 6
                     ) {
 
-                        Text("\(selectedDay). Juni")
-                            .font(.caption)
-                            .tracking(3)
-                            .foregroundColor(.yogaGold)
+                        Text(
+                            selectedDate.formatted(
+                                .dateTime
+                                    .weekday(.wide)
+                                    .day()
+                                    .month(.wide)
+                                    .locale(Locale(identifier: "de_DE"))
+                            )
+                        )
+                        .font(.caption)
+                        .foregroundColor(.yogaGreen)
 
-                        Text("Deine Kurse")
+                        Text("Kurse an diesem Tag")
                             .font(
                                 .system(
                                     size: 28,
@@ -170,8 +89,6 @@ struct CalendarView: View {
                         maxWidth: .infinity,
                         alignment: .leading
                     )
-
-                    // MARK: Kurse
 
                     NavigationLink {
 
@@ -257,14 +174,17 @@ struct CalendarView: View {
                 selectedTab: .calendar
             )
         }
-     
         .ignoresSafeArea(edges: .bottom)
+      
     }
 }
 
 #Preview {
+
     NavigationStack {
+
         CalendarView()
+
     }
     .environment(FavoritesStore())
 }
