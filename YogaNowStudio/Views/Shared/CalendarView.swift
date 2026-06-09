@@ -45,7 +45,7 @@ struct CalendarView: View {
                         .tracking(3)
                         .foregroundColor(.yogaGold)
                     }
-                    .padding(.horizontal, 24)
+                    .padding(.horizontal, 20)
                     .padding(.vertical, 16)
                     .background(.thinMaterial)
                     .clipShape(
@@ -69,15 +69,14 @@ struct CalendarView: View {
                             displayedComponents: [.date]
                         )
                         .datePickerStyle(.graphical)
+                        .scaleEffect(0.9)
                         .labelsHidden()
                         .environment(
                             \.locale,
                              Locale(identifier: "de_DE")
                         )
                         .tint(.yogaGreen)
-
                     }
-                    .padding(20)
                     .background(
                         RoundedRectangle(cornerRadius: 32)
                             .fill(Color.yogaCream.opacity(0.92))
@@ -132,6 +131,8 @@ struct CalendarView: View {
                         time: "19:00 Uhr",
                         participants: 8
                     )
+                    Spacer()
+                        .frame(height: 100)
                 }
                 .padding(.horizontal)
             }
