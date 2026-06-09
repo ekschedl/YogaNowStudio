@@ -52,7 +52,7 @@ struct ParticipantListView: View {
                         .font(.subheadline)
                         .foregroundColor(.gray)
                 }
-                .padding(.top, 20)
+                .padding(.top, 60)
                 .padding(.bottom, 20)
 
                 LinearGradient(
@@ -82,6 +82,22 @@ struct ParticipantListView: View {
                 }
                 .listStyle(.plain)
                 .scrollContentBackground(.hidden)
+                
+                LinearGradient(
+                    colors: [
+                        Color.white,
+                        Color.white.opacity(0.8),
+                        Color.white.opacity(0.4),
+                        Color.clear
+                    ],
+
+                    startPoint: .top,
+
+                    endPoint: .bottom
+
+                )
+
+                .frame(height: 100)
             }
         }
         .navigationTitle("")
