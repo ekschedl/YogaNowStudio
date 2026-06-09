@@ -47,7 +47,7 @@ struct CalendarView: View {
                     }
                     .padding(.horizontal, 20)
                     .padding(.vertical, 16)
-                    .background(.thinMaterial)
+                    .background(.ultraThickMaterial)
                     .clipShape(
                         RoundedRectangle(cornerRadius: 24)
                     )
@@ -79,7 +79,16 @@ struct CalendarView: View {
                     }
                     .background(
                         RoundedRectangle(cornerRadius: 32)
-                            .fill(Color.yogaCream.opacity(0.92))
+                            .fill(
+                                LinearGradient(
+                                    colors: [
+                                        Color.white.opacity(0.95),
+                                        Color.yogaCream.opacity(0.95)
+                                    ],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                )
+                            )
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: 32)
