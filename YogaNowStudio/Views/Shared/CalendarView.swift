@@ -172,7 +172,8 @@ struct CalendarView: View {
                 trainer: "Laura",
                 description: "Kursbeschreibung",
                 participants: participants,
-                maxParticipants: 15
+                maxParticipants: 15,
+                isBooked: false
             )
 
         } label: {

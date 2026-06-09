@@ -12,6 +12,7 @@ struct CourseDetailView: View {
     let description: String
     let participants: Int
     let maxParticipants: Int
+    let isBooked: Bool
 
     var body: some View {
 
@@ -36,7 +37,6 @@ struct CourseDetailView: View {
                             )
                         )
                         .foregroundColor(.yogaGreen)
-                        .padding(.bottom, 4)
 
                     HStack(spacing: 14) {
 
@@ -57,13 +57,9 @@ struct CourseDetailView: View {
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding()
-                        .background(
-                            Color.white.opacity(0.55)
-                        )
+                        .background(Color.white.opacity(0.55))
                         .clipShape(
-                            RoundedRectangle(
-                                cornerRadius: 18
-                            )
+                            RoundedRectangle(cornerRadius: 18)
                         )
 
                         VStack(alignment: .leading, spacing: 6) {
@@ -83,13 +79,9 @@ struct CourseDetailView: View {
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding()
-                        .background(
-                            Color.white.opacity(0.55)
-                        )
+                        .background(Color.white.opacity(0.55))
                         .clipShape(
-                            RoundedRectangle(
-                                cornerRadius: 18
-                            )
+                            RoundedRectangle(cornerRadius: 18)
                         )
                     }
 
@@ -98,7 +90,7 @@ struct CourseDetailView: View {
                         VStack(alignment: .leading, spacing: 6) {
 
                             Label(
-                                "Level",
+                                "LEVEL",
                                 systemImage: "figure.yoga"
                             )
                             .font(.caption)
@@ -112,19 +104,15 @@ struct CourseDetailView: View {
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding()
-                        .background(
-                            Color.white.opacity(0.55)
-                        )
+                        .background(Color.white.opacity(0.55))
                         .clipShape(
-                            RoundedRectangle(
-                                cornerRadius: 18
-                            )
+                            RoundedRectangle(cornerRadius: 18)
                         )
 
                         VStack(alignment: .leading, spacing: 6) {
 
                             Label(
-                                "Trainer",
+                                "TRAINER",
                                 systemImage: "person.fill"
                             )
                             .font(.caption)
@@ -138,44 +126,57 @@ struct CourseDetailView: View {
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding()
-                        .background(
-                            Color.white.opacity(0.55)
-                        )
+                        .background(Color.white.opacity(0.55))
                         .clipShape(
-                            RoundedRectangle(
-                                cornerRadius: 18
-                            )
+                            RoundedRectangle(cornerRadius: 18)
                         )
                     }
-                  
 
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("Kursbeschreibung")
+
+                        Text("KURSBESCHREIBUNG")
                             .font(.caption)
                             .fontWeight(.bold)
                             .tracking(2)
                             .foregroundColor(.yogaGold)
+
                         Text(description)
                             .foregroundColor(.primary)
                             .lineSpacing(4)
                     }
                     .padding()
-                    .background(
-                        Color.white.opacity(0.45)
-                    )
+                    .background(Color.white.opacity(0.45))
                     .clipShape(
-                        RoundedRectangle(
-                            cornerRadius: 20
-                        )
+                        RoundedRectangle(cornerRadius: 20)
                     )
-
                     if role == .participant {
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text("FREIE PLÄTZE")
-                                .font(.caption)
-                                .fontWeight(.bold)
-                                .tracking(2)
-                                .foregroundColor(.yogaGold)
+                        
+                        VStack(alignment: .leading, spacing: 12) {
+
+                            if isBooked {
+
+                                Text("DEINE BUCHUNG")
+                                    .font(.caption)
+                                    .fontWeight(.bold)
+                                    .tracking(2)
+                                    .foregroundColor(.yogaGold)
+
+                                Label(
+                                    "Angemeldet",
+                                    systemImage: "checkmark.circle.fill"
+                                )
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.green)
+
+                            } else {
+
+                                Text("FREIE PLÄTZE")
+                                    .font(.caption)
+                                    .fontWeight(.bold)
+                                    .tracking(2)
+                                    .foregroundColor(.yogaGold)
+                            }
 
                             Text(
                                 "\(maxParticipants - participants) von \(maxParticipants)"
@@ -186,37 +187,30 @@ struct CourseDetailView: View {
                         }
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(
-                            Color.white.opacity(0.45)
-                        )
+                        .background(Color.white.opacity(0.45))
                         .clipShape(
-                            RoundedRectangle(
-                                cornerRadius: 20
-                            )
+                            RoundedRectangle(cornerRadius: 20)
                         )
 
-                        Button {
-                        } label: {
-                            HStack {
-                                Image(
-                                    systemName: "calendar.badge.plus"
-                                )
-                                Text("Kurs buchen")
-                            }
-                            .fontWeight(.semibold)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.yogaGreen)
-                            .clipShape(
-                                RoundedRectangle(
-                                    cornerRadius: 18
-                                )
+                        if isBooked {
+
+                            SecondaryButton(
+                                title: "Buchung stornieren",
+                                icon: "xmark.circle"
+                            )
+
+                        } else {
+
+                            PrimaryButton(
+                                title: "Kurs buchen",
+                                icon: "calendar.badge.plus"
                             )
                         }
 
                     } else {
+
                         VStack(alignment: .leading, spacing: 6) {
+
                             Text("TEILNEHMER")
                                 .font(.caption)
                                 .fontWeight(.bold)
@@ -230,41 +224,26 @@ struct CourseDetailView: View {
                         }
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(
-                            Color.white.opacity(0.45)
-                        )
+                        .background(Color.white.opacity(0.45))
                         .clipShape(
-                            RoundedRectangle(
-                                cornerRadius: 20
-                            )
+                            RoundedRectangle(cornerRadius: 20)
                         )
 
                         NavigationLink {
+
                             ParticipantListView(
                                 courseTitle: title
                             )
-                        } label: {
-                            HStack {
-                                Image(
-                                    systemName: "person.2.fill"
-                                )
 
-                                Text(
-                                    "Teilnehmer anzeigen"
-                                )
-                            }
-                            .fontWeight(.semibold)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.yogaGreen)
-                            .clipShape(
-                                RoundedRectangle(
-                                    cornerRadius: 18
-                                )
+                        } label: {
+
+                            PrimaryButton(
+                                title: "Teilnehmer anzeigen",
+                                icon: "person.2.fill"
                             )
                         }
                     }
+
                 }
                 .padding(40)
                 .frame(
@@ -298,16 +277,17 @@ struct CourseDetailView: View {
     NavigationStack {
 
         CourseDetailView(
-            role: .trainer,
+            role: .participant,
             imageName: "ImageCourse01",
             title: "Morning Flow",
             time: "08:30 - 09:30",
             duration: "60 Min.",
             level: "Alle Levels",
             trainer: "Laura",
-            description: "Starte deinen Tag mit einer belebenden Yoga-Praxis für Körper und Geist. Für alle Levels geeignet.",
+            description: "Starte deinen Tag mit einer belebenden Yoga-Praxis für Körper und Geist.",
             participants: 12,
-            maxParticipants: 15
+            maxParticipants: 15,
+            isBooked: true
         )
     }
     .environment(FavoritesStore())

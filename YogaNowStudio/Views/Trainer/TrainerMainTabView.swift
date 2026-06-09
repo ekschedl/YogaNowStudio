@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-struct MainTabView: View {
+struct TrainerMainTabView: View {
 
     var body: some View {
 

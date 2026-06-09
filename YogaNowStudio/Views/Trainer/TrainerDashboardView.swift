@@ -79,7 +79,8 @@ struct TrainerDashboardView: View {
                                 trainer: "Laura",
                                 description: "Starte deinen Tag mit einer belebenden Yoga-Praxis für Körper und Geist.",
                                 participants: 12,
-                                maxParticipants: 15
+                                maxParticipants: 15,
+                                isBooked: true
                             )
                         } label: {
                             CourseCardView(
@@ -101,7 +102,8 @@ struct TrainerDashboardView: View {
                                 trainer: "Sarah",
                                 description: "Sanfte Yoga-Einheit für Entspannung und Beweglichkeit.",
                                 participants: 6,
-                                maxParticipants: 12
+                                maxParticipants: 12,
+                                isBooked: true
                             )
                         } label: {
                             CourseCardView(
@@ -123,7 +125,8 @@ struct TrainerDashboardView: View {
                                 trainer: "Emma",
                                 description: "Balance, Kraft und Fokus für Körper und Geist.",
                                 participants: 8,
-                                maxParticipants: 12
+                                maxParticipants: 12,
+                                isBooked: true
                             )
                         } label: {
                             CourseCardView(

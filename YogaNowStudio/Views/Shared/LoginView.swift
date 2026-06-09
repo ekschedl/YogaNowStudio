@@ -207,32 +207,21 @@ struct LoginView: View {
                     Button {
 
                         if email.isEmpty || password.isEmpty {
-
                             showError = true
-
                         } else {
-
                             showError = false
-
                             if isTrainer {
-
                                 showTrainerDashboard = true
-
                             } else {
-
                                 showParticipantDashboard = true
                             }
                         }
 
                     } label: {
-
-                        Text("Anmelden")
-                            .fontWeight(.semibold)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 16)
-                            .background(Color.yogaGreen)
-                            .cornerRadius(14)
+                        PrimaryButton(
+                            title: "Anmelden",
+                            icon: "person.fill"
+                        )
                     }
 
                     Text(
@@ -262,21 +251,19 @@ struct LoginView: View {
         .navigationDestination(
             isPresented: $showTrainerDashboard
         ) {
-            MainTabView()
+            TrainerMainTabView()
         }
         
         .navigationDestination(
             isPresented: $showParticipantDashboard
         ) {
-            MainTabView()
+            ParticipantMainTabView()
         }
     }
 }
 
 #Preview {
-
     NavigationStack {
-
         LoginView()
     }
     .environment(FavoritesStore())
