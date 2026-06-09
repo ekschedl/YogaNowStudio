@@ -44,21 +44,20 @@ struct CalendarView: View {
                         .fontWeight(.bold)
                         .tracking(3)
                         .foregroundColor(.yogaGold)
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 8)
-                        .background(
-                            Capsule()
-                                .fill(Color.white.opacity(0.85))
-                        )
-                        .overlay(
-                            Capsule()
-                                .stroke(
-                                    Color.yogaGold.opacity(0.35),
-                                    lineWidth: 1
-                                )
-                        )
                     }
-                    .padding(.top, 75)
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 16)
+                    .background(.thinMaterial)
+                    .clipShape(
+                        RoundedRectangle(cornerRadius: 24)
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 24)
+                            .stroke(
+                                Color.white.opacity(0.6),
+                                lineWidth: 1
+                            )
+                    ).padding(.top,50)
 
                     // MARK: Kalender
 
@@ -92,13 +91,10 @@ struct CalendarView: View {
                     )
 
                     // MARK: Datum
-
                     VStack(
                         alignment: .leading,
                         spacing: 6
                     ) {
-
-                  
 
                         Text("Kurse an diesem Tag")
                             .font(
@@ -116,7 +112,6 @@ struct CalendarView: View {
                     )
 
                     // MARK: Kurse
-
                     courseLink(
                         image: "ImageCourse01",
                         title: "Morning Flow",
@@ -141,11 +136,7 @@ struct CalendarView: View {
                 .padding(.horizontal)
             }
         }
-        .safeAreaInset(edge: .bottom) {
 
-            FooterView(
-                selectedTab: .calendar
-            )
         }
     }
 
@@ -184,7 +175,7 @@ struct CalendarView: View {
             )
         }
     }
-}
+
 
 #Preview {
 

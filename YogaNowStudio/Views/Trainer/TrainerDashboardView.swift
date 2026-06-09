@@ -137,14 +137,10 @@ struct TrainerDashboardView: View {
                     .padding(24)
                   
                 }
-       
 
             }
-
-            FooterView(
-                selectedTab: .home
-            )
-        }        .ignoresSafeArea(edges: .all)
+        
+        }
 
     }
 }

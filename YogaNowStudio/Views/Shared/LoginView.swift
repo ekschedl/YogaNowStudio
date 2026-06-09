@@ -262,12 +262,13 @@ struct LoginView: View {
         .navigationDestination(
             isPresented: $showTrainerDashboard
         ) {
-            TrainerDashboardView()
+            MainTabView()
         }
+        
         .navigationDestination(
             isPresented: $showParticipantDashboard
         ) {
-            ParticipantDashboardView()
+            MainTabView()
         }
     }
 }

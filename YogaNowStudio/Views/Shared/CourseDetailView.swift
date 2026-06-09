@@ -2,7 +2,6 @@ import SwiftUI
 
 struct CourseDetailView: View {
 
-
     let role: UserRole
     let imageName: String
     let title: String
@@ -16,157 +15,288 @@ struct CourseDetailView: View {
 
     var body: some View {
 
-        ZStack(alignment: .bottom) {
+        ScrollView {
 
-            ScrollView {
+            VStack(spacing: 0) {
 
-                VStack(spacing: 0) {
-                    Image(imageName)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(height: 280)
-                        .clipped()
-                 
-                    VStack(alignment: .leading, spacing: 20) {
+                Image(imageName)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(height: 280)
+                    .clipped()
 
-                        Text(title)
-                            .font(
-                                .system(
-                                    size: 30,
-                                    weight: .semibold,
-                                    design: .serif
-                                )
+                VStack(alignment: .leading, spacing: 15) {
+
+                    Text(title)
+                        .font(
+                            .system(
+                                size: 30,
+                                weight: .semibold,
+                                design: .serif
                             )
-                            .foregroundColor(.yogaGreen)
+                        )
+                        .foregroundColor(.yogaGreen)
+                        .padding(.bottom, 4)
 
-                        HStack(spacing: 25) {
+                    HStack(spacing: 14) {
+
+                        VStack(alignment: .leading, spacing: 6) {
+
                             Label(
-                                time,
-                                systemImage: "clock"
+                                "ZEIT",
+                                systemImage: "clock.fill"
                             )
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .tracking(2)
+                            .foregroundColor(.yogaGold)
+
+                            Text(time)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.yogaGreen)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .background(
+                            Color.white.opacity(0.55)
+                        )
+                        .clipShape(
+                            RoundedRectangle(
+                                cornerRadius: 18
+                            )
+                        )
+
+                        VStack(alignment: .leading, spacing: 6) {
+
                             Label(
-                                duration,
+                                "DAUER",
                                 systemImage: "timer"
                             )
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .tracking(2)
+                            .foregroundColor(.yogaGold)
+
+                            Text(duration)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.yogaGreen)
                         }
-                        .foregroundColor(.gray)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .background(
+                            Color.white.opacity(0.55)
+                        )
+                        .clipShape(
+                            RoundedRectangle(
+                                cornerRadius: 18
+                            )
+                        )
+                    }
 
-                        HStack {
+                    HStack(spacing: 14) {
 
-                            VStack(
-                                alignment: .leading,
-                                spacing: 5
-                            ) {
+                        VStack(alignment: .leading, spacing: 6) {
 
-                                Text("Level")
-                                    .foregroundColor(.gray)
-                                Text(level)
-                            }
+                            Label(
+                                "Level",
+                                systemImage: "figure.yoga"
+                            )
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .tracking(2)
+                            .foregroundColor(.yogaGold)
 
-                            Spacer()
-
-                            VStack(
-                                alignment: .leading,
-                                spacing: 5
-                            ) {
-
-                                Text("Trainer")
-                                    .foregroundColor(.gray)
-                                Text(trainer)
-                            }
+                            Text(level)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.yogaGreen)
                         }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .background(
+                            Color.white.opacity(0.55)
+                        )
+                        .clipShape(
+                            RoundedRectangle(
+                                cornerRadius: 18
+                            )
+                        )
 
-                        Divider()
+                        VStack(alignment: .leading, spacing: 6) {
 
+                            Label(
+                                "Trainer",
+                                systemImage: "person.fill"
+                            )
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .tracking(2)
+                            .foregroundColor(.yogaGold)
+
+                            Text(trainer)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.yogaGreen)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .background(
+                            Color.white.opacity(0.55)
+                        )
+                        .clipShape(
+                            RoundedRectangle(
+                                cornerRadius: 18
+                            )
+                        )
+                    }
+                  
+
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Kursbeschreibung")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .tracking(2)
+                            .foregroundColor(.yogaGold)
                         Text(description)
                             .foregroundColor(.primary)
+                            .lineSpacing(4)
+                    }
+                    .padding()
+                    .background(
+                        Color.white.opacity(0.45)
+                    )
+                    .clipShape(
+                        RoundedRectangle(
+                            cornerRadius: 20
+                        )
+                    )
 
-                        Divider()
+                    if role == .participant {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("FREIE PLÄTZE")
+                                .font(.caption)
+                                .fontWeight(.bold)
+                                .tracking(2)
+                                .foregroundColor(.yogaGold)
 
-                        if role == .participant {
+                            Text(
+                                "\(maxParticipants - participants) von \(maxParticipants)"
+                            )
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.yogaGreen)
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(
+                            Color.white.opacity(0.45)
+                        )
+                        .clipShape(
+                            RoundedRectangle(
+                                cornerRadius: 20
+                            )
+                        )
 
+                        Button {
+                        } label: {
                             HStack {
+                                Image(
+                                    systemName: "calendar.badge.plus"
+                                )
+                                Text("Kurs buchen")
+                            }
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.yogaGreen)
+                            .clipShape(
+                                RoundedRectangle(
+                                    cornerRadius: 18
+                                )
+                            )
+                        }
 
-                                Text("Freie Plätze")
+                    } else {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("TEILNEHMER")
+                                .font(.caption)
+                                .fontWeight(.bold)
+                                .tracking(2)
+                                .foregroundColor(.yogaGold)
 
-                                Spacer()
+                            Text("\(participants) Teilnehmer")
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.yogaGreen)
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(
+                            Color.white.opacity(0.45)
+                        )
+                        .clipShape(
+                            RoundedRectangle(
+                                cornerRadius: 20
+                            )
+                        )
+
+                        NavigationLink {
+                            ParticipantListView(
+                                courseTitle: title
+                            )
+                        } label: {
+                            HStack {
+                                Image(
+                                    systemName: "person.2.fill"
+                                )
 
                                 Text(
-                                    "\(maxParticipants - participants) von \(maxParticipants)"
+                                    "Teilnehmer anzeigen"
                                 )
                             }
-
-                            Button {
-
-                            } label: {
-
-                                HStack {
-
-                                    Image(
-                                        systemName: "calendar.badge.plus"
-                                    )
-
-                                    Text("Kurs buchen")
-                                }
-                                .fontWeight(.semibold)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.yogaGreen)
-                                .cornerRadius(14)
-                            }
-
-                        } else {
-
-                            HStack {
-                                Text("Teilnehmer")
-                                Spacer()
-                                Text(
-                                    "\(participants) Teilnehmer"
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.yogaGreen)
+                            .clipShape(
+                                RoundedRectangle(
+                                    cornerRadius: 18
                                 )
-                            }
-
-                            NavigationLink {
-                                ParticipantListView(
-                                      courseTitle: title
-                                  )
-
-                            } label: {
-                                HStack {
-                                    Image(
-                                        systemName: "person.2.fill"
-                                    )
-                                    Text("Teilnehmer anzeigen")
-                                }
-                                .fontWeight(.semibold)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.yogaGreen)
-                                .cornerRadius(14)
-                            }
+                            )
                         }
                     }
-                    .padding(40)
-                    .background(.white.opacity(0.9))
-                
                 }
-    
-            }
-            FooterView(
-                selectedTab: .home
+                .padding(40)
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .topLeading
+                )
+                .background(
+                    Color.yogaCream.opacity(0.96)
+                )
 
-            )
-        
-            
+                LinearGradient(
+                    colors: [
+                        Color.yogaCream.opacity(0.96),
+                        Color.yogaCream.opacity(0.85),
+                        Color.white.opacity(0.95),
+                        Color.white
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .frame(height: 140)
+            }
         }
-        .ignoresSafeArea(edges: .all)
+        .ignoresSafeArea(edges: .top)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 #Preview {
 
     NavigationStack {
+
         CourseDetailView(
             role: .trainer,
             imageName: "ImageCourse01",
@@ -179,5 +309,6 @@ struct CourseDetailView: View {
             participants: 12,
             maxParticipants: 15
         )
-    }.environment(FavoritesStore())
+    }
+    .environment(FavoritesStore())
 }

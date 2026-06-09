@@ -1,0 +1,65 @@
+//
+//  MainTabView..swift
+//  YogaNowStudio
+//
+//  Created by Kaaatkina on 09.06.26.
+//
+import SwiftUI
+
+struct MainTabView: View {
+
+    var body: some View {
+
+        TabView {
+
+            NavigationStack {
+
+                TrainerDashboardView()
+
+            }
+            .tabItem {
+                Label(
+                    "Heute",
+                    systemImage: "house"
+                )
+            }
+
+            NavigationStack {
+
+                CalendarView()
+
+            }
+            .tabItem {
+                Label(
+                    "Kalender",
+                    systemImage: "calendar"
+                )
+            }
+
+            NavigationStack {
+
+                YogaLibraryView()
+
+            }
+            .tabItem {
+                Label(
+                    "Library",
+                    systemImage: "book"
+                )
+            }
+
+            NavigationStack {
+
+                Text("Profil")
+
+            }
+            .tabItem {
+                Label(
+                    "Profil",
+                    systemImage: "person"
+                )
+            }
+        }
+        .tint(.yogaGreen)
+    }
+}
