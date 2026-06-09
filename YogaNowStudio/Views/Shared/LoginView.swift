@@ -26,19 +26,6 @@ struct LoginView: View {
                 .scaledToFill()
                 .ignoresSafeArea()
 
-            Button {
-                dismiss()
-            } label: {
-                Image(systemName: "chevron.left")
-                    .font(.title3)
-                    .foregroundColor(.yogaGreen)
-                    .padding(12)
-                    .background(.white.opacity(0.9))
-                    .clipShape(Circle())
-            }
-            .padding(.leading, 25)
-            .padding(.top, 60)
-
             VStack {
 
                 Image("LogoYogaNow")

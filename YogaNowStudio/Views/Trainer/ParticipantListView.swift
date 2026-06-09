@@ -2,8 +2,6 @@ import SwiftUI
 
 struct ParticipantListView: View {
 
-    @Environment(\.dismiss) private var dismiss
-
     let courseTitle: String
 
     let participants = [
@@ -21,7 +19,6 @@ struct ParticipantListView: View {
         "Maria Weiß"
     ]
 
-    
     var body: some View {
 
         ZStack {
@@ -33,55 +30,46 @@ struct ParticipantListView: View {
 
             VStack(spacing: 0) {
 
-                HStack {
+                VStack(spacing: 8) {
 
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "chevron.left")
-                            .font(.title3)
-                            .foregroundColor(.yogaGreen)
-                            .padding(12)
-                            .background(.white.opacity(0.9))
-                            .clipShape(Circle())
-                    }
+                    Text(courseTitle.uppercased())
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .foregroundColor(.yogaGold)
+                        .tracking(3)
 
-                    Spacer()
-
-                    VStack(spacing: 8) {
-
-                        Text(courseTitle.uppercased())
-                            .font(.caption)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.yogaGold)
-                            .tracking(3)
-
-                        Text("Teilnehmerliste")
-                            .font(
-                                .system(
-                                    size: 30,
-                                    weight: .semibold,
-                                    design: .serif
-                                )
+                    Text("Teilnehmerliste")
+                        .font(
+                            .system(
+                                size: 30,
+                                weight: .semibold,
+                                design: .serif
                             )
-                            .foregroundColor(.yogaGreen)
+                        )
+                        .foregroundColor(.yogaGreen)
 
-                        Text("\(participants.count) Teilnehmer")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                    }
-                    .padding(.bottom, 20)
-
-                    Spacer()
-
-                    Color.clear
-                        .frame(width: 20)
+                    Text("\(participants.count) Teilnehmer")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
                 }
-                .padding()
+                .padding(.top, 20)
+                .padding(.bottom, 20)
 
+                LinearGradient(
+                       colors: [
+                           Color.white.opacity(0),
+                           Color.white.opacity(0.4),
+                           Color.white.opacity(0.8),
+                           Color.white
+                       ],
+                       startPoint: .top,
+                       endPoint: .bottom
+                   )
+
+                   .frame(height: 60)
                 List(participants, id: \.self) { participant in
 
-                    HStack {
+                    HStack(spacing: 12) {
 
                         Image(systemName: "person.circle.fill")
                             .font(.title2)
@@ -93,8 +81,20 @@ struct ParticipantListView: View {
                     }
                 }
                 .listStyle(.plain)
+                .scrollContentBackground(.hidden)
             }
         }
-        .navigationBarBackButtonHidden(true)
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+#Preview {
+
+    NavigationStack {
+
+        ParticipantListView(
+            courseTitle: "Morning Flow"
+        )
     }
 }

@@ -2,7 +2,6 @@ import SwiftUI
 
 struct CourseDetailView: View {
 
-    @Environment(\.dismiss) private var dismiss
 
     let role: UserRole
     let imageName: String
@@ -22,33 +21,12 @@ struct CourseDetailView: View {
             ScrollView {
 
                 VStack(spacing: 0) {
-
-                    ZStack(alignment: .top) {
-
-                        Image(imageName)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(height: 280)
-                            .clipped()
-
-                        HStack {
-
-                            Button {
-                                dismiss()
-                            } label: {
-                                Image(systemName: "chevron.left")
-                                    .font(.title3)
-                                    .foregroundColor(.yogaGreen)
-                                    .padding(12)
-                                    .background(.white.opacity(0.9))
-                                    .clipShape(Circle())
-                            }
-                            Spacer()
-                        }
-                        .padding(.horizontal)
-                        .padding(.top, 60)
-                    }
-
+                    Image(imageName)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: 280)
+                        .clipped()
+                 
                     VStack(alignment: .leading, spacing: 20) {
 
                         Text(title)
@@ -175,16 +153,14 @@ struct CourseDetailView: View {
                 }
     
             }
+            FooterView(
+                selectedTab: .home
 
+            )
         
             
         }
-        .navigationBarTitle(
-            "",
-            displayMode: .inline
-        )
-        .ignoresSafeArea(edges: .top)
-        .navigationBarBackButtonHidden(true)
+        .ignoresSafeArea(edges: .all)
     }
 }
 

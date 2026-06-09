@@ -17,52 +17,48 @@ struct CalendarView: View {
 
             ScrollView(showsIndicators: false) {
 
-                VStack(spacing: 20) {
+                VStack(spacing: 24) {
 
-                    HStack {
-                        Button {
-                        } label: {
-                            Image(systemName: "chevron.left")
-                                .font(.title3)
+                    // MARK: Header
+
+            
+
+                    // MARK: Kalenderkarte
+
+                    VStack(spacing: 20) {
+
+                        HStack {
+
+                            Button {
+
+                            } label: {
+
+                                Image(systemName: "chevron.left")
+                                    .foregroundColor(.yogaGreen)
+                                    .padding(10)
+                                    .background(.white.opacity(0.9))
+                                    .clipShape(Circle())
+                            }
+
+                            Spacer()
+
+                            Text("Juni")
+                                .font(.headline)
                                 .foregroundColor(.yogaGreen)
-                                .padding(12)
-                                .background(.white.opacity(0.9))
-                                .clipShape(Circle())
-                                .shadow(
-                                    color: .black.opacity(0.08),
-                                    radius: 6
-                                )
-                        }
-                        Spacer()
-                        VStack(spacing: 4) {
 
-                            Text("Juni 2026")
-                                .font(.title3)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.yogaGreen)
+                            Spacer()
 
-                            Text("7 geplante Kurse")
-                                .font(.caption)
-                                .foregroundColor(.gray)
-                        }
-                        Spacer()
-                        Button {
-                        } label: {
-                            Image(systemName: "chevron.right")
-                                .font(.title3)
-                                .foregroundColor(.yogaGreen)
-                                .padding(12)
-                                .background(.white.opacity(0.9))
-                                .clipShape(Circle())
-                                .shadow(
-                                    color: .black.opacity(0.08),
-                                    radius: 6
-                                )
-                        }
-                    }
-                    .padding(.horizontal)
+                            Button {
 
-                    VStack(spacing: 14) {
+                            } label: {
+
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.yogaGreen)
+                                    .padding(10)
+                                    .background(.white.opacity(0.9))
+                                    .clipShape(Circle())
+                            }
+                        }
 
                         HStack {
 
@@ -73,6 +69,7 @@ struct CalendarView: View {
 
                                 Text(day)
                                     .font(.caption2)
+                                    .fontWeight(.semibold)
                                     .foregroundColor(.gray)
                                     .frame(maxWidth: .infinity)
                             }
@@ -83,40 +80,40 @@ struct CalendarView: View {
                                 repeating: GridItem(.flexible()),
                                 count: 7
                             ),
-                            spacing: 14
+                            spacing: 16
                         ) {
+
                             ForEach(1...30, id: \.self) { day in
+
                                 Button {
+
                                     selectedDay = day
+
                                 } label: {
-                                    VStack(spacing: 2) {
+
+                                    VStack(spacing: 4) {
+
                                         if selectedDay == day {
+
                                             Circle()
                                                 .fill(Color.yogaGreen)
-                                                .frame(width: 34, height: 34)
+                                                .frame(width: 40, height: 40)
                                                 .overlay {
 
                                                     Text("\(day)")
-                                                        .font(.caption)
-                                                        .fontWeight(.semibold)
+                                                        .fontWeight(.bold)
                                                         .foregroundColor(.white)
                                                 }
 
                                         } else {
 
                                             Text("\(day)")
-                                                .font(.caption)
                                                 .foregroundColor(
                                                     courseDays.contains(day)
                                                     ? .yogaGold
                                                     : .yogaGreen
                                                 )
-                                                .fontWeight(
-                                                    courseDays.contains(day)
-                                                    ? .semibold
-                                                    : .regular
-                                                )
-                                                .frame(width: 34, height: 34)
+                                                .frame(width: 40, height: 40)
                                                 .background(
                                                     courseDays.contains(day)
                                                     ? Color.yogaGold.opacity(0.12)
@@ -129,34 +126,40 @@ struct CalendarView: View {
 
                                             Circle()
                                                 .fill(Color.yogaGold)
-                                                .frame(width: 4, height: 4)
+                                                .frame(width: 5, height: 5)
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                    .padding(20)
-                    .background(Color.yogaCream)
-                    .cornerRadius(24)
+                    .padding(24)
+                    .background(
+                        RoundedRectangle(cornerRadius: 30)
+                            .fill(Color.yogaCream.opacity(0.96))
+                    )
                     .shadow(
-                        color: .black.opacity(0.05),
-                        radius: 8,
-                        y: 3
+                        color: .black.opacity(0.08),
+                        radius: 15,
+                        y: 5
                     )
 
-                    VStack(alignment: .leading, spacing: 4) {
+                    // MARK: Kurse Header
+
+                    VStack(
+                        alignment: .leading,
+                        spacing: 6
+                    ) {
 
                         Text("\(selectedDay). Juni")
                             .font(.caption)
-                            .foregroundColor(.yogaGreen)
-                            .tracking(2)
-                            
+                            .tracking(3)
+                            .foregroundColor(.yogaGold)
 
-                        Text("Kurse an diesem Tag")
+                        Text("Deine Kurse")
                             .font(
                                 .system(
-                                    size: 24,
+                                    size: 28,
                                     weight: .semibold,
                                     design: .serif
                                 )
@@ -167,6 +170,8 @@ struct CalendarView: View {
                         maxWidth: .infinity,
                         alignment: .leading
                     )
+
+                    // MARK: Kurse
 
                     NavigationLink {
 
@@ -244,28 +249,22 @@ struct CalendarView: View {
                     }
                 }
                 .padding(.horizontal)
-                .padding(.top, 50)
-                .padding(.bottom, 100)
+                .padding(.top, 20)
+                .padding(.bottom, 140)
             }
 
             FooterView(
                 selectedTab: .calendar
             )
         }
+     
+        .ignoresSafeArea(edges: .bottom)
     }
 }
 
 #Preview {
-
     NavigationStack {
-
-        NavigationStack {
-
-               CalendarView()
-
-           }
-
-           .environment(FavoritesStore())
-
+        CalendarView()
     }
+    .environment(FavoritesStore())
 }

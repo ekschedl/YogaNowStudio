@@ -145,6 +145,8 @@ struct TrainerDashboardView: View {
                 selectedTab: .home
             )
         }
+        .ignoresSafeArea(edges: .all)
+
     }
 }
 
