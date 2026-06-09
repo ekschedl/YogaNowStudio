@@ -36,7 +36,6 @@ struct CourseDetailView: View {
                             Button {
                                 dismiss()
                             } label: {
-
                                 Image(systemName: "chevron.left")
                                     .font(.title3)
                                     .foregroundColor(.yogaGreen)
@@ -44,7 +43,6 @@ struct CourseDetailView: View {
                                     .background(.white.opacity(0.9))
                                     .clipShape(Circle())
                             }
-
                             Spacer()
                         }
                         .padding(.horizontal)
@@ -179,9 +177,6 @@ struct CourseDetailView: View {
             }
 
         
-                FooterView(
-                    selectedTab: .home
-                )
             
         }
         .navigationBarTitle(

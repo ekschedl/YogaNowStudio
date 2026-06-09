@@ -35,10 +35,6 @@ struct LoginView: View {
                     .padding(12)
                     .background(.white.opacity(0.9))
                     .clipShape(Circle())
-                    .shadow(
-                        color: .black.opacity(0.08),
-                        radius: 6
-                    )
             }
             .padding(.leading, 25)
             .padding(.top, 60)
@@ -275,7 +271,7 @@ struct LoginView: View {
             }
             .padding(.horizontal, 20)
         }
-        .navigationBarBackButtonHidden(true)
+        
         .navigationDestination(
             isPresented: $showTrainerDashboard
         ) {

@@ -1,9 +1,3 @@
-//
-//  ParticipantListView.swift
-//  YogaNowStudio
-//
-//  Created by Kaaatkina on 05.06.26.
-//
 import SwiftUI
 
 struct ParticipantListView: View {
@@ -27,25 +21,23 @@ struct ParticipantListView: View {
         "Maria Weiß"
     ]
 
+    
     var body: some View {
 
-        ZStack(alignment: .bottom) {
+        ZStack {
 
             Image("BackgroundYoga")
                 .resizable()
                 .scaledToFill()
                 .ignoresSafeArea()
 
-            VStack {
+            VStack(spacing: 0) {
 
                 HStack {
 
                     Button {
-
                         dismiss()
-
                     } label: {
-
                         Image(systemName: "chevron.left")
                             .font(.title3)
                             .foregroundColor(.yogaGreen)
@@ -55,18 +47,8 @@ struct ParticipantListView: View {
                     }
 
                     Spacer()
-                }
-                .padding(.horizontal)
-                .padding(.top, 60)
 
-                Spacer()
-            }
-
-            ScrollView(showsIndicators: false) {
-
-                VStack(spacing: 24) {
-
-                    VStack(spacing: 10) {
+                    VStack(spacing: 8) {
 
                         Text(courseTitle.uppercased())
                             .font(.caption)
@@ -77,7 +59,7 @@ struct ParticipantListView: View {
                         Text("Teilnehmerliste")
                             .font(
                                 .system(
-                                    size: 32,
+                                    size: 30,
                                     weight: .semibold,
                                     design: .serif
                                 )
@@ -88,84 +70,31 @@ struct ParticipantListView: View {
                             .font(.subheadline)
                             .foregroundColor(.gray)
                     }
+                    .padding(.bottom, 20)
 
-                 
+                    Spacer()
 
-                    VStack(spacing: 10) {
-
-                        ForEach(participants, id: \.self) { participant in
-
-                            HStack(spacing: 14) {
-
-                                Circle()
-                                    .fill(
-                                        LinearGradient(
-                                            colors: [
-                                                Color.yogaGold.opacity(0.35),
-                                                Color.yogaGold.opacity(0.15)
-                                            ],
-                                            startPoint: .top,
-                                            endPoint: .bottom
-                                        )
-                                    )
-                                    .frame(width: 48, height: 48)
-                                    .overlay {
-
-                                        Image(systemName: "person.fill")
-                                            .foregroundColor(.yogaGold)
-                                    }
-
-                                VStack(
-                                    alignment: .leading,
-                                    spacing: 2
-                                ) {
-
-                                    Text(participant)
-                                        .fontWeight(.medium)
-                                        .foregroundColor(.yogaGreen)
-
-                                    Text("Angemeldet")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                }
-
-                                Spacer()
-
-                                Circle()
-                                    .fill(.green)
-                                    .frame(width: 12, height: 12)
-                            }
-                            .padding()
-                            .background(.white.opacity(0.92))
-                            .cornerRadius(18)
-                            .shadow(
-                                color: .black.opacity(0.03),
-                                radius: 4,
-                                y: 2
-                            )
-                        }
-                    }
+                    Color.clear
+                        .frame(width: 20)
                 }
                 .padding()
-                .padding(.top, 70)
-                .padding(.bottom, 120)
-            }
 
-         
+                List(participants, id: \.self) { participant in
+
+                    HStack {
+
+                        Image(systemName: "person.circle.fill")
+                            .font(.title2)
+                            .foregroundColor(.yogaGold)
+
+                        Text(participant)
+
+                        Spacer()
+                    }
+                }
+                .listStyle(.plain)
+            }
         }
         .navigationBarBackButtonHidden(true)
-        .navigationTitle("")
-        .navigationBarTitleDisplayMode(.inline)
     }
-}
-
-#Preview {
-
-    NavigationStack {
-
-        ParticipantListView(
-            courseTitle: "Morning Flow"
-        )
-    }
-    .environment(FavoritesStore())
 }
