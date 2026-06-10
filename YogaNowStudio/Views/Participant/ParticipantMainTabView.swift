@@ -13,49 +13,43 @@ struct ParticipantMainTabView: View {
 
         TabView {
 
-            ParticipantDashboardView()
-                .tabItem {
-                    Label(
-                        "Heute",
-                        systemImage: "house"
-                    )
-                }
-
-            CalendarView()
-                .tabItem {
-                    Label(
-                        "Buchen",
-                        systemImage: "calendar"
-                    )
-                }
-
-            MyBookingsView()
-                .tabItem {
-                    Label(
-                        "Buchungen",
-                        systemImage: "bookmark"
-                    )
-                }
-
-            YogaLibraryView()
-                .tabItem {
-                    Label(
-                        "Library",
-                        systemImage: "book"
-                    )
-                }
-
-            ProfileView(
-                role: .participant
-            )
+            NavigationStack {
+                ParticipantDashboardView()
+            }
             .tabItem {
-                Label(
-                    "Profil",
-                    systemImage: "person"
-                )
+                Label("Heute", systemImage: "house")
+            }
+
+            NavigationStack {
+                CalendarView()
+            }
+            .tabItem {
+                Label("Kalender", systemImage: "calendar")
+            }
+
+            NavigationStack {
+                MyBookingsView()
+            }
+            .tabItem {
+                Label("Buchungen", systemImage: "bookmark")
+            }
+
+            NavigationStack {
+                YogaLibraryView()
+            }
+            .tabItem {
+                Label("Library", systemImage: "book")
+            }
+
+            NavigationStack {
+                ProfileView(role: .participant)
+            }
+            .tabItem {
+                Label("Profil", systemImage: "person")
             }
         }
         .tint(.yogaGreen)
+        .navigationBarBackButtonHidden(true)
     }
 }
 

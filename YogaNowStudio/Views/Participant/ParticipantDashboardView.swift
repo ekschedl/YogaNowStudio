@@ -36,6 +36,10 @@ struct ParticipantDashboardView: View {
                             )
                             .tracking(2)
                             .foregroundColor(.yogaGold)
+                        
+                        Text("Schön, dass du heute da bist")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
                     }
 
                     Spacer()

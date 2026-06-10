@@ -248,14 +248,19 @@ struct LoginView: View {
             .padding(.horizontal, 20)
         }
         
-        .navigationDestination(
-            isPresented: $showTrainerDashboard
+        .fullScreenCover(
+            isPresented: $showTrainerDashboard,
+            onDismiss: {
+                dismiss()
+            }
         ) {
             TrainerMainTabView()
         }
-        
-        .navigationDestination(
-            isPresented: $showParticipantDashboard
+        .fullScreenCover(
+            isPresented: $showParticipantDashboard,
+            onDismiss: {
+                dismiss()
+            }
         ) {
             ParticipantMainTabView()
         }

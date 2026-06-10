@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ProfileView: View {
 
+    @Environment(\.dismiss) private var dismiss
     let role: UserRole
 
     var body: some View {
@@ -39,6 +40,7 @@ struct ProfileView: View {
                     .padding(.top, 70)
 
                     // MARK: Credits
+                    // MARK: Teilnehmer / Trainer Infos
 
                     if role == .participant {
 
@@ -60,39 +62,77 @@ struct ProfileView: View {
                                 )
                                 .foregroundColor(.yogaGreen)
                         }
-                    }
 
-                    // MARK: Stats
+                        HStack(spacing: 20) {
 
-                    HStack(spacing: 20) {
+                            VStack(spacing: 6) {
 
-                        VStack(spacing: 6) {
+                                Text("LEVEL")
+                                    .font(.caption)
+                                    .fontWeight(.bold)
+                                    .tracking(3)
+                                    .foregroundColor(.yogaGold)
 
-                            Text("LEVEL")
-                                .font(.caption)
-                                .fontWeight(.bold)
-                                .tracking(3)
-                                .foregroundColor(.yogaGold)
+                                Text("Alle Levels")
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.yogaGreen)
+                            }
+                            .frame(maxWidth: .infinity)
 
-                            Text("Alle Levels")
-                                .fontWeight(.semibold)
-                                .foregroundColor(.yogaGreen)
+                            VStack(spacing: 6) {
+
+                                Text("KURSE")
+                                    .font(.caption)
+                                    .fontWeight(.bold)
+                                    .tracking(3)
+                                    .foregroundColor(.yogaGold)
+
+                                Text("12")
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.yogaGreen)
+                            }
+                            .frame(maxWidth: .infinity)
                         }
-                        .frame(maxWidth: .infinity)
 
-                        VStack(spacing: 6) {
+                    } else {
 
-                            Text("KURSE")
-                                .font(.caption)
-                                .fontWeight(.bold)
-                                .tracking(3)
-                                .foregroundColor(.yogaGold)
+                        Text("YOGA TRAINERIN")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .tracking(4)
+                            .foregroundColor(.yogaGold)
 
-                            Text("12")
-                                .fontWeight(.semibold)
-                                .foregroundColor(.yogaGreen)
+                        HStack(spacing: 20) {
+
+                            VStack(spacing: 6) {
+
+                                Text("STIL")
+                                    .font(.caption)
+                                    .fontWeight(.bold)
+                                    .tracking(3)
+                                    .foregroundColor(.yogaGold)
+
+                                Text("Vinyasa & Yin Yoga")
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.yogaGreen)
+                                    .multilineTextAlignment(.center)
+                            }
+                            .frame(maxWidth: .infinity)
+
+                            VStack(spacing: 6) {
+
+                                Text("ERFAHRUNG")
+                                    .font(.caption)
+                                    .fontWeight(.bold)
+                                    .tracking(3)
+                                    .foregroundColor(.yogaGold)
+
+                                Text("6 Jahre")
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.yogaGreen)
+                            }
+                            .frame(maxWidth: .infinity)
                         }
-                        .frame(maxWidth: .infinity)
                     }
 
                     // MARK: Persönliche Daten
@@ -138,47 +178,62 @@ struct ProfileView: View {
                                 .foregroundColor(.yogaGreen)
                         }
 
-                        VStack(
-                            alignment: .leading,
-                            spacing: 4
-                        ) {
+                        if role == .participant {
 
-                            Text("MITGLIED SEIT")
-                                .font(.caption)
-                                .fontWeight(.bold)
-                                .tracking(2)
-                                .foregroundColor(.yogaGold)
+                            VStack(
+                                alignment: .leading,
+                                spacing: 4
+                            ) {
 
-                            Text("Juni 2026")
-                                .foregroundColor(.yogaGreen)
+                                Text("MITGLIED SEIT")
+                                    .font(.caption)
+                                    .fontWeight(.bold)
+                                    .tracking(2)
+                                    .foregroundColor(.yogaGold)
+
+                                Text("Juni 2026")
+                                    .foregroundColor(.yogaGreen)
+                            }
+
+                        } else {
+                            
+                            VStack(
+                                alignment: .leading,
+                                spacing: 4
+                            ) {
+                                
+                                Text("TRAINER SEIT")
+                                    .font(.caption)
+                                    .fontWeight(.bold)
+                                    .tracking(2)
+                                    .foregroundColor(.yogaGold)
+                                
+                                Text("2024")
+                                    .foregroundColor(.yogaGreen)
+                            }}
                         }
-                    }
                     .frame(
                         maxWidth: .infinity,
                         alignment: .leading
                     )
                     .padding(24)
                     .background(
-                        Color.white.opacity(0.45)
+                        Color.yogaCream.opacity(0.95)
                     )
                     .clipShape(
                         RoundedRectangle(
                             cornerRadius: 28
                         )
                     )
-
                     // MARK: Logout
-
                     Button {
-
+                        dismiss()
                     } label: {
-
                         SecondaryButton(
                             title: "Abmelden",
                             icon: "rectangle.portrait.and.arrow.right"
                         )
                     }
-
                     Spacer()
                         .frame(height: 100)
                 }

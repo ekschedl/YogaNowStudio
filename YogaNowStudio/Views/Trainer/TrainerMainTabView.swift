@@ -61,5 +61,6 @@ struct TrainerMainTabView: View {
             }
         }
         .tint(.yogaGreen)
+        .navigationBarBackButtonHidden(true)
     }
 }
