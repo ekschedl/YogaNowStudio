@@ -4,7 +4,9 @@ struct ProfileView: View {
 
     @Environment(\.dismiss) private var dismiss
     let role: UserRole
-
+    var userName: String {
+        role == .trainer ? "Valerie" : "Katja"
+    }
     var body: some View {
 
         ZStack {
@@ -26,7 +28,7 @@ struct ProfileView: View {
                             .font(.title3)
                             .foregroundColor(.yogaGreen)
 
-                        Text("Katja")
+                        Text(userName)
                             .font(
                                 .system(
                                     size: 44,

@@ -18,9 +18,7 @@ struct CalendarView: View {
                 VStack(spacing: 24) {
 
                     // MARK: Header
-
                     VStack(spacing: 8) {
-
                         Text("Dein Kalender")
                             .font(
                                 .system(
@@ -47,15 +45,11 @@ struct CalendarView: View {
                     }
                     .padding(.horizontal, 20)
                     .padding(.vertical, 16)
-                    .background(.ultraThickMaterial)
-                    .clipShape(
-                        RoundedRectangle(cornerRadius: 24)
-                    )
                     .overlay(
                         RoundedRectangle(cornerRadius: 24)
                             .stroke(
                                 Color.white.opacity(0.6),
-                                lineWidth: 1
+                                lineWidth: 3
                             )
                     ).padding(.top,50)
 

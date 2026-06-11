@@ -7,15 +7,15 @@
 import SwiftUI
 
 struct TrainerMainTabView: View {
-
+    
     var body: some View {
-
+        
         TabView {
-
+            
             NavigationStack {
-
+                
                 TrainerDashboardView()
-
+                
             }
             .tabItem {
                 Label(
@@ -23,11 +23,11 @@ struct TrainerMainTabView: View {
                     systemImage: "house"
                 )
             }
-
+            
             NavigationStack {
-
+                
                 CalendarView()
-
+                
             }
             .tabItem {
                 Label(
@@ -35,11 +35,11 @@ struct TrainerMainTabView: View {
                     systemImage: "calendar"
                 )
             }
-
+            
             NavigationStack {
-
+                
                 YogaLibraryView()
-
+                
             }
             .tabItem {
                 Label(
@@ -47,20 +47,28 @@ struct TrainerMainTabView: View {
                     systemImage: "book"
                 )
             }
-
+            
             NavigationStack {
 
-                Text("Profil")
+                ProfileView(
+
+                    role: .trainer
+
+                )
 
             }
+
             .tabItem {
+
                 Label(
+
                     "Profil",
+
                     systemImage: "person"
+
                 )
+
             }
         }
-        .tint(.yogaGreen)
-        .navigationBarBackButtonHidden(true)
     }
 }
