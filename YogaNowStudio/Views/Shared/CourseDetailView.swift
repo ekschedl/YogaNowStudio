@@ -179,7 +179,7 @@ struct CourseDetailView: View {
                             }
 
                             Text(
-                                "\(maxParticipants - participants) von \(maxParticipants)"
+                                "\(maxParticipants - participants) freie Plätze"
                             )
                             .font(.title3)
                             .fontWeight(.semibold)

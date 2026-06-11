@@ -20,9 +20,9 @@ struct ParticipantMainTabView: View {
                 Label("Heute", systemImage: "house")
             }
 
-            NavigationStack {
-                CalendarView()
-            }
+            CalendarView(
+                role: .participant
+            )
             .tabItem {
                 Label("Kalender", systemImage: "calendar")
             }

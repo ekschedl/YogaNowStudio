@@ -2,6 +2,8 @@ import SwiftUI
 
 struct CalendarView: View {
 
+    let role: UserRole
+
     @State private var selectedDate = Date()
 
     var body: some View {
@@ -18,7 +20,9 @@ struct CalendarView: View {
                 VStack(spacing: 24) {
 
                     // MARK: Header
+
                     VStack(spacing: 8) {
+
                         Text("Dein Kalender")
                             .font(
                                 .system(
@@ -28,34 +32,14 @@ struct CalendarView: View {
                                 )
                             )
                             .foregroundColor(.yogaGreen)
-
-                        Text(
-                            selectedDate.formatted(
-                                .dateTime
-                                    .weekday(.wide)
-                                    .day()
-                                    .month(.wide)
-                                    .locale(Locale(identifier: "de_DE"))
-                            )
-                        )
-                        .font(.footnote)
-                        .fontWeight(.bold)
-                        .tracking(3)
-                        .foregroundColor(.yogaGold)
                     }
                     .padding(.horizontal, 20)
-                    .padding(.vertical, 16)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 24)
-                            .stroke(
-                                Color.white.opacity(0.6),
-                                lineWidth: 3
-                            )
-                    ).padding(.top,50)
+                    .padding(.vertical, 10)
+                    .padding(.top, 50)
 
                     // MARK: Kalender
 
-                    VStack {
+                    VStack(spacing: 8) {
 
                         DatePicker(
                             "",
@@ -67,9 +51,25 @@ struct CalendarView: View {
                         .labelsHidden()
                         .environment(
                             \.locale,
-                             Locale(identifier: "de_DE")
+                            Locale(identifier: "de_DE")
                         )
                         .tint(.yogaGreen)
+
+                        Text(
+                            selectedDate.formatted(
+                                .dateTime
+                                    .weekday(.wide)
+                                    .day()
+                                    .month(.wide)
+                                    .locale(Locale(identifier: "de_DE"))
+                            )
+                            .uppercased()
+                        )
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .tracking(4)
+                        .foregroundColor(.yogaGold)
+                        .padding(.bottom, 18)
                     }
                     .background(
                         RoundedRectangle(cornerRadius: 32)
@@ -84,24 +84,18 @@ struct CalendarView: View {
                                 )
                             )
                     )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 32)
-                            .stroke(
-                                Color.white.opacity(0.8),
-                                lineWidth: 1
-                            )
-                    )
 
-                    // MARK: Datum
-                    VStack(
-                        alignment: .leading,
-                        spacing: 6
-                    ) {
-
-                        Text("Kurse an diesem Tag")
+                    // MARK: Kurse an diesem Tag
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("AUSGEWÄHLTER TAG")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .tracking(4)
+                            .foregroundColor(.yogaGold)
+                        Text("Deine Kurse")
                             .font(
                                 .system(
-                                    size: 28,
+                                    size: 32,
                                     weight: .semibold,
                                     design: .serif
                                 )
@@ -112,7 +106,9 @@ struct CalendarView: View {
                         maxWidth: .infinity,
                         alignment: .leading
                     )
-
+                    .padding(.top, 4)
+                        
+            
                     // MARK: Kurse
                     courseLink(
                         image: "ImageCourse01",
@@ -134,14 +130,14 @@ struct CalendarView: View {
                         time: "19:00 Uhr",
                         participants: 8
                     )
+
                     Spacer()
                         .frame(height: 100)
                 }
                 .padding(.horizontal)
             }
         }
-
-        }
+        .navigationBarTitleDisplayMode(.inline)
     }
 
     // MARK: Kurs-Link
@@ -155,9 +151,8 @@ struct CalendarView: View {
     ) -> some View {
 
         NavigationLink {
-
             CourseDetailView(
-                role: .trainer,
+                role: role,
                 imageName: image,
                 title: title,
                 time: time,
@@ -167,11 +162,9 @@ struct CalendarView: View {
                 description: "Kursbeschreibung",
                 participants: participants,
                 maxParticipants: 15,
-                isBooked: false
+                isBooked: role == .participant
             )
-
         } label: {
-
             CourseCardView(
                 imageName: image,
                 title: title,
@@ -180,14 +173,14 @@ struct CalendarView: View {
             )
         }
     }
-
+}
 
 #Preview {
 
     NavigationStack {
-
-        CalendarView()
-
+        CalendarView(
+            role: .participant
+        )
     }
     .environment(FavoritesStore())
 }

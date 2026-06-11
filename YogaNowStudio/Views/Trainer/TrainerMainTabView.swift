@@ -24,11 +24,9 @@ struct TrainerMainTabView: View {
                 )
             }
             
-            NavigationStack {
-                
-                CalendarView()
-                
-            }
+            CalendarView(
+                role: .trainer
+            )
             .tabItem {
                 Label(
                     "Kalender",
