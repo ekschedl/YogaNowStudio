@@ -26,6 +26,7 @@ struct CourseDetailView: View {
     let maxParticipants: Int
     let isBooked: Bool
     let onShowBookings: () -> Void
+    let courseDate: Date
 
     // MARK: - Init
 
@@ -41,7 +42,8 @@ struct CourseDetailView: View {
         participants: Int,
         maxParticipants: Int,
         isBooked: Bool,
-        onShowBookings: @escaping () -> Void = {}
+        onShowBookings: @escaping () -> Void = {},
+        courseDate: Date = Date()
     ) {
         self.role = role
         self.imageName = imageName
@@ -55,6 +57,7 @@ struct CourseDetailView: View {
         self.maxParticipants = maxParticipants
         self.isBooked = isBooked
         self.onShowBookings = onShowBookings
+        self.courseDate = courseDate
     }
 
     // MARK: - Computed Properties
@@ -63,6 +66,7 @@ struct CourseDetailView: View {
         Course(
             title: title,
             day: "Donnerstag",
+            date: courseDate,
             time: time,
             room: "Raum 1",
             participants: participants,
@@ -522,7 +526,8 @@ struct CourseDetailView: View {
             participants: 12,
             maxParticipants: 15,
             isBooked: false,
-            onShowBookings: {}
+            onShowBookings: {},
+            
         )
     }
     .environment(FavoritesStore())

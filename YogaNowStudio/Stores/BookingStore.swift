@@ -5,11 +5,17 @@ import Combine
 @MainActor
 final class BookingStore: ObservableObject {
 
+    // MARK: - Published Properties
+
     @Published private(set) var bookings: [Booking] = []
     @Published private(set) var credits: Int = 8
     @Published var errorMessage: String?
 
+    // MARK: - Service
+
     private let bookingService: BookingService
+
+    // MARK: - Init
 
     init() {
         self.bookingService = MockBookingService()
@@ -21,17 +27,38 @@ final class BookingStore: ObservableObject {
         self.bookingService = bookingService
     }
 
+    // MARK: - Load Bookings
+
     func loadBookings() async {
+
         do {
             bookings = try await bookingService.fetchBookings()
+            errorMessage = nil
+
         } catch {
             errorMessage = "Buchungen konnten nicht geladen werden."
         }
     }
 
+    // MARK: - Book Course
+
     func book(
         course: Course
     ) async -> Bool {
+
+        let alreadyBooked = bookings.contains { booking in
+
+            booking.course.title == course.title &&
+            Calendar.current.isDate(
+                booking.course.date,
+                inSameDayAs: course.date
+            )
+        }
+
+        if alreadyBooked {
+            errorMessage = "Du hast diesen Kurs bereits gebucht."
+            return false
+        }
 
         guard credits > 0 else {
             errorMessage = "Du hast nicht genügend Credits."
@@ -45,6 +72,7 @@ final class BookingStore: ObservableObject {
 
             bookings.append(booking)
             credits -= 1
+            errorMessage = nil
 
             return true
 
@@ -53,6 +81,8 @@ final class BookingStore: ObservableObject {
             return false
         }
     }
+
+    // MARK: - Cancel Booking
 
     func cancel(
         booking: Booking
@@ -68,18 +98,26 @@ final class BookingStore: ObservableObject {
             }
 
             credits += 1
+            errorMessage = nil
 
         } catch {
             errorMessage = "Die Buchung konnte nicht storniert werden."
         }
     }
 
+    // MARK: - Booking Check
+
     func isBooked(
         course: Course
     ) -> Bool {
 
-        bookings.contains {
-            $0.course.id == course.id
+        bookings.contains { booking in
+
+            booking.course.title == course.title &&
+            Calendar.current.isDate(
+                booking.course.date,
+                inSameDayAs: course.date
+            )
         }
     }
 }

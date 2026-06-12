@@ -1,5 +1,6 @@
 import SwiftUI
 
+
 struct ParticipantDashboardView: View {
     let onShowBookings: () -> Void
     @EnvironmentObject private var bookingStore: BookingStore
@@ -13,7 +14,14 @@ struct ParticipantDashboardView: View {
         Course(
             title: "Morning Flow",
             day: "Donnerstag",
-            time: "18:00",
+            date: Calendar.current.date(
+                from: DateComponents(
+                    year: 2026,
+                    month: 6,
+                    day: 18
+                )
+            ) ?? Date(),
+            time: "08:30 Uhr",
             room: "Raum 1",
             participants: 12,
             imageName: "ImageCourse01"
@@ -32,6 +40,17 @@ struct ParticipantDashboardView: View {
     
     private var buttonTitle: String {
         hasBooking ? "Buchung ansehen" : "Kursdetails ansehen"
+    }
+
+    private var displayedCourseDateText: String {
+
+        displayedCourse.date.formatted(
+            .dateTime
+                .weekday(.wide)
+                .day()
+                .month(.wide)
+                .locale(Locale(identifier: "de_DE"))
+        )
     }
 
     var body: some View {
@@ -131,15 +150,15 @@ struct ParticipantDashboardView: View {
                         HStack(spacing: 20) {
 
                             InfoCard(
-                                title: "Zeit",
-                                value: displayedCourse.time,
-                                icon: "clock.fill"
+                                title: "Datum",
+                                value: displayedCourseDateText,
+                                icon: "calendar"
                             )
 
                             InfoCard(
-                                title: "Dauer",
-                                value: "60 Min",
-                                icon: "timer"
+                                title: "Zeit",
+                                value: displayedCourse.time,
+                                icon: "clock.fill"
                             )
                         }
 
@@ -191,7 +210,6 @@ struct ParticipantDashboardView: View {
                     // MARK: Kursdetails
 
                     NavigationLink {
-
                         CourseDetailView(
                             role: .participant,
                             imageName: displayedCourse.imageName,
@@ -203,7 +221,9 @@ struct ParticipantDashboardView: View {
                             description: "Starte deinen Tag mit einer belebenden Yoga-Praxis für Körper und Geist.",
                             participants: displayedCourse.participants,
                             maxParticipants: 15,
-                            isBooked: hasBooking
+                            isBooked: hasBooking,
+                            onShowBookings: onShowBookings,
+                            courseDate: displayedCourse.date
                         )
 
                     } label: {

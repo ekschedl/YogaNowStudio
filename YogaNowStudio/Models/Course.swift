@@ -1,10 +1,3 @@
-//
-//  Course.swift
-//  YogaNowStudio
-//
-//  Created by Kaaatkina on 05.06.26.
-//
-
 import Foundation
 
 struct Course: Identifiable, Equatable {
@@ -12,6 +5,7 @@ struct Course: Identifiable, Equatable {
     let id: UUID
     let title: String
     let day: String
+    let date: Date
     let time: String
     let room: String
     let participants: Int
@@ -21,6 +15,7 @@ struct Course: Identifiable, Equatable {
         id: UUID = UUID(),
         title: String,
         day: String,
+        date: Date = Date(),
         time: String,
         room: String,
         participants: Int,
@@ -29,6 +24,7 @@ struct Course: Identifiable, Equatable {
         self.id = id
         self.title = title
         self.day = day
+        self.date = date
         self.time = time
         self.room = room
         self.participants = participants
