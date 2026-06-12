@@ -18,6 +18,35 @@ struct CourseDetailView: View {
     let participants: Int
     let maxParticipants: Int
     let isBooked: Bool
+    let onShowBookings: () -> Void
+
+    init(
+        role: UserRole,
+        imageName: String,
+        title: String,
+        time: String,
+        duration: String,
+        level: String,
+        trainer: String,
+        description: String,
+        participants: Int,
+        maxParticipants: Int,
+        isBooked: Bool,
+        onShowBookings: @escaping () -> Void = {}
+    ) {
+        self.role = role
+        self.imageName = imageName
+        self.title = title
+        self.time = time
+        self.duration = duration
+        self.level = level
+        self.trainer = trainer
+        self.description = description
+        self.participants = participants
+        self.maxParticipants = maxParticipants
+        self.isBooked = isBooked
+        self.onShowBookings = onShowBookings
+    }
 
     private var course: Course {
         Course(
@@ -209,12 +238,33 @@ struct CourseDetailView: View {
                         )
 
                         if isBooked {
-                            SecondaryButton(
-                                title: "Buchung stornieren",
-                                icon: "xmark.circle"
-                            )
+
+                            Button {
+                                if let booking = bookingStore.bookings.first(where: {
+
+                                    $0.course.title == course.title
+
+                                }) {
+                                    Task {
+                                        await bookingStore.cancel(
+                                            booking: booking
+                                        )
+                                        onShowBookings()
+                                    }
+                                }
+                            } label: {
+                                SecondaryButton(
+
+                                    title: "Buchung stornieren",
+
+                                    icon: "xmark.circle"
+
+                                )
+
+                            }
 
                         } else {
+
                             Button {
                                 showBookingPopup = true
                             } label: {
@@ -291,6 +341,7 @@ struct CourseDetailView: View {
                     course: course,
                     credits: bookingStore.credits,
                     isBooking: isBooking,
+                    errorMessage: bookingStore.errorMessage,
                     onCancel: {
                         showBookingPopup = false
                     },
@@ -306,7 +357,8 @@ struct CourseDetailView: View {
             isPresented: $showBookingSuccess
         ) {
             BookingSuccessView(
-                course: course
+                course: course,
+                onFinish: onShowBookings
             )
         }
     }
@@ -342,7 +394,8 @@ struct CourseDetailView: View {
             description: "Starte deinen Tag mit einer belebenden Yoga-Praxis für Körper und Geist.",
             participants: 12,
             maxParticipants: 15,
-            isBooked: false
+            isBooked: false,
+            onShowBookings: {}
         )
     }
     .environment(FavoritesStore())

@@ -1,10 +1,3 @@
-//
-//  BookingConfirmPopupView.swift
-//  YogaNowStudio
-//
-//  Created by Kaaatkina on 12.06.26.
-//
-
 import SwiftUI
 
 struct BookingConfirmPopupView: View {
@@ -12,6 +5,7 @@ struct BookingConfirmPopupView: View {
     let course: Course
     let credits: Int
     let isBooking: Bool
+    let errorMessage: String?
     let onCancel: () -> Void
     let onConfirm: () -> Void
 
@@ -24,13 +18,9 @@ struct BookingConfirmPopupView: View {
 
             VStack(spacing: 22) {
 
-                // MARK: Icon
-
                 Image(systemName: "calendar.badge.checkmark")
                     .font(.system(size: 34))
                     .foregroundColor(.yogaGold)
-
-                // MARK: Title
 
                 VStack(spacing: 6) {
 
@@ -53,8 +43,6 @@ struct BookingConfirmPopupView: View {
                 }
 
                 Divider()
-
-                // MARK: Course Info
 
                 VStack(alignment: .leading, spacing: 14) {
 
@@ -88,8 +76,6 @@ struct BookingConfirmPopupView: View {
                     alignment: .leading
                 )
 
-                // MARK: Credits
-
                 VStack(alignment: .leading, spacing: 6) {
 
                     Text("DEINE CREDITS")
@@ -118,7 +104,23 @@ struct BookingConfirmPopupView: View {
                     RoundedRectangle(cornerRadius: 18)
                 )
 
-                // MARK: Buttons
+                if let errorMessage {
+
+                    Text(errorMessage)
+                        .font(.subheadline)
+                        .foregroundColor(.red)
+                        .padding()
+                        .frame(
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
+                        .background(
+                            Color.red.opacity(0.08)
+                        )
+                        .clipShape(
+                            RoundedRectangle(cornerRadius: 16)
+                        )
+                }
 
                 VStack(spacing: 10) {
 
@@ -181,7 +183,6 @@ struct BookingConfirmPopupView: View {
 }
 
 #Preview {
-
     BookingConfirmPopupView(
         course: Course(
             title: "Morning Flow",
@@ -193,6 +194,7 @@ struct BookingConfirmPopupView: View {
         ),
         credits: 8,
         isBooking: false,
+        errorMessage: nil,
         onCancel: {},
         onConfirm: {}
     )

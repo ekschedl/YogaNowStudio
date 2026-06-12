@@ -4,10 +4,11 @@
 //
 //  Created by Kaaatkina on 09.06.26.
 //
-
 import SwiftUI
 
 struct MyBookingsView: View {
+
+    @EnvironmentObject private var bookingStore: BookingStore
 
     var body: some View {
 
@@ -22,8 +23,11 @@ struct MyBookingsView: View {
 
                 VStack(spacing: 24) {
 
-                    VStack(spacing: 8) {
+                    // MARK: Header
 
+                    VStack(spacing: 8) {
+                        Spacer()
+                        Spacer()
                         Text("Meine Buchungen")
                             .font(
                                 .system(
@@ -34,7 +38,7 @@ struct MyBookingsView: View {
                             )
                             .foregroundColor(.yogaGreen)
 
-                        Text("2 AKTIVE KURSE")
+                        Text("\(bookingStore.bookings.count) AKTIVE KURSE")
                             .font(.caption)
                             .fontWeight(.bold)
                             .tracking(3)
@@ -42,62 +46,116 @@ struct MyBookingsView: View {
                     }
                     .padding(.top, 70)
 
-                    bookingCard(
-                        title: "Morning Flow",
-                        date: "10.06.2026",
-                        time: "18:00 Uhr"
-                    )
+                    // MARK: Empty State
 
-                    bookingCard(
-                        title: "Yin Yoga",
-                        date: "13.06.2026",
-                        time: "17:30 Uhr"
-                    )
+                    if bookingStore.bookings.isEmpty {
+
+                        VStack(spacing: 16) {
+
+                            Image(systemName: "calendar.badge.exclamationmark")
+                                .font(.system(size: 38))
+                                .foregroundColor(.yogaGold)
+
+                            Text("Keine Buchungen")
+                                .font(
+                                    .system(
+                                        size: 28,
+                                        weight: .semibold,
+                                        design: .serif
+                                    )
+                                )
+                                .foregroundColor(.yogaGreen)
+
+                            Text("Du hast aktuell keine aktiven Kurse gebucht.")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                                .multilineTextAlignment(.center)
+                        }
+                        .padding(30)
+                        .frame(maxWidth: .infinity)
+                        .background(
+                            Color.white.opacity(0.78)
+                        )
+                        .clipShape(
+                            RoundedRectangle(cornerRadius: 28)
+                        )
+
+                    } else {
+
+                        ForEach(bookingStore.bookings) { booking in
+
+                            bookingCard(
+                                booking: booking
+                            )
+                        }
+                    }
 
                     Spacer()
                         .frame(height: 100)
                 }
                 .padding(.horizontal)
+                
             }
         }
         .navigationBarTitleDisplayMode(.inline)
     }
 
-    @ViewBuilder
+    // MARK: Booking Card
+
     private func bookingCard(
-        title: String,
-        date: String,
-        time: String
+        booking: Booking
     ) -> some View {
-        
+
         VStack(
             alignment: .leading,
             spacing: 14
         ) {
-            
-            Text(title)
+
+            Text(booking.course.title)
                 .font(.title3)
                 .fontWeight(.semibold)
                 .foregroundColor(.yogaGreen)
-            
-            Text(date)
-                .foregroundColor(.gray)
-            
-            Text(time)
-                .foregroundColor(.gray)
-            
-            HStack {
-                
+
+            HStack(spacing: 10) {
+
+                Image(systemName: "calendar")
+                    .foregroundColor(.yogaGold)
+
+                Text(booking.course.day)
+                    .foregroundColor(.gray)
+            }
+
+            HStack(spacing: 10) {
+
+                Image(systemName: "clock.fill")
+                    .foregroundColor(.yogaGold)
+
+                Text(booking.course.time)
+                    .foregroundColor(.gray)
+            }
+
+            HStack(spacing: 12) {
+
                 Button {
-                    
+
                 } label: {
+
                     PrimaryButton(
                         title: "Details",
-                        icon: ""
+                        icon: "calendar"
                     )
                 }
+
                 Button {
+
+                    Task {
+                        await bookingStore.cancel(
+                            booking: booking
+                        )
+                    }
+
                 } label: {
+
                     SecondaryButton(
                         title: "Stornieren",
                         icon: "xmark"
@@ -109,7 +167,7 @@ struct MyBookingsView: View {
         .background(
             LinearGradient(
                 colors: [
-                    Color.white,
+                    Color.white.opacity(0.95),
                     Color.yogaCream.opacity(0.9)
                 ],
                 startPoint: .topLeading,
@@ -129,7 +187,7 @@ struct MyBookingsView: View {
     NavigationStack {
 
         MyBookingsView()
-
     }
+    .environmentObject(BookingStore())
     .environment(FavoritesStore())
 }

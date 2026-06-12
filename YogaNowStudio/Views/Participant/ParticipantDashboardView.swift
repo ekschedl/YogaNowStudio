@@ -1,6 +1,38 @@
 import SwiftUI
 
 struct ParticipantDashboardView: View {
+    let onShowBookings: () -> Void
+    @EnvironmentObject private var bookingStore: BookingStore
+
+    private var hasBooking: Bool {
+        !bookingStore.bookings.isEmpty
+    }
+
+    private var displayedCourse: Course {
+        bookingStore.bookings.first?.course ??
+        Course(
+            title: "Morning Flow",
+            day: "Donnerstag",
+            time: "18:00",
+            room: "Raum 1",
+            participants: 12,
+            imageName: "ImageCourse01"
+        )
+    }
+
+    private var sectionTitle: String {
+        hasBooking ? "DEIN NÄCHSTER KURS" : "EMPFOHLENER KURS"
+    }
+
+    private var infoText: String {
+        hasBooking
+        ? "Du bist für diesen Kurs angemeldet."
+        : "Du hast aktuell noch keine Buchung.\nDieser Kurs könnte gut zu dir passen."
+    }
+    
+    private var buttonTitle: String {
+        hasBooking ? "Buchung ansehen" : "Kursdetails ansehen"
+    }
 
     var body: some View {
 
@@ -20,8 +52,8 @@ struct ParticipantDashboardView: View {
 
                     // MARK: Header
 
-                    VStack(spacing: 8) {
-
+                    VStack(spacing: 10) {
+                        Spacer()
                         Text("Namasté")
                             .font(.title3)
                             .foregroundColor(.yogaGreen)
@@ -36,25 +68,32 @@ struct ParticipantDashboardView: View {
                             )
                             .tracking(2)
                             .foregroundColor(.yogaGold)
+
                         
-                        Text("Schön, dass du heute da bist")
+                        Text("Schön, dass du da bist")
                             .font(.subheadline)
-                            .foregroundColor(.gray)
+                            .foregroundColor(.yogaGold)
                     }
 
                     Spacer()
-                        .frame(height: 70)
+                        .frame(height: 50)
+                    
+                    Text(infoText)
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.center)
 
-                    // MARK: Nächster Kurs
+                    // MARK: Kurs Card
+
                     VStack(spacing: 18) {
 
-                        Text("DEIN NÄCHSTER KURS")
+                        Text(sectionTitle)
                             .font(.caption)
                             .fontWeight(.bold)
                             .tracking(4)
                             .foregroundColor(.yogaGold)
 
-                        Text("Morning Flow")
+                        Text(displayedCourse.title)
                             .font(
                                 .system(
                                     size: 34,
@@ -71,7 +110,7 @@ struct ParticipantDashboardView: View {
 
                             InfoCard(
                                 title: "Zeit",
-                                value: "18:00",
+                                value: displayedCourse.time,
                                 icon: "clock.fill"
                             )
 
@@ -96,6 +135,20 @@ struct ParticipantDashboardView: View {
                                 icon: "figure.yoga"
                             )
                         }
+
+                        if hasBooking {
+
+                            Text("Du bist für diesen Kurs angemeldet.")
+                                .font(.footnote)
+                                .foregroundColor(.gray)
+
+                        } else {
+
+                            Text("Du hast aktuell noch keine Buchung. Dieser Kurs könnte gut zu dir passen.")
+                                .font(.footnote)
+                                .foregroundColor(.gray)
+                                .multilineTextAlignment(.center)
+                        }
                     }
                     .frame(maxWidth: .infinity)
                     .padding(24)
@@ -119,23 +172,23 @@ struct ParticipantDashboardView: View {
 
                         CourseDetailView(
                             role: .participant,
-                            imageName: "ImageCourse01",
-                            title: "Morning Flow",
-                            time: "18:00 - 19:00",
+                            imageName: displayedCourse.imageName,
+                            title: displayedCourse.title,
+                            time: displayedCourse.time,
                             duration: "60 Min.",
                             level: "Alle Levels",
                             trainer: "Laura",
                             description: "Starte deinen Tag mit einer belebenden Yoga-Praxis für Körper und Geist.",
-                            participants: 12,
+                            participants: displayedCourse.participants,
                             maxParticipants: 15,
-                            isBooked: false
+                            isBooked: hasBooking
                         )
 
                     } label: {
 
                         PrimaryButton(
-                            title: "Kursdetails ansehen",
-                            icon: "calendar"
+                            title: buttonTitle,
+                            icon: hasBooking ? "checkmark.circle.fill" : "calendar"
                         )
                     }
 
@@ -153,8 +206,11 @@ struct ParticipantDashboardView: View {
 
     NavigationStack {
 
-        ParticipantDashboardView()
+        ParticipantDashboardView(
+            onShowBookings: {}
 
+        )
     }
+    .environmentObject(BookingStore())
     .environment(FavoritesStore())
 }

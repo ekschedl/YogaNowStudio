@@ -1,17 +1,10 @@
-//
-//  BookingSuccessView.swift
-//  YogaNowStudio
-//
-//  Created by Kaaatkina on 12.06.26.
-//
-
 import SwiftUI
 
 struct BookingSuccessView: View {
 
-    @Environment(\.dismiss) private var dismiss
-
     let course: Course
+    let onFinish: () -> Void
+    @State private var showMyBookings = false
 
     var body: some View {
 
@@ -22,7 +15,7 @@ struct BookingSuccessView: View {
                 .scaledToFill()
                 .ignoresSafeArea()
 
-            VStack(spacing: 34) {
+            VStack(spacing: 30) {
 
                 Spacer()
 
@@ -42,7 +35,12 @@ struct BookingSuccessView: View {
                         .frame(width: 120, height: 120)
 
                     Image(systemName: "checkmark")
-                        .font(.system(size: 48, weight: .semibold))
+                        .font(
+                            .system(
+                                size: 48,
+                                weight: .semibold
+                            )
+                        )
                         .foregroundColor(.yogaGreen)
                 }
 
@@ -71,128 +69,35 @@ struct BookingSuccessView: View {
                         .foregroundColor(.gray)
                         .multilineTextAlignment(.center)
                         .lineSpacing(4)
-                        .padding(.horizontal, 20)
+                        .padding(.horizontal, 24)
                 }
 
-                // MARK: Course Card
+                // MARK: Small Info
 
-                VStack(alignment: .leading, spacing: 18) {
-
-                    Text(course.title)
-                        .font(
-                            .system(
-                                size: 28,
-                                weight: .semibold,
-                                design: .serif
-                            )
-                        )
-                        .foregroundColor(.yogaGreen)
-
-                    Divider()
-
-                    HStack(spacing: 14) {
-
-                        Image(systemName: "calendar")
-                            .foregroundColor(.yogaGold)
-                            .frame(width: 24)
-
-                        VStack(alignment: .leading, spacing: 4) {
-
-                            Text("TAG")
-                                .font(.caption)
-                                .fontWeight(.bold)
-                                .tracking(3)
-                                .foregroundColor(.yogaGold)
-
-                            Text(course.day)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.yogaGreen)
-                        }
-
-                        Spacer()
-                    }
-
-                    HStack(spacing: 14) {
-
-                        Image(systemName: "clock.fill")
-                            .foregroundColor(.yogaGold)
-                            .frame(width: 24)
-
-                        VStack(alignment: .leading, spacing: 4) {
-
-                            Text("ZEIT")
-                                .font(.caption)
-                                .fontWeight(.bold)
-                                .tracking(3)
-                                .foregroundColor(.yogaGold)
-
-                            Text(course.time)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.yogaGreen)
-                        }
-
-                        Spacer()
-                    }
-
-                    HStack(spacing: 14) {
-
-                        Image(systemName: "mappin.and.ellipse")
-                            .foregroundColor(.yogaGold)
-                            .frame(width: 24)
-
-                        VStack(alignment: .leading, spacing: 4) {
-
-                            Text("RAUM")
-                                .font(.caption)
-                                .fontWeight(.bold)
-                                .tracking(3)
-                                .foregroundColor(.yogaGold)
-
-                            Text(course.room)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.yogaGreen)
-                        }
-
-                        Spacer()
-                    }
-                }
-                .padding(24)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(
-                    LinearGradient(
-                        colors: [
-                            Color.white.opacity(0.96),
-                            Color.yogaCream.opacity(0.92)
-                        ],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-                .clipShape(
-                    RoundedRectangle(cornerRadius: 30)
-                )
-                .padding(.horizontal)
-
-                // MARK: Button
-
-                Button {
-
-                    dismiss()
-
-                } label: {
-
-                    PrimaryButton(
-                        title: "Zurück",
-                        icon: "arrow.left"
-                    )
-                }
-                .padding(.horizontal)
+                Text("Du wirst automatisch zu deinen Buchungen weitergeleitet.")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 30)
 
                 Spacer()
             }
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(
+            isPresented: $showMyBookings
+        ) {
+            MyBookingsView()
+        }
+        .task {
+
+            try? await Task.sleep(
+                nanoseconds: 3_000_000_000
+            )
+
+            showMyBookings = true
+        }
     }
 }
 
@@ -208,8 +113,10 @@ struct BookingSuccessView: View {
                 room: "Raum 1",
                 participants: 12,
                 imageName: "ImageCourse01"
-            )
+            ),
+            onFinish: {}
         )
     }
+    .environmentObject(BookingStore())
     .environment(FavoritesStore())
 }

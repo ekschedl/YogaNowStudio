@@ -22,7 +22,7 @@ struct CalendarView: View {
                     // MARK: Header
 
                     VStack(spacing: 8) {
-
+                        Spacer()
                         Text("Dein Kalender")
                             .font(
                                 .system(
@@ -97,7 +97,7 @@ struct CalendarView: View {
                         Text("Deine Kurse")
                             .font(
                                 .system(
-                                    size: 32,
+                                    size: 30,
                                     weight: .semibold,
                                     design: .serif
                                 )
