@@ -89,7 +89,7 @@ struct BookingConfirmPopupView: View {
                     alignment: .leading
                 )
 
-                VStack(alignment: .leading, spacing: 6) {
+                VStack(alignment: .leading, spacing: 10) {
 
                     Text("DEINE CREDITS")
                         .font(.caption)
@@ -101,9 +101,10 @@ struct BookingConfirmPopupView: View {
                         .fontWeight(.semibold)
                         .foregroundColor(.yogaGreen)
 
-                    Text("Für diese Buchung wird 1 Credit verwendet.")
+                    Text("Für diese Buchung wird 1 Credit verwendet. Kostenlose Stornierung bis 24 Stunden vor Kursbeginn.")
                         .font(.footnote)
                         .foregroundColor(.gray)
+                     
                 }
                 .frame(
                     maxWidth: .infinity,

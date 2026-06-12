@@ -303,11 +303,12 @@ struct CourseDetailView: View {
     }
 
     // MARK: - Participant Booking Card
+
     private var participantBookingCard: some View {
 
         HStack {
 
-            Text(isBooked ? "DEINE BUCHUNG" : "FREIE PLÄTZE")
+            Text("PLÄTZE")
                 .font(.caption)
                 .fontWeight(.bold)
                 .tracking(3)
@@ -315,23 +316,10 @@ struct CourseDetailView: View {
 
             Spacer()
 
-            if isBooked {
-
-                Label(
-                    "Angemeldet",
-                    systemImage: "checkmark.circle.fill"
-                )
-                .font(.subheadline)
+            Text("\(maxParticipants - participants)/\(participants) frei")
+                .font(.title3)
                 .fontWeight(.semibold)
-                .foregroundColor(.green)
-
-            } else {
-
-                Text("\(maxParticipants - participants)/\(maxParticipants)")
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.green)
-            }
+                .foregroundColor(.yogaGreen)
         }
         .padding(.horizontal, 18)
         .padding(.vertical, 16)
@@ -346,7 +334,6 @@ struct CourseDetailView: View {
             RoundedRectangle(cornerRadius: 20)
         )
     }
-
     // MARK: - Trainer Participant Card
 
     private var trainerParticipantCard: some View {
