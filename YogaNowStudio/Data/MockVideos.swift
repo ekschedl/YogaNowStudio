@@ -92,7 +92,8 @@ let mockVideos = [
         subtitle: "Sanfte Bewegungen für Einsteiger.",
         level: "Anfänger",
         duration: "20 Min",
-        imageName: "Video1"
+        imageName: "Video1",
+        youtubeID: "g_tea8ZNk5A"
     ),
     Video(
         id: UUID(uuidString: "00000000-0000-0000-0000-000000000011")!,

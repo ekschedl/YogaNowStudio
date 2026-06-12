@@ -26,21 +26,50 @@ struct VideoDetailView: View {
             VStack(spacing: 20) {
 
                 // Video-Player Bereich
-                ZStack {
-                    Image(video.imageName)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(height: 210)
-                        .clipped()
-                        .cornerRadius(20)
+                Group {
+                    if let youtubeID = video.youtubeID {
+                        Link(destination: URL(string: "https://www.youtube.com/watch?v=\(youtubeID)")!) {
+                            ZStack {
+                                AsyncImage(url: URL(string: "https://img.youtube.com/vi/\(youtubeID)/hqdefault.jpg")) { image in
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                } placeholder: {
+                                    Image(video.imageName)
+                                        .resizable()
+                                        .scaledToFill()
+                                }
+                                .frame(height: 210)
+                                .clipped()
+                                .cornerRadius(20)
 
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(Color.black.opacity(0.25))
-                        .frame(height: 210)
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(Color.black.opacity(0.25))
+                                    .frame(height: 210)
 
-                    Image(systemName: "play.circle.fill")
-                        .font(.system(size: 60))
-                        .foregroundColor(.white.opacity(0.9))
+                                Image(systemName: "play.circle.fill")
+                                    .font(.system(size: 60))
+                                    .foregroundColor(.white.opacity(0.9))
+                            }
+                        }
+                    } else {
+                        ZStack {
+                            Image(video.imageName)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(height: 210)
+                                .clipped()
+                                .cornerRadius(20)
+
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(Color.black.opacity(0.25))
+                                .frame(height: 210)
+
+                            Image(systemName: "play.circle.fill")
+                                .font(.system(size: 60))
+                                .foregroundColor(.white.opacity(0.9))
+                        }
+                    }
                 }
                 .shadow(color: .black.opacity(0.2), radius: 10)
 

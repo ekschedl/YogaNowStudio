@@ -14,4 +14,15 @@ struct Video: Identifiable {
     let level: String
     let duration: String
     let imageName: String
+    let youtubeID: String?
+
+    init(id: UUID, title: String, subtitle: String, level: String, duration: String, imageName: String, youtubeID: String? = nil) {
+        self.id = id
+        self.title = title
+        self.subtitle = subtitle
+        self.level = level
+        self.duration = duration
+        self.imageName = imageName
+        self.youtubeID = youtubeID
+    }
 }
