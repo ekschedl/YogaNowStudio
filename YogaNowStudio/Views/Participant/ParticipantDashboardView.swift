@@ -93,15 +93,37 @@ struct ParticipantDashboardView: View {
                             .tracking(4)
                             .foregroundColor(.yogaGold)
 
-                        Text(displayedCourse.title)
-                            .font(
-                                .system(
-                                    size: 34,
-                                    weight: .semibold,
-                                    design: .serif
+                        HStack(alignment: .firstTextBaseline, spacing: 10) {
+
+                            Text(displayedCourse.title)
+                                .font(
+                                    .system(
+                                        size: 34,
+                                        weight: .semibold,
+                                        design: .serif
+                                    )
                                 )
-                            )
-                            .foregroundColor(.yogaGreen)
+                                .foregroundColor(.yogaGreen)
+
+                            if hasBooking {
+
+                                Label(
+                                    "Angemeldet",
+                                    systemImage: "checkmark.circle.fill"
+                                )
+                                .font(.caption)
+                                .fontWeight(.bold)
+                                .foregroundColor(.green)
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 6)
+                                .background(
+                                    Color.green.opacity(0.10)
+                                )
+                                .clipShape(
+                                    Capsule()
+                                )
+                            }
+                        }
 
                         Divider()
                             .padding(.horizontal)

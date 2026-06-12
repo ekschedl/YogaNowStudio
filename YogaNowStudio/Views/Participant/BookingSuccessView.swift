@@ -41,7 +41,7 @@ struct BookingSuccessView: View {
                                 weight: .semibold
                             )
                         )
-                        .foregroundColor(.yogaGreen)
+                        .foregroundColor(.green)
                 }
 
                 // MARK: Text
@@ -64,12 +64,6 @@ struct BookingSuccessView: View {
                         .tracking(4)
                         .foregroundColor(.yogaGold)
 
-                    Text("Du hast den Kurs „\(course.title)“ erfolgreich gebucht.")
-                        .font(.body)
-                        .foregroundColor(.gray)
-                        .multilineTextAlignment(.center)
-                        .lineSpacing(4)
-                        .padding(.horizontal, 24)
                 }
 
                 // MARK: Small Info

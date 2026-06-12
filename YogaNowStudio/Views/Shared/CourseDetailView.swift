@@ -1,11 +1,18 @@
 import SwiftUI
 
 struct CourseDetailView: View {
-    
+
+    // MARK: - Environment
+
     @EnvironmentObject private var bookingStore: BookingStore
+
+    // MARK: - State
+
     @State private var showBookingPopup = false
     @State private var showBookingSuccess = false
     @State private var isBooking = false
+
+    // MARK: - Properties
 
     let role: UserRole
     let imageName: String
@@ -19,6 +26,8 @@ struct CourseDetailView: View {
     let maxParticipants: Int
     let isBooked: Bool
     let onShowBookings: () -> Void
+
+    // MARK: - Init
 
     init(
         role: UserRole,
@@ -48,6 +57,8 @@ struct CourseDetailView: View {
         self.onShowBookings = onShowBookings
     }
 
+    // MARK: - Computed Properties
+
     private var course: Course {
         Course(
             title: title,
@@ -58,310 +69,424 @@ struct CourseDetailView: View {
             imageName: imageName
         )
     }
-    
+
+    private var freePlaces: Int {
+        maxParticipants - participants
+    }
+
+    // MARK: - Body
+
     var body: some View {
 
-        ScrollView {
+        ScrollView(showsIndicators: false) {
 
             VStack(spacing: 0) {
 
-                Image(imageName)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(height: 280)
-                    .clipped()
+                courseImage
 
-                VStack(alignment: .leading, spacing: 15) {
+                contentSection
 
-                    Text(title)
-                        .font(
-                            .system(
-                                size: 30,
-                                weight: .semibold,
-                                design: .serif
-                            )
-                        )
-                        .foregroundColor(.yogaGreen)
-
-                    HStack(spacing: 14) {
-
-                        VStack(alignment: .leading, spacing: 6) {
-
-                            Label(
-                                "ZEIT",
-                                systemImage: "clock.fill"
-                            )
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .tracking(2)
-                            .foregroundColor(.yogaGold)
-
-                            Text(time)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.yogaGreen)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
-                        .background(Color.white.opacity(0.55))
-                        .clipShape(
-                            RoundedRectangle(cornerRadius: 18)
-                        )
-
-                        VStack(alignment: .leading, spacing: 6) {
-
-                            Label(
-                                "DAUER",
-                                systemImage: "timer"
-                            )
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .tracking(2)
-                            .foregroundColor(.yogaGold)
-
-                            Text(duration)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.yogaGreen)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
-                        .background(Color.white.opacity(0.55))
-                        .clipShape(
-                            RoundedRectangle(cornerRadius: 18)
-                        )
-                    }
-
-                    HStack(spacing: 14) {
-
-                        VStack(alignment: .leading, spacing: 6) {
-
-                            Label(
-                                "LEVEL",
-                                systemImage: "figure.yoga"
-                            )
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .tracking(2)
-                            .foregroundColor(.yogaGold)
-
-                            Text(level)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.yogaGreen)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
-                        .background(Color.white.opacity(0.55))
-                        .clipShape(
-                            RoundedRectangle(cornerRadius: 18)
-                        )
-
-                        VStack(alignment: .leading, spacing: 6) {
-
-                            Label(
-                                "TRAINER",
-                                systemImage: "person.fill"
-                            )
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .tracking(2)
-                            .foregroundColor(.yogaGold)
-
-                            Text(trainer)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.yogaGreen)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
-                        .background(Color.white.opacity(0.55))
-                        .clipShape(
-                            RoundedRectangle(cornerRadius: 18)
-                        )
-                    }
-
-                    VStack(alignment: .leading, spacing: 10) {
-
-                        Text("KURSBESCHREIBUNG")
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .tracking(2)
-                            .foregroundColor(.yogaGold)
-
-                        Text(description)
-                            .foregroundColor(.primary)
-                            .lineSpacing(4)
-                    }
-                    .padding()
-                    .background(Color.white.opacity(0.45))
-                    .clipShape(
-                        RoundedRectangle(cornerRadius: 20)
-                    )
-                    if role == .participant {
-                        
-                        VStack(alignment: .leading, spacing: 12) {
-
-                            if isBooked {
-
-                                Text("DEINE BUCHUNG")
-                                    .font(.caption)
-                                    .fontWeight(.bold)
-                                    .tracking(2)
-                                    .foregroundColor(.yogaGold)
-
-                                Label(
-                                    "Angemeldet",
-                                    systemImage: "checkmark.circle.fill"
-                                )
-                                .font(.title3)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.green)
-
-                            } else {
-
-                                Text("FREIE PLÄTZE")
-                                    .font(.caption)
-                                    .fontWeight(.bold)
-                                    .tracking(2)
-                                    .foregroundColor(.yogaGold)
-                            }
-
-                            Text(
-                                "\(maxParticipants - participants) freie Plätze"
-                            )
-                            .font(.title3)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.yogaGreen)
-                        }
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.white.opacity(0.45))
-                        .clipShape(
-                            RoundedRectangle(cornerRadius: 20)
-                        )
-
-                        if isBooked {
-
-                            Button {
-                                if let booking = bookingStore.bookings.first(where: {
-
-                                    $0.course.title == course.title
-
-                                }) {
-                                    Task {
-                                        await bookingStore.cancel(
-                                            booking: booking
-                                        )
-                                        onShowBookings()
-                                    }
-                                }
-                            } label: {
-                                SecondaryButton(
-
-                                    title: "Buchung stornieren",
-
-                                    icon: "xmark.circle"
-
-                                )
-
-                            }
-
-                        } else {
-
-                            Button {
-                                showBookingPopup = true
-                            } label: {
-                                PrimaryButton(
-                                    title: "Kurs buchen",
-                                    icon: "calendar.badge.plus"
-                                )
-                            }
-                        }
-                    } else {
-                        VStack(alignment: .leading, spacing: 6) {
-                            
-                            Text("TEILNEHMER")
-                                .font(.caption)
-                                .fontWeight(.bold)
-                                .tracking(2)
-                                .foregroundColor(.yogaGold)
-                            Text("\(participants) Teilnehmer")
-                                .font(.title3)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.yogaGreen)
-                        }
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.white.opacity(0.45))
-                        .clipShape(
-                            RoundedRectangle(cornerRadius: 20)
-                        )
-                        
-                        NavigationLink {
-
-                            ParticipantListView(
-                                courseTitle: title
-                            )
-
-                        } label: {
-
-                            PrimaryButton(
-                                title: "Teilnehmer anzeigen",
-                                icon: "person.2.fill"
-                            )
-                        }
-                    }
-                }
-                .padding(40)
-                .frame(
-                    maxWidth: .infinity,
-                    alignment: .topLeading
-                )
-                .background(
-                    Color.yogaCream.opacity(0.96)
-                )
-
-                LinearGradient(
-                    colors: [
-                        Color.yogaCream.opacity(0.96),
-                        Color.yogaCream.opacity(0.85),
-                        Color.white.opacity(0.95),
-                        Color.white
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .frame(height: 140)
+                bottomFade
             }
         }
         .ignoresSafeArea(edges: .top)
         .navigationBarTitleDisplayMode(.inline)
-        
+        .safeAreaInset(edge: .bottom) {
+            bottomActionButton
+        }
         .overlay {
-
-            if showBookingPopup {
-                BookingConfirmPopupView(
-                    course: course,
-                    credits: bookingStore.credits,
-                    isBooking: isBooking,
-                    errorMessage: bookingStore.errorMessage,
-                    onCancel: {
-                        showBookingPopup = false
-                    },
-                    onConfirm: {
-                        Task {
-                            await confirmBooking()
-                        }
-                    }
-                )
-            }
+            bookingPopupOverlay
         }
         .navigationDestination(
             isPresented: $showBookingSuccess
         ) {
+
             BookingSuccessView(
                 course: course,
                 onFinish: onShowBookings
             )
         }
     }
+
+    // MARK: - Course Image
+
+    private var courseImage: some View {
+
+        Image(imageName)
+            .resizable()
+            .scaledToFill()
+            .frame(height: 230)
+            .clipped()
+    }
+
+    // MARK: - Content Section
+
+    private var contentSection: some View {
+
+        VStack(alignment: .leading, spacing: 12) {
+
+            HStack(alignment: .firstTextBaseline, spacing: 10) {
+
+                Text(title)
+                    .font(
+                        .system(
+                            size: 34,
+                            weight: .semibold,
+                            design: .serif
+                        )
+                    )
+                    .foregroundColor(.yogaGreen)
+
+                if role == .participant && isBooked {
+
+                    Label(
+                        "Angemeldet",
+                        systemImage: "checkmark.circle.fill"
+                    )
+                    .font(.caption)
+                    .fontWeight(.bold)
+                    .foregroundColor(.green)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(
+                        Color.green.opacity(0.10)
+                    )
+                    .clipShape(
+                        Capsule()
+                    )
+                }
+
+                Spacer()
+            }
+            .padding(.bottom, 4)
+
+            HStack(spacing: 12) {
+
+                detailInfoCard(
+                    title: "Zeit",
+                    value: time,
+                    icon: "clock.fill"
+                )
+
+                detailInfoCard(
+                    title: "Dauer",
+                    value: duration,
+                    icon: "timer"
+                )
+            }
+
+            HStack(spacing: 12) {
+
+                detailInfoCard(
+                    title: "Level",
+                    value: level,
+                    icon: "figure.yoga"
+                )
+
+                detailInfoCard(
+                    title: "Trainer",
+                    value: trainer,
+                    icon: "person.fill"
+                )
+            }
+
+            descriptionCard
+
+            if role == .participant {
+                participantBookingCard
+            } else {
+                trainerParticipantCard
+            }
+        }
+        .padding(.horizontal, 26)
+        .padding(.top, 28)
+        .padding(.bottom, 20)
+        .frame(
+            maxWidth: .infinity,
+            alignment: .topLeading
+        )
+        .background(
+            LinearGradient(
+                colors: [
+                    Color.white.opacity(0.98),
+                    Color.yogaCream.opacity(0.82),
+                    Color.white.opacity(0.95)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
+    }
+
+    // MARK: - Detail Info Card
+
+    private func detailInfoCard(
+        title: String,
+        value: String,
+        icon: String
+    ) -> some View {
+
+        VStack(alignment: .leading, spacing: 8) {
+
+            Label(
+                title.uppercased(),
+                systemImage: icon
+            )
+            .font(.caption)
+            .fontWeight(.bold)
+            .tracking(3)
+            .foregroundColor(.yogaGold)
+
+            Text(value)
+                .font(.headline)
+                .fontWeight(.semibold)
+                .foregroundColor(.yogaGreen)
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
+        }
+        .frame(
+            maxWidth: .infinity,
+            minHeight: 88,
+            alignment: .leading
+        )
+        .padding(.horizontal, 16)
+        .padding(.vertical, 14)
+        .background(
+            Color.white.opacity(0.78)
+        )
+        .clipShape(
+            RoundedRectangle(cornerRadius: 18)
+        )
+    }
+
+    // MARK: - Description Card
+
+    private var descriptionCard: some View {
+
+        VStack(alignment: .leading, spacing: 10) {
+
+            Text("KURSBESCHREIBUNG")
+                .font(.caption)
+                .fontWeight(.bold)
+                .tracking(3)
+                .foregroundColor(.yogaGold)
+
+            Text(description)
+                .font(.body)
+                .foregroundColor(.primary)
+                .lineSpacing(3)
+        }
+        .padding(.horizontal, 18)
+        .padding(.vertical, 16)
+        .frame(
+            maxWidth: .infinity,
+            alignment: .leading
+        )
+        .background(
+            Color.white.opacity(0.72)
+        )
+        .clipShape(
+            RoundedRectangle(cornerRadius: 20)
+        )
+    }
+
+    // MARK: - Participant Booking Card
+
+    private var participantBookingCard: some View {
+
+        VStack(alignment: .leading, spacing: 8) {
+
+            if isBooked {
+
+                Text("DEINE BUCHUNG")
+                    .font(.caption)
+                    .fontWeight(.bold)
+                    .tracking(3)
+                    .foregroundColor(.yogaGold)
+
+                Text("Du bist für diesen Kurs angemeldet.")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+
+            } else {
+
+                Text("FREIE PLÄTZE")
+                    .font(.caption)
+                    .fontWeight(.bold)
+                    .tracking(3)
+                    .foregroundColor(.yogaGold)
+            }
+
+            Text("\(freePlaces) freie Plätze")
+                .font(.title3)
+                .fontWeight(.semibold)
+                .foregroundColor(.yogaGreen)
+        }
+        .padding(.horizontal, 18)
+        .padding(.vertical, 14)
+        .frame(
+            maxWidth: .infinity,
+            alignment: .leading
+        )
+        .background(
+            Color.white.opacity(0.72)
+        )
+        .clipShape(
+            RoundedRectangle(cornerRadius: 20)
+        )
+    }
+
+    // MARK: - Trainer Participant Card
+
+    private var trainerParticipantCard: some View {
+
+        VStack(alignment: .leading, spacing: 8) {
+
+            Text("TEILNEHMER")
+                .font(.caption)
+                .fontWeight(.bold)
+                .tracking(3)
+                .foregroundColor(.yogaGold)
+
+            Text("\(participants) Teilnehmer")
+                .font(.title3)
+                .fontWeight(.semibold)
+                .foregroundColor(.yogaGreen)
+        }
+        .padding(.horizontal, 18)
+        .padding(.vertical, 16)
+        .frame(
+            maxWidth: .infinity,
+            alignment: .leading
+        )
+        .background(
+            Color.white.opacity(0.72)
+        )
+        .clipShape(
+            RoundedRectangle(cornerRadius: 20)
+        )
+    }
+
+    // MARK: - Bottom Fade
+
+    private var bottomFade: some View {
+
+        LinearGradient(
+            colors: [
+                Color.white.opacity(0.96),
+                Color.yogaCream.opacity(0.70),
+                Color.white
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+        .frame(height: 50)
+    }
+
+    // MARK: - Bottom Action Button
+
+    private var bottomActionButton: some View {
+
+        Group {
+
+            if role == .participant {
+
+                if isBooked {
+
+                    Button {
+                        cancelBooking()
+                    } label: {
+                        SecondaryButton(
+                            title: "Buchung stornieren",
+                            icon: "xmark.circle"
+                        )
+                    }
+
+                } else {
+
+                    Button {
+                        showBookingPopup = true
+                    } label: {
+                        PrimaryButton(
+                            title: "Kurs buchen",
+                            icon: "calendar.badge.plus"
+                        )
+                    }
+                }
+
+            } else {
+
+                NavigationLink {
+
+                    ParticipantListView(
+                        courseTitle: title
+                    )
+
+                } label: {
+
+                    PrimaryButton(
+                        title: "Teilnehmer anzeigen",
+                        icon: "person.2.fill"
+                    )
+                }
+            }
+        }
+        .padding(.horizontal)
+        .padding(.top, 10)
+        .padding(.bottom, 8)
+        .background(
+            LinearGradient(
+                colors: [
+                    Color.white.opacity(0.96),
+                    Color.yogaCream.opacity(0.78)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        )
+    }
+
+    // MARK: - Booking Popup Overlay
+
+    @ViewBuilder
+    private var bookingPopupOverlay: some View {
+
+        if showBookingPopup {
+
+            BookingConfirmPopupView(
+                course: course,
+                credits: bookingStore.credits,
+                isBooking: isBooking,
+                errorMessage: bookingStore.errorMessage,
+                onCancel: {
+                    showBookingPopup = false
+                },
+                onConfirm: {
+                    Task {
+                        await confirmBooking()
+                    }
+                }
+            )
+        }
+    }
+
+    // MARK: - Actions
+
+    private func cancelBooking() {
+
+        if let booking = bookingStore.bookings.first(where: {
+            $0.course.title == course.title
+        }) {
+            Task {
+                await bookingStore.cancel(
+                    booking: booking
+                )
+
+                onShowBookings()
+            }
+        }
+    }
+
     private func confirmBooking() async {
 
         isBooking = true
@@ -378,6 +503,8 @@ struct CourseDetailView: View {
         }
     }
 }
+
+// MARK: - Preview
 
 #Preview {
 
