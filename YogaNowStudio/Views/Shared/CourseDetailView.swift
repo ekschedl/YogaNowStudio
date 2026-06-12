@@ -74,10 +74,18 @@ struct CourseDetailView: View {
         )
     }
 
-    private var freePlaces: Int {
-        maxParticipants - participants
-    }
+    private var courseDateText: String {
 
+        courseDate.formatted(
+            .dateTime
+                .weekday(.short)
+                .day()
+                .month(.wide)
+                .locale(Locale(identifier: "de_DE"))
+
+        )
+
+    }
     // MARK: - Body
 
     var body: some View {
@@ -167,24 +175,24 @@ struct CourseDetailView: View {
             HStack(spacing: 12) {
 
                 detailInfoCard(
-                    title: "Zeit",
-                    value: time,
-                    icon: "clock.fill"
+                    title: "Datum",
+                    value: courseDateText,
+                    icon: "calendar"
                 )
 
                 detailInfoCard(
-                    title: "Dauer",
-                    value: duration,
-                    icon: "timer"
+                    title: "Zeit",
+                    value: time,
+                    icon: "clock.fill"
                 )
             }
 
             HStack(spacing: 12) {
 
                 detailInfoCard(
-                    title: "Level",
-                    value: level,
-                    icon: "figure.yoga"
+                    title: "Dauer",
+                    value: duration,
+                    icon: "timer"
                 )
 
                 detailInfoCard(
@@ -295,39 +303,38 @@ struct CourseDetailView: View {
     }
 
     // MARK: - Participant Booking Card
-
     private var participantBookingCard: some View {
 
-        VStack(alignment: .leading, spacing: 8) {
+        HStack {
+
+            Text(isBooked ? "DEINE BUCHUNG" : "FREIE PLÄTZE")
+                .font(.caption)
+                .fontWeight(.bold)
+                .tracking(3)
+                .foregroundColor(.yogaGold)
+
+            Spacer()
 
             if isBooked {
 
-                Text("DEINE BUCHUNG")
-                    .font(.caption)
-                    .fontWeight(.bold)
-                    .tracking(3)
-                    .foregroundColor(.yogaGold)
-
-                Text("Du bist für diesen Kurs angemeldet.")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
+                Label(
+                    "Angemeldet",
+                    systemImage: "checkmark.circle.fill"
+                )
+                .font(.subheadline)
+                .fontWeight(.semibold)
+                .foregroundColor(.green)
 
             } else {
 
-                Text("FREIE PLÄTZE")
-                    .font(.caption)
-                    .fontWeight(.bold)
-                    .tracking(3)
-                    .foregroundColor(.yogaGold)
+                Text("\(maxParticipants - participants)/\(maxParticipants)")
+                    .font(.title3)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.green)
             }
-
-            Text("\(freePlaces) freie Plätze")
-                .font(.title3)
-                .fontWeight(.semibold)
-                .foregroundColor(.yogaGreen)
         }
         .padding(.horizontal, 18)
-        .padding(.vertical, 14)
+        .padding(.vertical, 16)
         .frame(
             maxWidth: .infinity,
             alignment: .leading

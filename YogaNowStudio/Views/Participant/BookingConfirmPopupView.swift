@@ -9,6 +9,19 @@ struct BookingConfirmPopupView: View {
     let onCancel: () -> Void
     let onConfirm: () -> Void
 
+    // MARK: - Computed Properties
+
+    private var courseDateText: String {
+
+        course.date.formatted(
+            .dateTime
+                .weekday(.wide)
+                .day()
+                .month(.wide)
+                .locale(Locale(identifier: "de_DE"))
+        )
+    }
+    
     var body: some View {
 
         ZStack {
@@ -58,7 +71,7 @@ struct BookingConfirmPopupView: View {
 
                     infoRow(
                         icon: "calendar",
-                        text: course.day
+                        text: courseDateText
                     )
 
                     infoRow(
@@ -187,7 +200,7 @@ struct BookingConfirmPopupView: View {
         course: Course(
             title: "Morning Flow",
             day: "Donnerstag",
-            time: "08:30 - 09:30",
+            time: "08:30",
             room: "Raum 1",
             participants: 12,
             imageName: "ImageCourse01"

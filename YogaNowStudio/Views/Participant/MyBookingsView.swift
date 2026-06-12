@@ -10,6 +10,21 @@ struct MyBookingsView: View {
 
     @EnvironmentObject private var bookingStore: BookingStore
 
+    // MARK: - Date Formatting
+
+    private func formattedDate(
+        for booking: Booking
+    ) -> String {
+
+        booking.course.date.formatted(
+            .dateTime
+                .weekday(.wide)
+                .day()
+                .month(.wide)
+                .locale(Locale(identifier: "de_DE"))
+        )
+    }
+    
     var body: some View {
 
         ZStack {
@@ -121,7 +136,7 @@ struct MyBookingsView: View {
                 Image(systemName: "calendar")
                     .foregroundColor(.yogaGold)
 
-                Text(booking.course.day)
+                Text(formattedDate(for: booking))
                     .foregroundColor(.gray)
             }
 
@@ -136,7 +151,23 @@ struct MyBookingsView: View {
 
             HStack(spacing: 12) {
 
-                Button {
+                NavigationLink {
+
+                    CourseDetailView(
+                        role: .participant,
+                        imageName: booking.course.imageName,
+                        title: booking.course.title,
+                        time: booking.course.time,
+                        duration: "60 Min.",
+                        level: "Alle Levels",
+                        trainer: "Laura",
+                        description: "Kursbeschreibung",
+                        participants: booking.course.participants,
+                        maxParticipants: 15,
+                        isBooked: true,
+                        onShowBookings: {},
+                        courseDate: booking.course.date
+                    )
 
                 } label: {
 
@@ -145,7 +176,6 @@ struct MyBookingsView: View {
                         icon: "calendar"
                     )
                 }
-
                 Button {
 
                     Task {

@@ -46,7 +46,7 @@ struct ParticipantDashboardView: View {
 
         displayedCourse.date.formatted(
             .dateTime
-                .weekday(.wide)
+                .weekday(.short)
                 .day()
                 .month(.wide)
                 .locale(Locale(identifier: "de_DE"))
