@@ -1,0 +1,199 @@
+//
+//  BookingConfirmPopupView.swift
+//  YogaNowStudio
+//
+//  Created by Kaaatkina on 12.06.26.
+//
+
+import SwiftUI
+
+struct BookingConfirmPopupView: View {
+
+    let course: Course
+    let credits: Int
+    let isBooking: Bool
+    let onCancel: () -> Void
+    let onConfirm: () -> Void
+
+    var body: some View {
+
+        ZStack {
+
+            Color.black.opacity(0.28)
+                .ignoresSafeArea()
+
+            VStack(spacing: 22) {
+
+                // MARK: Icon
+
+                Image(systemName: "calendar.badge.checkmark")
+                    .font(.system(size: 34))
+                    .foregroundColor(.yogaGold)
+
+                // MARK: Title
+
+                VStack(spacing: 6) {
+
+                    Text("Buchung bestätigen")
+                        .font(
+                            .system(
+                                size: 30,
+                                weight: .semibold,
+                                design: .serif
+                            )
+                        )
+                        .foregroundColor(.yogaGreen)
+
+                    Text("MÖCHTEST DU DIESEN KURS BUCHEN?")
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .tracking(3)
+                        .foregroundColor(.yogaGold)
+                        .multilineTextAlignment(.center)
+                }
+
+                Divider()
+
+                // MARK: Course Info
+
+                VStack(alignment: .leading, spacing: 14) {
+
+                    Text(course.title)
+                        .font(
+                            .system(
+                                size: 26,
+                                weight: .semibold,
+                                design: .serif
+                            )
+                        )
+                        .foregroundColor(.yogaGreen)
+
+                    infoRow(
+                        icon: "calendar",
+                        text: course.day
+                    )
+
+                    infoRow(
+                        icon: "clock.fill",
+                        text: course.time
+                    )
+
+                    infoRow(
+                        icon: "person.2.fill",
+                        text: "\(course.participants) Teilnehmer"
+                    )
+                }
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .leading
+                )
+
+                // MARK: Credits
+
+                VStack(alignment: .leading, spacing: 6) {
+
+                    Text("DEINE CREDITS")
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .tracking(3)
+                        .foregroundColor(.yogaGold)
+
+                    Text("\(credits) verfügbare Credits")
+                        .fontWeight(.semibold)
+                        .foregroundColor(.yogaGreen)
+
+                    Text("Für diese Buchung wird 1 Credit verwendet.")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                }
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .leading
+                )
+                .padding()
+                .background(
+                    Color.yogaCream.opacity(0.65)
+                )
+                .clipShape(
+                    RoundedRectangle(cornerRadius: 18)
+                )
+
+                // MARK: Buttons
+
+                VStack(spacing: 10) {
+
+                    Button {
+                        onConfirm()
+                    } label: {
+                        PrimaryButton(
+                            title: isBooking ? "Wird gebucht..." : "Buchen",
+                            icon: "checkmark.circle.fill"
+                        )
+                    }
+                    .disabled(isBooking)
+
+                    Button {
+                        onCancel()
+                    } label: {
+                        SecondaryButton(
+                            title: "Abbrechen",
+                            icon: "xmark.circle"
+                        )
+                    }
+                }
+            }
+            .padding(26)
+            .background(
+                LinearGradient(
+                    colors: [
+                        Color.white.opacity(0.97),
+                        Color.yogaCream.opacity(0.94)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .clipShape(
+                RoundedRectangle(cornerRadius: 32)
+            )
+            .padding(.horizontal, 28)
+        }
+    }
+
+    private func infoRow(
+        icon: String,
+        text: String
+    ) -> some View {
+
+        HStack(spacing: 12) {
+
+            Image(systemName: icon)
+                .foregroundColor(.yogaGold)
+                .frame(width: 22)
+
+            Text(text)
+                .fontWeight(.semibold)
+                .foregroundColor(.yogaGreen)
+
+            Spacer()
+        }
+    }
+}
+
+#Preview {
+
+    BookingConfirmPopupView(
+        course: Course(
+            title: "Morning Flow",
+            day: "Donnerstag",
+            time: "08:30 - 09:30",
+            room: "Raum 1",
+            participants: 12,
+            imageName: "ImageCourse01"
+        ),
+        credits: 8,
+        isBooking: false,
+        onCancel: {},
+        onConfirm: {}
+    )
+}

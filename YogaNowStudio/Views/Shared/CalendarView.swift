@@ -87,11 +87,13 @@ struct CalendarView: View {
 
                     // MARK: Kurse an diesem Tag
                     VStack(alignment: .leading, spacing: 6) {
+
                         Text("AUSGEWÄHLTER TAG")
                             .font(.caption)
                             .fontWeight(.bold)
                             .tracking(4)
                             .foregroundColor(.yogaGold)
+
                         Text("Deine Kurse")
                             .font(
                                 .system(

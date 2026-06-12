@@ -1,6 +1,11 @@
 import SwiftUI
 
 struct CourseDetailView: View {
+    
+    @EnvironmentObject private var bookingStore: BookingStore
+    @State private var showBookingPopup = false
+    @State private var showBookingSuccess = false
+    @State private var isBooking = false
 
     let role: UserRole
     let imageName: String
@@ -14,6 +19,17 @@ struct CourseDetailView: View {
     let maxParticipants: Int
     let isBooked: Bool
 
+    private var course: Course {
+        Course(
+            title: title,
+            day: "Donnerstag",
+            time: time,
+            room: "Raum 1",
+            participants: participants,
+            imageName: imageName
+        )
+    }
+    
     var body: some View {
 
         ScrollView {
@@ -193,30 +209,29 @@ struct CourseDetailView: View {
                         )
 
                         if isBooked {
-
                             SecondaryButton(
                                 title: "Buchung stornieren",
                                 icon: "xmark.circle"
                             )
 
                         } else {
-
-                            PrimaryButton(
-                                title: "Kurs buchen",
-                                icon: "calendar.badge.plus"
-                            )
+                            Button {
+                                showBookingPopup = true
+                            } label: {
+                                PrimaryButton(
+                                    title: "Kurs buchen",
+                                    icon: "calendar.badge.plus"
+                                )
+                            }
                         }
-
                     } else {
-
                         VStack(alignment: .leading, spacing: 6) {
-
+                            
                             Text("TEILNEHMER")
                                 .font(.caption)
                                 .fontWeight(.bold)
                                 .tracking(2)
                                 .foregroundColor(.yogaGold)
-
                             Text("\(participants) Teilnehmer")
                                 .font(.title3)
                                 .fontWeight(.semibold)
@@ -228,7 +243,7 @@ struct CourseDetailView: View {
                         .clipShape(
                             RoundedRectangle(cornerRadius: 20)
                         )
-
+                        
                         NavigationLink {
 
                             ParticipantListView(
@@ -243,7 +258,6 @@ struct CourseDetailView: View {
                             )
                         }
                     }
-
                 }
                 .padding(40)
                 .frame(
@@ -269,6 +283,47 @@ struct CourseDetailView: View {
         }
         .ignoresSafeArea(edges: .top)
         .navigationBarTitleDisplayMode(.inline)
+        
+        .overlay {
+
+            if showBookingPopup {
+                BookingConfirmPopupView(
+                    course: course,
+                    credits: bookingStore.credits,
+                    isBooking: isBooking,
+                    onCancel: {
+                        showBookingPopup = false
+                    },
+                    onConfirm: {
+                        Task {
+                            await confirmBooking()
+                        }
+                    }
+                )
+            }
+        }
+        .navigationDestination(
+            isPresented: $showBookingSuccess
+        ) {
+            BookingSuccessView(
+                course: course
+            )
+        }
+    }
+    private func confirmBooking() async {
+
+        isBooking = true
+
+        let success = await bookingStore.book(
+            course: course
+        )
+
+        isBooking = false
+
+        if success {
+            showBookingPopup = false
+            showBookingSuccess = true
+        }
     }
 }
 
@@ -287,8 +342,9 @@ struct CourseDetailView: View {
             description: "Starte deinen Tag mit einer belebenden Yoga-Praxis für Körper und Geist.",
             participants: 12,
             maxParticipants: 15,
-            isBooked: true
+            isBooked: false
         )
     }
     .environment(FavoritesStore())
+    .environmentObject(BookingStore())
 }
