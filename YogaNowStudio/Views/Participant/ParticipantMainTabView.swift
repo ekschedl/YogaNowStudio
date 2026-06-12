@@ -105,7 +105,7 @@ struct ParticipantMainTabView: View {
             }
             .tag(ParticipantTab.profile)
         }
-        .tint(.yogaGreen)
+        .tint(.yogaGold)
         .navigationBarBackButtonHidden(true)
     }
 }

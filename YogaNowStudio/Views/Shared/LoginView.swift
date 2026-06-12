@@ -272,4 +272,5 @@ struct LoginView: View {
         LoginView()
     }
     .environment(FavoritesStore())
+    .environmentObject(BookingStore())
 }

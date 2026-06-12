@@ -13,9 +13,7 @@ struct TrainerMainTabView: View {
         TabView {
             
             NavigationStack {
-                
                 TrainerDashboardView()
-                
             }
             .tabItem {
                 Label(

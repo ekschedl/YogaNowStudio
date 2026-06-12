@@ -32,9 +32,7 @@ struct TrainerDashboardView: View {
                              .tracking(2)
                             .foregroundColor(.yogaGold)
 
-                        Text("3 Kurse heute • 26 Teilnehmer")
-                            .font(.footnote)
-                            .foregroundColor(.gray)
+                     
                     }
                     .padding(.top, 70)
                     
@@ -43,12 +41,23 @@ struct TrainerDashboardView: View {
 
                         VStack(alignment: .leading, spacing: 8) {
 
-                            Text("HEUTE")
-                                .font(.caption2)
-                                .fontWeight(.bold)
-                                .foregroundColor(.yogaGold)
-                                .tracking(4)
-
+                            HStack(alignment: .center) {
+                                Text("HEUTE")
+                                    .font(.caption2)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.yogaGold)
+                                    .tracking(4)
+                                
+                                Spacer()
+                                Text("3 Kurse • 26 Teilnehmer")
+                                    .font(.footnote)
+                                    .foregroundColor(.gray)
+                            }
+                            
+                            Rectangle()
+                                .fill(Color.yogaGold.opacity(0.3))
+                                .frame(width: 70, height: 1)
+                        
                             Text("Dein Kursplan")
                                 .font(
                                     .system(
@@ -59,14 +68,12 @@ struct TrainerDashboardView: View {
                                 )
                                 .tracking(0.5)
                                 .foregroundColor(.yogaGreen)
-
-                            Rectangle()
-                                .fill(Color.yogaGold.opacity(0.3))
-                                .frame(width: 70, height: 1)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal)
                         .padding(.top, 20)
+
+                            
                         
                         NavigationLink {
                             CourseDetailView(

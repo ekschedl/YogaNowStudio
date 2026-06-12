@@ -51,15 +51,10 @@ struct ProfileView: View {
             ScrollView(showsIndicators: false) {
 
                 VStack(spacing: 32) {
-
                     headerSection
-
                     roleInfoSection
-
                     personalDataSection
-
                     logoutButton
-
                     Spacer()
                         .frame(height: 100)
                 }
@@ -107,9 +102,8 @@ struct ProfileView: View {
         if role == .participant {
 
             VStack(spacing: 20) {
-
+                
                 VStack(spacing: 6) {
-
                     Text("CREDITS")
                         .font(.caption)
                         .fontWeight(.bold)
@@ -128,12 +122,10 @@ struct ProfileView: View {
                 }
 
                 HStack(spacing: 20) {
-
                     profileSmallCard(
                         title: "LEVEL",
                         value: "Alle Levels"
                     )
-
                     profileSmallCard(
                         title: "BUCHUNGEN",
                         value: "\(bookingStore.bookings.count)"
@@ -145,7 +137,7 @@ struct ProfileView: View {
 
             VStack(spacing: 20) {
 
-                Text("YOGA TRAINERIN")
+                Text("schön, dass du da bist")
                     .font(.caption)
                     .fontWeight(.bold)
                     .tracking(4)
