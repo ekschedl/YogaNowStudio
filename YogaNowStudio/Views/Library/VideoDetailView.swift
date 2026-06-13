@@ -31,13 +31,9 @@ struct VideoDetailView: View {
                         Link(destination: URL(string: "https://www.youtube.com/watch?v=\(youtubeID)")!) {
                             ZStack {
                                 AsyncImage(url: URL(string: "https://img.youtube.com/vi/\(youtubeID)/hqdefault.jpg")) { image in
-                                    image
-                                        .resizable()
-                                        .scaledToFill()
+                                    image.resizable().scaledToFill()
                                 } placeholder: {
-                                    Image(video.imageName)
-                                        .resizable()
-                                        .scaledToFill()
+                                    Image(video.imageName).resizable().scaledToFill()
                                 }
                                 .frame(height: 210)
                                 .clipped()
@@ -113,7 +109,7 @@ struct VideoDetailView: View {
                         .font(.headline)
                         .foregroundColor(.yogaGreen)
 
-                    ForEach(["Geführte Atemübungen", "Schritt-für-Schritt Anleitung", "Angepasst an dein Level"], id: \.self) { punkt in
+                    ForEach(video.highlights ?? ["Geführte Atemübungen", "Schritt-für-Schritt Anleitung", "Angepasst an dein Level"], id: \.self) { punkt in
                         HStack(spacing: 10) {
                             Image(systemName: "checkmark.circle.fill")
                                 .foregroundColor(.yogaGold)

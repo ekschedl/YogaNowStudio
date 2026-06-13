@@ -2,12 +2,15 @@
 //  AsanasView.swift
 //  YogaNowStudio
 //
-//  Created by Kaaatkina on 07.06.26.
-//
 import SwiftUI
 
 struct AsanasView: View {
     @Environment(\.dismiss) private var dismiss
+
+    let columns = [
+        GridItem(.flexible(), spacing: 12),
+        GridItem(.flexible(), spacing: 12)
+    ]
 
     var body: some View {
         ZStack {
@@ -33,15 +36,19 @@ struct AsanasView: View {
                     .italic()
                     .foregroundColor(.yogaGold)
 
-                Spacer()
-
-                Text("Inhalte folgen in Kürze.")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 40)
-
-                Spacer()
+                ScrollView {
+                    LazyVGrid(columns: columns, spacing: 12) {
+                        ForEach(mockAsanas) { asana in
+                            NavigationLink {
+                                AsanaDetailView(asana: asana)
+                            } label: {
+                                AsanaCard(asana: asana)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    .padding(.top, 8)
+                }
             }
             .padding(.horizontal)
             .padding(.top, 8)
@@ -49,9 +56,7 @@ struct AsanasView: View {
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button {
-                    dismiss()
-                } label: {
+                Button { dismiss() } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "chevron.left")
                         Text("Zurück")
@@ -63,10 +68,44 @@ struct AsanasView: View {
     }
 }
 
+// MARK: - AsanaCard
+
+private struct AsanaCard: View {
+    let asana: Asana
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Image(asana.imageName)
+                .resizable()
+                .scaledToFill()
+                .frame(height: 110)
+                .clipped()
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(asana.name)
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .foregroundColor(.yogaGreen)
+                    .lineLimit(1)
+
+                Text(asana.sanskrit)
+                    .font(.caption2)
+                    .italic()
+                    .foregroundColor(.yogaGold)
+                    .lineLimit(1)
+            }
+            .padding(10)
+        }
+        .background(Color.white.opacity(0.95))
+        .cornerRadius(16)
+        .shadow(color: .black.opacity(0.07), radius: 5)
+        .contentShape(Rectangle())
+    }
+}
+
 #Preview {
     NavigationStack {
         AsanasView()
-    }.environment(FavoritesStore())
+    }
+    .environment(FavoritesStore())
 }
-
-

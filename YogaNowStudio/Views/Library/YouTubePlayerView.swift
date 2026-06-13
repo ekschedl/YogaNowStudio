@@ -7,6 +7,7 @@ import WebKit
 
 struct YouTubePlayerView: UIViewRepresentable {
     let videoID: String
+    var endSeconds: Int? = nil
 
     func makeUIView(context: Context) -> WKWebView {
         let config = WKWebViewConfiguration()
@@ -20,6 +21,10 @@ struct YouTubePlayerView: UIViewRepresentable {
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
+        var params = "playsinline=1&rel=0"
+        if let end = endSeconds {
+            params += "&end=\(end)"
+        }
         let embedHTML = """
         <!DOCTYPE html>
         <html>
@@ -31,7 +36,7 @@ struct YouTubePlayerView: UIViewRepresentable {
         </style>
         </head>
         <body>
-        <iframe src="https://www.youtube.com/embed/\(videoID)?playsinline=1&rel=0"
+        <iframe src="https://www.youtube.com/embed/\(videoID)?\(params)"
                 allow="autoplay; encrypted-media"
                 allowfullscreen>
         </iframe>

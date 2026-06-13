@@ -15,8 +15,10 @@ struct Video: Identifiable {
     let duration: String
     let imageName: String
     let youtubeID: String?
+    let youtubeEnd: Int?
+    let highlights: [String]?
 
-    init(id: UUID, title: String, subtitle: String, level: String, duration: String, imageName: String, youtubeID: String? = nil) {
+    init(id: UUID, title: String, subtitle: String, level: String, duration: String, imageName: String, youtubeID: String? = nil, youtubeEnd: Int? = nil, highlights: [String]? = nil) {
         self.id = id
         self.title = title
         self.subtitle = subtitle
@@ -24,5 +26,7 @@ struct Video: Identifiable {
         self.duration = duration
         self.imageName = imageName
         self.youtubeID = youtubeID
+        self.youtubeEnd = youtubeEnd
+        self.highlights = highlights
     }
 }

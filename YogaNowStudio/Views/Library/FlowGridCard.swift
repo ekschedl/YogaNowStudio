@@ -23,12 +23,20 @@ struct FlowGridCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Image(video.imageName)
-                .resizable()
-                .scaledToFill()
-                .frame(height: 110)
-                .clipped()
-                .overlay(alignment: .topTrailing) {
+            Group {
+                if let youtubeID = video.youtubeID {
+                    AsyncImage(url: URL(string: "https://img.youtube.com/vi/\(youtubeID)/hqdefault.jpg")) { image in
+                        image.resizable().scaledToFill()
+                    } placeholder: {
+                        Image(video.imageName).resizable().scaledToFill()
+                    }
+                } else {
+                    Image(video.imageName).resizable().scaledToFill()
+                }
+            }
+            .frame(height: 110)
+            .clipped()
+            .overlay(alignment: .topTrailing) {
                     Button {
                         favorites.toggle(video)
                     } label: {
