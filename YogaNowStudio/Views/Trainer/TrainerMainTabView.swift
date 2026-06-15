@@ -65,6 +65,13 @@ struct TrainerMainTabView: View {
                 )
 
             }
+            .tint(.yogaGold)
         }
     }
+}
+#Preview {
+
+    TrainerMainTabView()
+        .environment(FavoritesStore())
+        .environmentObject(BookingStore())
 }

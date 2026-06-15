@@ -11,30 +11,46 @@ struct ProfileView: View {
 
     let role: UserRole
 
-    // MARK: - Computed Properties
+    // MARK: - User Information
 
     private var userName: String {
         role == .trainer ? "Valerie" : "Katja"
     }
 
     private var userEmail: String {
-        role == .trainer ? "valerie@yoganow.at" : "katja@test.at"
+        role == .trainer
+            ? "valerie@yoganow.at"
+            : "katja@test.at"
     }
 
     private var roleTitle: String {
-        role == .trainer ? "YOGA TRAINERIN" : "TEILNEHMERIN"
+        role == .trainer
+            ? "YOGA TRAINERIN"
+            : "TEILNEHMERIN"
     }
 
-    private var studioName: String {
-        "YogaNow Graz"
+    private var roleValue: String {
+        role == .trainer
+            ? "Trainerin"
+            : "Teilnehmerin"
+    }
+
+    private var greetingText: String {
+        role == .trainer
+            ? "Atme ein. Inspiriere."
+            : "Atme ein. Komm bei dir an."
     }
 
     private var memberTitle: String {
-        role == .trainer ? "TRAINER SEIT" : "MITGLIED SEIT"
+        role == .trainer
+            ? "TRAINER SEIT"
+            : "MITGLIED SEIT"
     }
 
     private var memberValue: String {
-        role == .trainer ? "2024" : "Juni 2026"
+        role == .trainer
+            ? "2024"
+            : "Juni 2026"
     }
 
     // MARK: - Body
@@ -50,15 +66,20 @@ struct ProfileView: View {
 
             ScrollView(showsIndicators: false) {
 
-                VStack(spacing: 32) {
+                VStack(spacing: 26) {
+
                     headerSection
+
                     roleInfoSection
+
                     personalDataSection
+
                     logoutButton
+
                     Spacer()
-                        .frame(height: 100)
+                        .frame(height: 110)
                 }
-                .padding(.horizontal)
+                .padding(.horizontal, 22)
             }
         }
         .navigationBarTitleDisplayMode(.inline)
@@ -68,95 +89,147 @@ struct ProfileView: View {
 
     private var headerSection: some View {
 
-        VStack(spacing: 8) {
+        VStack(spacing: 7) {
 
             Text("Namasté")
-                .font(.title3)
+                .font(
+                    .system(
+                        size: 21,
+                        weight: .regular,
+                        design: .rounded
+                    )
+                )
                 .foregroundColor(.yogaGreen)
 
             Text(userName)
                 .font(
                     .system(
-                        size: 44,
+                        size: 48,
                         weight: .semibold,
                         design: .serif
                     )
                 )
-                .tracking(2)
                 .foregroundColor(.yogaGold)
 
             Text(roleTitle)
                 .font(.caption)
                 .fontWeight(.bold)
-                .tracking(4)
-                .foregroundColor(.yogaGreen.opacity(0.75))
+                .tracking(5)
+                .foregroundColor(.yogaGreen.opacity(0.78))
         }
-        .padding(.top, 70)
+        .frame(maxWidth: .infinity)
+        .padding(.top, 80)
     }
 
-    // MARK: - Role Info Section
+    // MARK: - Role Information Section
 
     @ViewBuilder
     private var roleInfoSection: some View {
 
         if role == .participant {
 
-            VStack(spacing: 20) {
-                
-                VStack(spacing: 6) {
-                    Text("CREDITS")
-                        .font(.caption)
-                        .fontWeight(.bold)
-                        .tracking(4)
-                        .foregroundColor(.yogaGold)
-
-                    Text("\(bookingStore.credits)")
-                        .font(
-                            .system(
-                                size: 48,
-                                weight: .bold,
-                                design: .serif
-                            )
-                        )
-                        .foregroundColor(.yogaGreen)
-                }
-
-                HStack(spacing: 20) {
-                    profileSmallCard(
-                        title: "LEVEL",
-                        value: "Alle Levels"
-                    )
-                    profileSmallCard(
-                        title: "BUCHUNGEN",
-                        value: "\(bookingStore.bookings.count)"
-                    )
-                }
-            }
+            participantInfoSection
 
         } else {
 
-            VStack(spacing: 20) {
+            trainerInfoSection
+        }
+    }
 
-                Text("schön, dass du da bist")
-                    .font(.caption)
-                    .fontWeight(.bold)
-                    .tracking(4)
-                    .foregroundColor(.yogaGold)
+    // MARK: - Participant Information
 
-                HStack(spacing: 20) {
+    private var participantInfoSection: some View {
 
-                    profileSmallCard(
-                        title: "STIL",
-                        value: "Vinyasa & Yin"
-                    )
+        VStack(spacing: 22) {
 
-                    profileSmallCard(
-                        title: "ERFAHRUNG",
-                        value: "6 Jahre"
-                    )
-                }
+            greetingSection
+                .padding(.bottom, 20)
+
+            HStack(spacing: 50) {
+
+                profileMetric(
+                    title: "LEVEL",
+                    value: "Alle Levels"
+                )
+
+                profileMetric(
+                    title: "CREDITS",
+                    value: "\(bookingStore.credits)"
+                )
             }
         }
+        .frame(maxWidth: .infinity)
+        .padding(.top, 30)
+    }
+
+    // MARK: - Trainer Information
+
+    private var trainerInfoSection: some View {
+
+        VStack(spacing: 20) {
+
+            greetingSection
+                .padding(.bottom, 20)
+            
+            HStack(spacing: 50) {
+
+                profileMetric(
+                    title: "STIL",
+                    value: "Vinyasa & Yin"
+                )
+
+                profileMetric(
+                    title: "ERFAHRUNG",
+                    value: "6 Jahre"
+                )
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.top, 30)
+    }
+
+    // MARK: - Greeting Section
+
+    private var greetingSection: some View {
+
+        Text(greetingText)
+            .font(
+                .system(
+                    size: 19,
+                    weight: .regular,
+                    design: .serif
+                )
+                .italic()
+            )
+            .foregroundColor(.yogaGold)
+            .multilineTextAlignment(.center)
+            .frame(maxWidth: .infinity)
+    }
+
+    // MARK: - Profile Metric
+
+    private func profileMetric(
+        title: String,
+        value: String
+    ) -> some View {
+
+        VStack(spacing: 5) {
+
+            Text(title)
+                .font(.caption)
+                .fontWeight(.bold)
+                .tracking(3)
+                .foregroundColor(.yogaGold)
+
+            Text(value)
+                .font(.headline)
+                .fontWeight(.semibold)
+                .foregroundColor(.yogaGreen)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .minimumScaleFactor(0.8)
+        }
+        .frame(maxWidth: .infinity)
     }
 
     // MARK: - Personal Data Section
@@ -165,7 +238,7 @@ struct ProfileView: View {
 
         VStack(
             alignment: .leading,
-            spacing: 24
+            spacing: 22
         ) {
 
             Text("PERSÖNLICHE DATEN")
@@ -185,13 +258,8 @@ struct ProfileView: View {
             )
 
             profileDataRow(
-                title: "ROLLE",
-                value: role == .trainer ? "Trainerin" : "Teilnehmerin"
-            )
-
-            profileDataRow(
                 title: "STUDIO",
-                value: studioName
+                value: "YogaNow Graz"
             )
 
             profileDataRow(
@@ -203,47 +271,14 @@ struct ProfileView: View {
             maxWidth: .infinity,
             alignment: .leading
         )
-        .padding(24)
+        .padding(.horizontal, 24)
+        .padding(.vertical, 26)
         .background(
-            LinearGradient(
-                colors: [
-                    Color.white.opacity(0.92),
-                    Color.yogaCream.opacity(0.86)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+            Color.white.opacity(0.70)
         )
         .clipShape(
-            RoundedRectangle(
-                cornerRadius: 28
-            )
+            RoundedRectangle(cornerRadius: 30)
         )
-    }
-
-    // MARK: - Small Profile Card
-
-    private func profileSmallCard(
-        title: String,
-        value: String
-    ) -> some View {
-
-        VStack(spacing: 6) {
-
-            Text(title)
-                .font(.caption)
-                .fontWeight(.bold)
-                .tracking(3)
-                .foregroundColor(.yogaGold)
-
-            Text(value)
-                .fontWeight(.semibold)
-                .foregroundColor(.yogaGreen)
-                .multilineTextAlignment(.center)
-        }
-        .frame(maxWidth: .infinity)
-        
-       
     }
 
     // MARK: - Profile Data Row
@@ -255,7 +290,7 @@ struct ProfileView: View {
 
         VStack(
             alignment: .leading,
-            spacing: 2
+            spacing: 3
         ) {
 
             Text(title)
@@ -265,8 +300,13 @@ struct ProfileView: View {
                 .foregroundColor(.yogaGold)
 
             Text(value)
+                .font(.body)
                 .foregroundColor(.yogaGreen)
         }
+        .frame(
+            maxWidth: .infinity,
+            alignment: .leading
+        )
     }
 
     // MARK: - Logout Button
@@ -276,6 +316,7 @@ struct ProfileView: View {
         Button {
             dismiss()
         } label: {
+
             SecondaryButton(
                 title: "Abmelden",
                 icon: "rectangle.portrait.and.arrow.right"
@@ -284,9 +325,9 @@ struct ProfileView: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Participant Preview
 
-#Preview("Teilnehmer") {
+#Preview("Teilnehmerin") {
 
     NavigationStack {
 
@@ -298,7 +339,9 @@ struct ProfileView: View {
     .environment(FavoritesStore())
 }
 
-#Preview("Trainer") {
+// MARK: - Trainer Preview
+
+#Preview("Trainerin") {
 
     NavigationStack {
 
