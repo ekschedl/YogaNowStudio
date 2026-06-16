@@ -16,7 +16,7 @@ struct TrainerDashboardView: View {
                 VStack {
 
                     VStack(spacing: 4) {
-
+                        Spacer()
                         Text("Namasté")
                             .font(.subheadline)
                             .foregroundColor(.yogaGreen)

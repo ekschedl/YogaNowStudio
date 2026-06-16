@@ -65,8 +65,8 @@ struct TrainerMainTabView: View {
                 )
 
             }
-            .tint(.yogaGold)
-        }
+            
+        }.tint(.yogaGold)
     }
 }
 #Preview {
