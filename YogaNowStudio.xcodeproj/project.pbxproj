@@ -6,13 +6,35 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		454F34E62FE1E442002DDD62 /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = 454F34E52FE1E442002DDD62 /* Auth */; };
+		454F34E82FE1E442002DDD62 /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = 454F34E72FE1E442002DDD62 /* Functions */; };
+		454F34EA2FE1E442002DDD62 /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = 454F34E92FE1E442002DDD62 /* PostgREST */; };
+		454F34EC2FE1E442002DDD62 /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = 454F34EB2FE1E442002DDD62 /* Realtime */; };
+		454F34EE2FE1E442002DDD62 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 454F34ED2FE1E442002DDD62 /* Storage */; };
+		454F34F02FE1E442002DDD62 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 454F34EF2FE1E442002DDD62 /* Supabase */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		45E9285B2FCE2EEE00404612 /* YogaNowStudio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YogaNowStudio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		454999312FE1FFD000BBD843 /* Exceptions for "YogaNowStudio" folder in "YogaNowStudio" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Views/Shared/Untitled.swift,
+			);
+			target = 45E9285A2FCE2EEE00404612 /* YogaNowStudio */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		45E9285D2FCE2EEE00404612 /* YogaNowStudio */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				454999312FE1FFD000BBD843 /* Exceptions for "YogaNowStudio" folder in "YogaNowStudio" target */,
+			);
 			path = YogaNowStudio;
 			sourceTree = "<group>";
 		};
@@ -23,6 +45,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				454F34EA2FE1E442002DDD62 /* PostgREST in Frameworks */,
+				454F34E82FE1E442002DDD62 /* Functions in Frameworks */,
+				454F34F02FE1E442002DDD62 /* Supabase in Frameworks */,
+				454F34E62FE1E442002DDD62 /* Auth in Frameworks */,
+				454F34EE2FE1E442002DDD62 /* Storage in Frameworks */,
+				454F34EC2FE1E442002DDD62 /* Realtime in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,6 +101,12 @@
 			);
 			name = YogaNowStudio;
 			packageProductDependencies = (
+				454F34E52FE1E442002DDD62 /* Auth */,
+				454F34E72FE1E442002DDD62 /* Functions */,
+				454F34E92FE1E442002DDD62 /* PostgREST */,
+				454F34EB2FE1E442002DDD62 /* Realtime */,
+				454F34ED2FE1E442002DDD62 /* Storage */,
+				454F34EF2FE1E442002DDD62 /* Supabase */,
 			);
 			productName = YogaNowStudio;
 			productReference = 45E9285B2FCE2EEE00404612 /* YogaNowStudio.app */;
@@ -103,6 +137,7 @@
 			mainGroup = 45E928522FCE2EEE00404612;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				454F34E42FE1E442002DDD62 /* XCRemoteSwiftPackageReference "supabase-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 45E9285C2FCE2EEE00404612 /* Products */;
@@ -342,6 +377,50 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		454F34E42FE1E442002DDD62 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		454F34E52FE1E442002DDD62 /* Auth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 454F34E42FE1E442002DDD62 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Auth;
+		};
+		454F34E72FE1E442002DDD62 /* Functions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 454F34E42FE1E442002DDD62 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Functions;
+		};
+		454F34E92FE1E442002DDD62 /* PostgREST */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 454F34E42FE1E442002DDD62 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = PostgREST;
+		};
+		454F34EB2FE1E442002DDD62 /* Realtime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 454F34E42FE1E442002DDD62 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Realtime;
+		};
+		454F34ED2FE1E442002DDD62 /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 454F34E42FE1E442002DDD62 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Storage;
+		};
+		454F34EF2FE1E442002DDD62 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 454F34E42FE1E442002DDD62 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 45E928532FCE2EEE00404612 /* Project object */;
 }

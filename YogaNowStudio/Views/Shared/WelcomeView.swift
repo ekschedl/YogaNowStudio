@@ -70,8 +70,11 @@ struct WelcomeView: View {
 }
 
 #Preview {
+
     WelcomeView()
-      .environment(FavoritesStore())
+        .environment(FavoritesStore())
+        .environmentObject(BookingStore())
+        .environmentObject(SessionStore())
 }
 
 

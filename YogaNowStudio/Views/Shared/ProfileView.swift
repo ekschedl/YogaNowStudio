@@ -6,6 +6,7 @@ struct ProfileView: View {
 
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var bookingStore: BookingStore
+    @EnvironmentObject private var sessionStore: SessionStore
 
     // MARK: - Properties
 
@@ -314,7 +315,11 @@ struct ProfileView: View {
     private var logoutButton: some View {
 
         Button {
-            dismiss()
+
+            Task {
+                await sessionStore.signOut()
+            }
+
         } label: {
 
             SecondaryButton(
@@ -337,6 +342,7 @@ struct ProfileView: View {
     }
     .environmentObject(BookingStore())
     .environment(FavoritesStore())
+    .environmentObject(SessionStore())
 }
 
 // MARK: - Trainer Preview
@@ -351,4 +357,5 @@ struct ProfileView: View {
     }
     .environmentObject(BookingStore())
     .environment(FavoritesStore())
+    .environmentObject(SessionStore())
 }
