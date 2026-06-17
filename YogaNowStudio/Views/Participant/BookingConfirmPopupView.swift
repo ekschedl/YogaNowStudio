@@ -131,7 +131,7 @@ struct BookingConfirmPopupView: View {
                     } else {
 
                         Text(
-                            "Du hast aktuell keine Credits und kannst diesen Kurs nicht buchen."
+                            "Du hast aktuell keine verfügbaren Credits."
                         )
                         .font(.footnote)
                         .foregroundColor(.red)

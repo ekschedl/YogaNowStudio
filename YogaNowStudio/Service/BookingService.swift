@@ -16,6 +16,6 @@ protocol BookingService {
     ) async throws -> BookCourseResult
 
     func cancelBooking(
-        booking: Booking
-    ) async throws
+        bookingID: UUID
+    ) async throws -> CancelBookingResult
 }

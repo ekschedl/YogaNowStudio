@@ -7,14 +7,17 @@ struct CourseDetailView: View {
     @EnvironmentObject private var bookingStore: BookingStore
 
     // MARK: - State
-
+    @State private var cancellationRefunded = false
+    @State private var showCancelConfirmation = false
+    @State private var showCancelSuccess = false
     @State private var showBookingPopup = false
     @State private var showBookingSuccess = false
     @State private var isBooking = false
+    @State private var isCancelling = false
 
     // MARK: - Properties
+
     let courseID: UUID
-    
     let role: UserRole
     let imageName: String
     let title: String
@@ -97,6 +100,7 @@ struct CourseDetailView: View {
     }
 
     private var freePlacesText: String {
+
         if freePlaces == 0 {
             return "Ausgebucht"
         }
@@ -151,6 +155,63 @@ struct CourseDetailView: View {
                 onFinish: onShowBookings
             )
         }
+        .confirmationDialog(
+            "Buchung wirklich stornieren?",
+            isPresented: $showCancelConfirmation,
+            titleVisibility: .visible
+        ) {
+
+            Button(
+                "Buchung stornieren",
+                role: .destructive
+            ) {
+                cancelBooking()
+            }
+
+            Button(
+                "Abbrechen",
+                role: .cancel
+            ) {}
+
+        } message: {
+
+            if courseDate > Date().addingTimeInterval(24 * 60 * 60) {
+
+                Text(
+                    "Der Kurs wird aus deinen Buchungen entfernt. Dein Credit wird zurückgegeben."
+                )
+
+            } else {
+
+                Text(
+                    "Der Kurs beginnt in weniger als 24 Stunden. Die Buchung wird storniert, aber du erhältst keinen Credit zurück."
+                )
+            }
+        }
+        .alert(
+            "Kurs storniert",
+            isPresented: $showCancelSuccess
+        ) {
+
+            Button("OK") {
+                onShowBookings()
+            }
+
+        } message: {
+
+            if cancellationRefunded {
+
+                Text(
+                    "Die Buchung wurde erfolgreich storniert. Dein Credit wurde zurückgegeben."
+                )
+
+            } else {
+
+                Text(
+                    "Die Buchung wurde erfolgreich storniert. Da der Kurs in weniger als 24 Stunden beginnt, wurde kein Credit zurückgegeben."
+                )
+            }
+        }
     }
 
     // MARK: - Course Image
@@ -168,7 +229,10 @@ struct CourseDetailView: View {
 
     private var contentSection: some View {
 
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(
+            alignment: .leading,
+            spacing: 12
+        ) {
 
             titleSection
 
@@ -277,6 +341,7 @@ struct CourseDetailView: View {
         }
         .padding(.bottom, 6)
     }
+
     // MARK: - Detail Info Card
 
     private func detailInfoCard(
@@ -325,7 +390,10 @@ struct CourseDetailView: View {
 
     private var descriptionCard: some View {
 
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(
+            alignment: .leading,
+            spacing: 10
+        ) {
 
             Text("KURSBESCHREIBUNG")
                 .font(.caption)
@@ -393,7 +461,10 @@ struct CourseDetailView: View {
 
     private var trainerParticipantCard: some View {
 
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(
+            alignment: .leading,
+            spacing: 8
+        ) {
 
             Text("TEILNEHMER")
                 .font(.caption)
@@ -428,16 +499,8 @@ struct CourseDetailView: View {
 
     private var bottomFade: some View {
 
-        LinearGradient(
-            colors: [
-                Color.white.opacity(0.96),
-                Color.yogaCream.opacity(0.70),
-                Color.white
-            ],
-            startPoint: .top,
-            endPoint: .bottom
-        )
-        .frame(height: 50)
+        Color.yogaCream
+            .frame(height: 30)
     }
 
     // MARK: - Bottom Action Button
@@ -445,18 +508,29 @@ struct CourseDetailView: View {
     private var bottomActionButton: some View {
 
         Group {
+
             if role == .participant {
+
                 if isBooked {
+
                     Button {
-                        cancelBooking()
+                        showCancelConfirmation = true
                     } label: {
                         SecondaryButton(
-                            title: "Buchung stornieren",
+                            title:
+                                isCancelling
+                                ? "Wird storniert ..."
+                                : "Buchung stornieren",
                             icon: "xmark.circle"
                         )
                     }
+                    .disabled(isCancelling)
+                    .opacity(isCancelling ? 0.6 : 1)
+
                 } else {
+
                     Button {
+                        bookingStore.errorMessage = nil
                         showBookingPopup = true
                     } label: {
                         PrimaryButton(
@@ -464,15 +538,26 @@ struct CourseDetailView: View {
                             icon: "calendar.badge.plus"
                         )
                     }
-                    .disabled(freePlaces == 0)
-                    .opacity(freePlaces == 0 ? 0.55 : 1)
+                    .disabled(
+                        freePlaces == 0 || isBooking
+                    )
+                    .opacity(
+                        freePlaces == 0 || isBooking
+                            ? 0.55
+                            : 1
+                    )
                 }
+
             } else {
+
                 NavigationLink {
+
                     ParticipantListView(
                         courseTitle: title
                     )
+
                 } label: {
+
                     PrimaryButton(
                         title: "Teilnehmer anzeigen",
                         icon: "person.2.fill"
@@ -501,6 +586,7 @@ struct CourseDetailView: View {
                 isBooking: isBooking,
                 errorMessage: bookingStore.errorMessage,
                 onCancel: {
+                    bookingStore.errorMessage = nil
                     showBookingPopup = false
                 },
                 onConfirm: {
@@ -512,27 +598,40 @@ struct CourseDetailView: View {
         }
     }
 
-    // MARK: - Actions
-
+    // MARK: - Cancel Booking
     private func cancelBooking() {
 
         guard let booking = bookingStore.bookings.first(
             where: {
-                $0.course.title == course.title
+                $0.courseID == courseID
             }
         ) else {
+            bookingStore.errorMessage =
+                "Die Buchung wurde nicht gefunden."
             return
         }
 
+        isCancelling = true
+        bookingStore.errorMessage = nil
+
         Task {
 
-            await bookingStore.cancel(
+            let result = await bookingStore.cancel(
                 booking: booking
             )
 
-            onShowBookings()
+            isCancelling = false
+
+            guard let result else {
+                return
+            }
+
+            cancellationRefunded = result.creditRefunded
+            showCancelSuccess = true
         }
     }
+
+    // MARK: - Confirm Booking
 
     private func confirmBooking() async {
 
@@ -577,7 +676,7 @@ struct CourseDetailView: View {
                 "Starte deinen Tag mit einer belebenden Yoga-Praxis für Körper und Geist.",
             participants: 12,
             maxParticipants: 15,
-            isBooked: false,
+            isBooked: true,
             onShowBookings: {},
             courseDate: Date()
         )

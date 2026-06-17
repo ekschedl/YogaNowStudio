@@ -85,27 +85,36 @@ final class BookingStore: ObservableObject {
     }
 
     // MARK: - Cancel Booking
-
     func cancel(
         booking: Booking
-    ) async {
+    ) async -> CancelBookingResult? {
 
         do {
 
-            try await bookingService.cancelBooking(
-                booking: booking
+            let result = try await bookingService.cancelBooking(
+                bookingID: booking.id
             )
 
             bookings.removeAll {
                 $0.id == booking.id
             }
 
+            credits = result.creditsRemaining
             errorMessage = nil
+
+            return result
 
         } catch {
 
-            errorMessage =
-                "Die Buchung konnte nicht storniert werden."
+            let message = error.localizedDescription
+
+            if message.contains("nicht gefunden") {
+                errorMessage = "Die Buchung wurde nicht gefunden."
+            } else {
+                errorMessage = "Die Buchung konnte nicht storniert werden."
+            }
+
+            return nil
         }
     }
 
@@ -138,7 +147,8 @@ final class BookingStore: ObservableObject {
         }
 
         if message.contains("nicht genügend Credits") {
-            return "Du hast nicht genügend Credits."
+            credits = 0
+            return "Du hast keine verfügbaren Credits mehr."
         }
 
         if message.contains("ausgebucht") {

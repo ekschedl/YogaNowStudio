@@ -139,12 +139,21 @@ final class SupabaseBookingService: BookingService {
     }
 
     // MARK: - Cancel Booking
-
     func cancelBooking(
-        booking: Booking
-    ) async throws {
+        bookingID: UUID
+    ) async throws -> CancelBookingResult {
 
-        throw BookingServiceError.cancelNotImplemented
+        let result: CancelBookingResult = try await client
+            .rpc(
+                "cancel_booking",
+                params: [
+                    "p_booking_id": bookingID.uuidString
+                ]
+            )
+            .execute()
+            .value
+
+        return result
     }
 }
 
