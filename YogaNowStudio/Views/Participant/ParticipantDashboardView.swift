@@ -1,9 +1,19 @@
 import SwiftUI
 
-
 struct ParticipantDashboardView: View {
-    let onShowBookings: () -> Void
+
+    // MARK: - Environment
+
     @EnvironmentObject private var bookingStore: BookingStore
+    @EnvironmentObject private var sessionStore: SessionStore
+
+    // MARK: - Properties
+
+    let onShowBookings: () -> Void
+
+    private var userName: String {
+        sessionStore.profile?.displayName ?? "Benutzer"
+    }
 
     private var hasBooking: Bool {
         !bookingStore.bookings.isEmpty
@@ -29,21 +39,24 @@ struct ParticipantDashboardView: View {
     }
 
     private var sectionTitle: String {
-        hasBooking ? "DEIN NÄCHSTER KURS" : "EMPFOHLENER KURS"
+        hasBooking
+            ? "DEIN NÄCHSTER KURS"
+            : "EMPFOHLENER KURS"
     }
 
     private var infoText: String {
         hasBooking
-        ? "Du bist für diesen Kurs angemeldet."
-        : "Du hast aktuell noch keine Buchung.\nDieser Kurs könnte gut zu dir passen."
+            ? "Du bist für diesen Kurs angemeldet."
+            : "Du hast aktuell noch keine Buchung.\nDieser Kurs könnte gut zu dir passen."
     }
-    
+
     private var buttonTitle: String {
-        hasBooking ? "Buchung ansehen" : "Kursdetails ansehen"
+        hasBooking
+            ? "Buchung ansehen"
+            : "Kursdetails ansehen"
     }
 
     private var displayedCourseDateText: String {
-
         displayedCourse.date.formatted(
             .dateTime
                 .weekday(.short)
@@ -52,6 +65,8 @@ struct ParticipantDashboardView: View {
                 .locale(Locale(identifier: "de_DE"))
         )
     }
+
+    // MARK: - Body
 
     var body: some View {
 
@@ -72,12 +87,12 @@ struct ParticipantDashboardView: View {
                     // MARK: Header
 
                     VStack(spacing: 10) {
-                        Spacer()
+
                         Text("Namasté")
                             .font(.title3)
                             .foregroundColor(.yogaGreen)
 
-                        Text("Katja")
+                        Text(userName)
                             .font(
                                 .system(
                                     size: 44,
@@ -87,8 +102,10 @@ struct ParticipantDashboardView: View {
                             )
                             .tracking(2)
                             .foregroundColor(.yogaGold)
+                            .multilineTextAlignment(.center)
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.7)
 
-                        
                         Text("Schön, dass du da bist")
                             .font(.subheadline)
                             .foregroundColor(.yogaGold)
@@ -96,7 +113,7 @@ struct ParticipantDashboardView: View {
 
                     Spacer()
                         .frame(height: 50)
-                    
+
                     Text(infoText)
                         .font(.footnote)
                         .foregroundColor(.gray)
@@ -112,7 +129,10 @@ struct ParticipantDashboardView: View {
                             .tracking(4)
                             .foregroundColor(.yogaGold)
 
-                        HStack(alignment: .firstTextBaseline, spacing: 10) {
+                        HStack(
+                            alignment: .firstTextBaseline,
+                            spacing: 10
+                        ) {
 
                             Text(displayedCourse.title)
                                 .font(
@@ -138,9 +158,7 @@ struct ParticipantDashboardView: View {
                                 .background(
                                     Color.green.opacity(0.10)
                                 )
-                                .clipShape(
-                                    Capsule()
-                                )
+                                .clipShape(Capsule())
                             }
                         }
 
@@ -183,12 +201,6 @@ struct ParticipantDashboardView: View {
                                 .font(.footnote)
                                 .foregroundColor(.gray)
 
-                        } else {
-
-                            Text("Du hast aktuell noch keine Buchung. Dieser Kurs könnte gut zu dir passen.")
-                                .font(.footnote)
-                                .foregroundColor(.gray)
-                                .multilineTextAlignment(.center)
                         }
                     }
                     .frame(maxWidth: .infinity)
@@ -210,6 +222,7 @@ struct ParticipantDashboardView: View {
                     // MARK: Kursdetails
 
                     NavigationLink {
+
                         CourseDetailView(
                             role: .participant,
                             imageName: displayedCourse.imageName,
@@ -218,7 +231,8 @@ struct ParticipantDashboardView: View {
                             duration: "60 Min.",
                             level: "Alle Levels",
                             trainer: "Laura",
-                            description: "Starte deinen Tag mit einer belebenden Yoga-Praxis für Körper und Geist.",
+                            description:
+                                "Starte deinen Tag mit einer belebenden Yoga-Praxis für Körper und Geist.",
                             participants: displayedCourse.participants,
                             maxParticipants: 15,
                             isBooked: hasBooking,
@@ -230,7 +244,9 @@ struct ParticipantDashboardView: View {
 
                         PrimaryButton(
                             title: buttonTitle,
-                            icon: hasBooking ? "checkmark.circle.fill" : "calendar"
+                            icon: hasBooking
+                                ? "checkmark.circle.fill"
+                                : "calendar"
                         )
                     }
 
@@ -250,9 +266,9 @@ struct ParticipantDashboardView: View {
 
         ParticipantDashboardView(
             onShowBookings: {}
-
         )
     }
     .environmentObject(BookingStore())
+    .environmentObject(SessionStore())
     .environment(FavoritesStore())
 }
