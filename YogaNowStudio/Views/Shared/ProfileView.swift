@@ -4,8 +4,6 @@ struct ProfileView: View {
 
     // MARK: - Environment
 
-    @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var bookingStore: BookingStore
     @EnvironmentObject private var sessionStore: SessionStore
 
     // MARK: - Properties
@@ -14,44 +12,60 @@ struct ProfileView: View {
 
     // MARK: - User Information
 
+    private var currentRole: UserRole {
+        sessionStore.profile?.role ?? role
+    }
+
     private var userName: String {
-        role == .trainer ? "Valerie" : "Katja"
+        sessionStore.profile?.displayName ?? "Benutzer"
     }
 
     private var userEmail: String {
-        role == .trainer
-            ? "valerie@yoganow.at"
-            : "katja@test.at"
+        sessionStore.email ?? "Keine E-Mail verfügbar"
     }
 
     private var roleTitle: String {
-        role == .trainer
+        currentRole == .trainer
             ? "YOGA TRAINERIN"
             : "TEILNEHMERIN"
     }
 
-    private var roleValue: String {
-        role == .trainer
-            ? "Trainerin"
-            : "Teilnehmerin"
-    }
-
     private var greetingText: String {
-        role == .trainer
+        currentRole == .trainer
             ? "Atme ein. Inspiriere."
             : "Atme ein. Komm bei dir an."
     }
 
     private var memberTitle: String {
-        role == .trainer
+        currentRole == .trainer
             ? "TRAINER SEIT"
             : "MITGLIED SEIT"
     }
 
     private var memberValue: String {
-        role == .trainer
-            ? "2024"
-            : "Juni 2026"
+        if currentRole == .trainer {
+            return sessionStore.profile?.trainerSince ?? "Noch nicht hinterlegt"
+        } else {
+            return sessionStore.profile?.memberSince ?? "Noch nicht hinterlegt"
+        }
+    }
+
+    private var yogaStyle: String {
+        sessionStore.profile?.yogaStyle ?? "Noch nicht hinterlegt"
+    }
+
+    private var experienceValue: String {
+        guard let years = sessionStore.profile?.experienceYears else {
+            return "Noch nicht hinterlegt"
+        }
+
+        return years == 1
+            ? "1 Jahr"
+            : "\(years) Jahre"
+    }
+
+    private var creditsValue: String {
+        "\(sessionStore.profile?.credits ?? 0)"
     }
 
     // MARK: - Body
@@ -111,6 +125,9 @@ struct ProfileView: View {
                     )
                 )
                 .foregroundColor(.yogaGold)
+                .multilineTextAlignment(.center)
+                .minimumScaleFactor(0.7)
+                .lineLimit(2)
 
             Text(roleTitle)
                 .font(.caption)
@@ -127,7 +144,7 @@ struct ProfileView: View {
     @ViewBuilder
     private var roleInfoSection: some View {
 
-        if role == .participant {
+        if currentRole == .participant {
 
             participantInfoSection
 
@@ -155,7 +172,7 @@ struct ProfileView: View {
 
                 profileMetric(
                     title: "CREDITS",
-                    value: "\(bookingStore.credits)"
+                    value: creditsValue
                 )
             }
         }
@@ -171,17 +188,17 @@ struct ProfileView: View {
 
             greetingSection
                 .padding(.bottom, 20)
-            
+
             HStack(spacing: 50) {
 
                 profileMetric(
                     title: "STIL",
-                    value: "Vinyasa & Yin"
+                    value: yogaStyle
                 )
 
                 profileMetric(
                     title: "ERFAHRUNG",
-                    value: "6 Jahre"
+                    value: experienceValue
                 )
             }
         }
@@ -340,8 +357,6 @@ struct ProfileView: View {
             role: .participant
         )
     }
-    .environmentObject(BookingStore())
-    .environment(FavoritesStore())
     .environmentObject(SessionStore())
 }
 
@@ -355,7 +370,5 @@ struct ProfileView: View {
             role: .trainer
         )
     }
-    .environmentObject(BookingStore())
-    .environment(FavoritesStore())
     .environmentObject(SessionStore())
 }
