@@ -106,10 +106,8 @@ struct ParticipantDashboardView: View {
                             .lineLimit(2)
                             .minimumScaleFactor(0.7)
 
-                        Text("Schön, dass du da bist")
-                            .font(.subheadline)
-                            .foregroundColor(.yogaGold)
                     }
+                    .padding(.top, 30)
 
                     Spacer()
                         .frame(height: 50)
