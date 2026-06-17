@@ -101,7 +101,6 @@ struct CourseCalendarCardView: View {
         .contentShape(
             RoundedRectangle(cornerRadius: 26)
         )
-        .opacity(1)
         .shadow(
             color: Color.black.opacity(0.08),
             radius: 7,
@@ -116,11 +115,11 @@ struct CourseCalendarCardView: View {
 #Preview {
 
     CourseCalendarCardView(
-        imageName: "ImageCourse02",
-        title: "Valerie Evening Relax",
-        time: "18:00 Uhr",
-        participants: 0,
-        isBooked: false
+        imageName: "ImageCourse01",
+        title: "Morning Flow",
+        time: "06:30 Uhr",
+        participants: 1,
+        isBooked: true
     )
     .padding()
     .background(Color.yogaCream)

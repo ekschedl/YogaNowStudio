@@ -225,7 +225,7 @@ struct TrainerDashboardView: View {
                         description:
                             course.description
                             ?? "Keine Beschreibung hinterlegt.",
-                        participants: 0,
+                        participants: course.participantCount,
                         maxParticipants: course.maxParticipants,
                         isBooked: true,
                         courseDate: course.startAt

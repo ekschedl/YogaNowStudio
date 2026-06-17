@@ -112,7 +112,8 @@ struct BookingConfirmPopupView: View {
                         .tracking(3)
                         .foregroundColor(.yogaGold)
 
-                    Text(creditText)
+                    Text("Keine verfügbare  Credits. Neue Credits erhältst du im Studio.")
+                        .font(.footnote)
                         .fontWeight(.semibold)
                         .foregroundColor(
                             credits > 0
@@ -128,14 +129,7 @@ struct BookingConfirmPopupView: View {
                         .font(.footnote)
                         .foregroundColor(.gray)
 
-                    } else {
-
-                        Text(
-                            "Du hast aktuell keine verfügbaren Credits."
-                        )
-                        .font(.footnote)
-                        .foregroundColor(.red)
-                    }
+                    } 
                 }
                 .frame(
                     maxWidth: .infinity,
@@ -148,9 +142,8 @@ struct BookingConfirmPopupView: View {
                 .clipShape(
                     RoundedRectangle(cornerRadius: 18)
                 )
-
-                if let errorMessage {
-
+                if let errorMessage,
+                   credits > 0 {
                     Text(errorMessage)
                         .font(.subheadline)
                         .foregroundColor(.red)

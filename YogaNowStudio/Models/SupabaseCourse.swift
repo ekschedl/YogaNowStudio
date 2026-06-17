@@ -21,6 +21,8 @@ struct SupabaseCourse: Codable, Identifiable {
     let imageName: String?
     let createdAt: Date
 
+    var participantCount: Int = 0
+
     enum CodingKeys: String, CodingKey {
         case id
         case trainerId = "trainer_id"

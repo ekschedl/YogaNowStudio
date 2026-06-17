@@ -147,7 +147,6 @@ final class BookingStore: ObservableObject {
         }
 
         if message.contains("nicht genügend Credits") {
-            credits = 0
             return "Du hast keine verfügbaren Credits mehr."
         }
 

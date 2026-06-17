@@ -3,7 +3,7 @@ import SwiftUI
 struct CourseDetailView: View {
 
     // MARK: - Environment
-
+    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var bookingStore: BookingStore
 
     // MARK: - State
@@ -194,9 +194,8 @@ struct CourseDetailView: View {
         ) {
 
             Button("OK") {
-                onShowBookings()
+                dismiss()
             }
-
         } message: {
 
             if cancellationRefunded {

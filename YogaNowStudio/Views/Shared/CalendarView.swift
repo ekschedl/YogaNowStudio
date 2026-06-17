@@ -277,7 +277,7 @@ struct CalendarView: View {
                 description:
                     course.description
                     ?? "Keine Beschreibung hinterlegt.",
-                participants: 0,
+                participants: course.participantCount,
                 maxParticipants:
                     course.maxParticipants,
                 isBooked: booked,
@@ -294,8 +294,7 @@ struct CalendarView: View {
                 title: course.title,
                 time:
                     "\(startTime(for: course)) Uhr",
-                participants: 0,
-                isBooked: booked
+                participants: course.participantCount,  isBooked: booked
             )
         }
         .buttonStyle(.plain)

@@ -104,11 +104,7 @@ struct ParticipantDashboardView: View {
     }
 
     private var displayedParticipants: Int {
-        /*
-         Die echte Teilnehmerzahl kommt später aus bookings.
-         Deshalb vorerst 0.
-         */
-        0
+        displayedDatabaseCourse?.participantCount ?? 0
     }
 
     private var displayedMaxParticipants: Int {

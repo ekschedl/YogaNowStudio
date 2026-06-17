@@ -1,43 +1,113 @@
 //
-//  CourseService.swift.swift
-//  YogaNowStudio
-//
-//  Created by Kaaatkina on 17.06.26.
-//
-
-//
 //  CourseService.swift
 //  YogaNowStudio
 //
+
 import Foundation
 import Supabase
 
 final class CourseService {
 
+    // MARK: - Client
+
     private let client = SupabaseManager.client
+
+    // MARK: - Load All Courses
 
     func loadCourses() async throws -> [SupabaseCourse] {
 
-        let courses: [SupabaseCourse] = try await client
+        var courses: [SupabaseCourse] = try await client
             .from("courses")
             .select()
-            .order("start_at", ascending: true)
+            .order(
+                "start_at",
+                ascending: true
+            )
             .execute()
             .value
+
+        let participantCounts =
+            try await loadParticipantCounts()
+
+        applyParticipantCounts(
+            participantCounts,
+            to: &courses
+        )
 
         return courses
     }
 
-    func loadCourses(for trainerID: UUID) async throws -> [SupabaseCourse] {
+    // MARK: - Load Trainer Courses
 
-        let courses: [SupabaseCourse] = try await client
+    func loadCourses(
+        for trainerID: UUID
+    ) async throws -> [SupabaseCourse] {
+
+        var courses: [SupabaseCourse] = try await client
             .from("courses")
             .select()
-            .eq("trainer_id", value: trainerID)
-            .order("start_at", ascending: true)
+            .eq(
+                "trainer_id",
+                value: trainerID
+            )
+            .order(
+                "start_at",
+                ascending: true
+            )
             .execute()
             .value
 
+        let participantCounts =
+            try await loadParticipantCounts()
+
+        applyParticipantCounts(
+            participantCounts,
+            to: &courses
+        )
+
         return courses
+    }
+
+    // MARK: - Load Participant Counts
+
+    private func loadParticipantCounts()
+        async throws -> [CourseParticipantCount] {
+
+        let counts: [CourseParticipantCount] =
+            try await client
+                .rpc(
+                    "get_course_participant_counts"
+                )
+                .execute()
+                .value
+
+        return counts
+    }
+
+    // MARK: - Apply Participant Counts
+
+    private func applyParticipantCounts(
+        _ counts: [CourseParticipantCount],
+        to courses: inout [SupabaseCourse]
+    ) {
+
+        let countByCourseID =
+            Dictionary(
+                uniqueKeysWithValues:
+                    counts.map {
+                        (
+                            $0.courseID,
+                            $0.participantCount
+                        )
+                    }
+            )
+
+        for index in courses.indices {
+
+            courses[index].participantCount =
+                countByCourseID[
+                    courses[index].id
+                ] ?? 0
+        }
     }
 }
