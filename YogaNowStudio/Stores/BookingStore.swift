@@ -41,9 +41,20 @@ final class BookingStore: ObservableObject {
     }
 
     // MARK: - Set Credits
-    func setCredits(
-        _ value: Int
-    ) {
+
+    private var creditsInitialized = false
+
+    func setInitialCredits(_ value: Int) {
+
+        guard !creditsInitialized else {
+            return
+        }
+
+        credits = value
+        creditsInitialized = true
+    }
+
+    func setCredits(_ value: Int) {
         credits = value
     }
     

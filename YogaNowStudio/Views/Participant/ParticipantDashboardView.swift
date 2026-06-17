@@ -230,8 +230,7 @@ struct ParticipantDashboardView: View {
         .navigationBarTitleDisplayMode(.inline)
         .task {
             if let profileCredits = sessionStore.profile?.credits {
-                bookingStore.setCredits(profileCredits)
-            }
+                bookingStore.setInitialCredits(profileCredits)            }
             await courseStore.loadCourses()
             await bookingStore.loadBookings()
         }

@@ -112,16 +112,11 @@ struct BookingConfirmPopupView: View {
                         .tracking(3)
                         .foregroundColor(.yogaGold)
 
-                    Text("Keine verfügbare  Credits. Neue Credits erhältst du im Studio.")
-                        .font(.footnote)
-                        .fontWeight(.semibold)
-                        .foregroundColor(
-                            credits > 0
-                                ? .yogaGreen
-                                : .red
-                        )
-
                     if credits > 0 {
+
+                        Text(creditText)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.yogaGreen)
 
                         Text(
                             "Für diese Buchung wird 1 Credit verwendet. Kostenlose Stornierung bis 24 Stunden vor Kursbeginn."
@@ -129,7 +124,16 @@ struct BookingConfirmPopupView: View {
                         .font(.footnote)
                         .foregroundColor(.gray)
 
-                    } 
+                    } else {
+
+                        Text("Keine verfügbaren Credits")
+                            .fontWeight(.semibold)
+                            .foregroundColor(.yogaGold)
+
+                        Text("Neue Credits erhältst du im Studio.")
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                    }
                 }
                 .frame(
                     maxWidth: .infinity,
