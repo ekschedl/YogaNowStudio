@@ -19,22 +19,9 @@
 		45E9285B2FCE2EEE00404612 /* YogaNowStudio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YogaNowStudio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		454999312FE1FFD000BBD843 /* Exceptions for "YogaNowStudio" folder in "YogaNowStudio" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Views/Shared/Untitled.swift,
-			);
-			target = 45E9285A2FCE2EEE00404612 /* YogaNowStudio */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		45E9285D2FCE2EEE00404612 /* YogaNowStudio */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				454999312FE1FFD000BBD843 /* Exceptions for "YogaNowStudio" folder in "YogaNowStudio" target */,
-			);
 			path = YogaNowStudio;
 			sourceTree = "<group>";
 		};

@@ -6,7 +6,7 @@
 //
 import Foundation
 
-enum UserRole {
+enum UserRole: String, Codable {
 
     case trainer
     case participant
