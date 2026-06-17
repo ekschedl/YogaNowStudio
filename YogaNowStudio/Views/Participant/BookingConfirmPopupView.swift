@@ -21,7 +21,22 @@ struct BookingConfirmPopupView: View {
                 .locale(Locale(identifier: "de_DE"))
         )
     }
-    
+
+    private var canBook: Bool {
+        credits > 0 && !isBooking
+    }
+
+    private var creditText: String {
+
+        if credits == 1 {
+            return "1 verfügbarer Credit"
+        }
+
+        return "\(credits) verfügbare Credits"
+    }
+
+    // MARK: - Body
+
     var body: some View {
 
         ZStack {
@@ -97,14 +112,30 @@ struct BookingConfirmPopupView: View {
                         .tracking(3)
                         .foregroundColor(.yogaGold)
 
-                    Text("\(credits) verfügbare Credits")
+                    Text(creditText)
                         .fontWeight(.semibold)
-                        .foregroundColor(.yogaGreen)
+                        .foregroundColor(
+                            credits > 0
+                                ? .yogaGreen
+                                : .red
+                        )
 
-                    Text("Für diese Buchung wird 1 Credit verwendet. Kostenlose Stornierung bis 24 Stunden vor Kursbeginn.")
+                    if credits > 0 {
+
+                        Text(
+                            "Für diese Buchung wird 1 Credit verwendet. Kostenlose Stornierung bis 24 Stunden vor Kursbeginn."
+                        )
                         .font(.footnote)
                         .foregroundColor(.gray)
-                     
+
+                    } else {
+
+                        Text(
+                            "Du hast aktuell keine Credits und kannst diesen Kurs nicht buchen."
+                        )
+                        .font(.footnote)
+                        .foregroundColor(.red)
+                    }
                 }
                 .frame(
                     maxWidth: .infinity,
@@ -142,11 +173,15 @@ struct BookingConfirmPopupView: View {
                         onConfirm()
                     } label: {
                         PrimaryButton(
-                            title: isBooking ? "Wird gebucht..." : "Buchen",
+                            title:
+                                isBooking
+                                ? "Wird gebucht..."
+                                : "Buchen",
                             icon: "checkmark.circle.fill"
                         )
                     }
-                    .disabled(isBooking)
+                    .disabled(!canBook)
+                    .opacity(canBook ? 1 : 0.55)
 
                     Button {
                         onCancel()
@@ -156,6 +191,7 @@ struct BookingConfirmPopupView: View {
                             icon: "xmark.circle"
                         )
                     }
+                    .disabled(isBooking)
                 }
             }
             .padding(26)
@@ -175,6 +211,8 @@ struct BookingConfirmPopupView: View {
             .padding(.horizontal, 28)
         }
     }
+
+    // MARK: - Info Row
 
     private func infoRow(
         icon: String,
@@ -196,7 +234,10 @@ struct BookingConfirmPopupView: View {
     }
 }
 
+// MARK: - Preview
+
 #Preview {
+
     BookingConfirmPopupView(
         course: Course(
             title: "Morning Flow",

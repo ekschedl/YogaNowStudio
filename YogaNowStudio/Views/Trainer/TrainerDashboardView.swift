@@ -213,6 +213,7 @@ struct TrainerDashboardView: View {
                 NavigationLink {
 
                     CourseDetailView(
+                        courseID: course.id,
                         role: .trainer,
                         imageName: course.imageName ?? "ImageCourse01",
                         title: course.title,

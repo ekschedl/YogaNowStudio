@@ -12,8 +12,8 @@ protocol BookingService {
     func fetchBookings() async throws -> [Booking]
 
     func bookCourse(
-        course: Course
-    ) async throws -> Booking
+        courseID: UUID
+    ) async throws -> BookCourseResult
 
     func cancelBooking(
         booking: Booking

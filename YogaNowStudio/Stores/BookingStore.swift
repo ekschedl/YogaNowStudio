@@ -8,7 +8,7 @@ final class BookingStore: ObservableObject {
     // MARK: - Published Properties
 
     @Published private(set) var bookings: [Booking] = []
-    @Published private(set) var credits: Int = 8
+    @Published private(set) var credits: Int = 0
     @Published var errorMessage: String?
 
     // MARK: - Service
@@ -18,7 +18,7 @@ final class BookingStore: ObservableObject {
     // MARK: - Init
 
     init() {
-        self.bookingService = MockBookingService()
+        self.bookingService = SupabaseBookingService()
     }
 
     init(
@@ -40,44 +40,46 @@ final class BookingStore: ObservableObject {
         }
     }
 
+    // MARK: - Set Credits
+    func setCredits(
+        _ value: Int
+    ) {
+        credits = value
+    }
+    
     // MARK: - Book Course
 
     func book(
+        courseID: UUID,
         course: Course
     ) async -> Bool {
 
-        let alreadyBooked = bookings.contains { booking in
-
-            booking.course.title == course.title &&
-            Calendar.current.isDate(
-                booking.course.date,
-                inSameDayAs: course.date
-            )
-        }
-
-        if alreadyBooked {
-            errorMessage = "Du hast diesen Kurs bereits gebucht."
-            return false
-        }
-
-        guard credits > 0 else {
-            errorMessage = "Du hast nicht genügend Credits."
-            return false
-        }
+        errorMessage = nil
 
         do {
-            let booking = try await bookingService.bookCourse(
+
+            let result = try await bookingService.bookCourse(
+                courseID: courseID
+            )
+
+            let booking = Booking(
+                id: result.bookingID,
+                courseID: courseID,
                 course: course
             )
 
             bookings.append(booking)
-            credits -= 1
-            errorMessage = nil
+
+            credits = result.creditsRemaining
 
             return true
 
         } catch {
-            errorMessage = "Der Kurs konnte nicht gebucht werden."
+
+            errorMessage = bookingErrorMessage(
+                from: error
+            )
+
             return false
         }
     }
@@ -89,6 +91,7 @@ final class BookingStore: ObservableObject {
     ) async {
 
         do {
+
             try await bookingService.cancelBooking(
                 booking: booking
             )
@@ -97,11 +100,12 @@ final class BookingStore: ObservableObject {
                 $0.id == booking.id
             }
 
-            credits += 1
             errorMessage = nil
 
         } catch {
-            errorMessage = "Die Buchung konnte nicht storniert werden."
+
+            errorMessage =
+                "Die Buchung konnte nicht storniert werden."
         }
     }
 
@@ -119,5 +123,36 @@ final class BookingStore: ObservableObject {
                 inSameDayAs: course.date
             )
         }
+    }
+
+    // MARK: - Error Message
+
+    private func bookingErrorMessage(
+        from error: Error
+    ) -> String {
+
+        let message = error.localizedDescription
+
+        if message.contains("bereits gebucht") {
+            return "Du hast diesen Kurs bereits gebucht."
+        }
+
+        if message.contains("nicht genügend Credits") {
+            return "Du hast nicht genügend Credits."
+        }
+
+        if message.contains("ausgebucht") {
+            return "Dieser Kurs ist bereits ausgebucht."
+        }
+
+        if message.contains("nicht gefunden") {
+            return "Der Kurs wurde nicht gefunden."
+        }
+
+        if message.contains("Nur Teilnehmer") {
+            return "Nur Teilnehmer können Kurse buchen."
+        }
+
+        return "Der Kurs konnte nicht gebucht werden."
     }
 }

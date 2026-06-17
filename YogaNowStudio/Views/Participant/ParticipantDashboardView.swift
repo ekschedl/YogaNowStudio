@@ -19,11 +19,16 @@ struct ParticipantDashboardView: View {
     }
 
     // MARK: - Booking Information
-
     private var hasBooking: Bool {
-        !bookingStore.bookings.isEmpty
-    }
+        guard let courseID = displayedDatabaseCourse?.id else {
+            return false
+        }
 
+        return bookingStore.bookings.contains {
+            $0.courseID == courseID
+        }
+
+    }
     private var bookedCourse: Course? {
         bookingStore.bookings.first?.course
     }
@@ -183,12 +188,12 @@ struct ParticipantDashboardView: View {
             : "EMPFOHLENER KURS"
     }
 
-    private var infoText: String {
+    private var infoText: String? {
         hasBooking
-            ? "Du bist für diesen Kurs angemeldet."
+            ? nil
             : "Du hast aktuell noch keine Buchung.\nDieser Kurs könnte gut zu dir passen."
     }
-
+    
     private var buttonTitle: String {
         hasBooking
             ? "Buchung ansehen"
@@ -228,7 +233,11 @@ struct ParticipantDashboardView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .task {
+            if let profileCredits = sessionStore.profile?.credits {
+                bookingStore.setCredits(profileCredits)
+            }
             await courseStore.loadCourses()
+            await bookingStore.loadBookings()
         }
     }
 
@@ -290,10 +299,15 @@ struct ParticipantDashboardView: View {
 
             VStack(spacing: 18) {
 
-                Text(infoText)
+                if !hasBooking {
+
+                    Text(
+                        "Du hast aktuell noch keine Buchung.\nDieser Kurs könnte gut zu dir passen."
+                    )
                     .font(.footnote)
                     .foregroundColor(.gray)
                     .multilineTextAlignment(.center)
+                }
 
                 courseCard
 
@@ -409,35 +423,50 @@ struct ParticipantDashboardView: View {
 
     // MARK: - Course Detail Link
 
+    @ViewBuilder
     private var courseDetailLink: some View {
 
-        NavigationLink {
+        if let databaseCourse = displayedDatabaseCourse {
 
-            CourseDetailView(
-                role: .participant,
-                imageName: displayedImageName,
-                title: displayedTitle,
-                time: displayedTimeRange,
-                duration: displayedDuration,
-                level: displayedLevel,
-                trainer: displayedTrainer,
-                room: displayedRoom,
-                description: displayedDescription,
-                participants: displayedParticipants,
-                maxParticipants: displayedMaxParticipants,
-                isBooked: hasBooking,
-                onShowBookings: onShowBookings,
-                courseDate: displayedDate
-            )
+            NavigationLink {
 
-        } label: {
+                CourseDetailView(
+                    courseID: databaseCourse.id,
+                    role: .participant,
+                    imageName: displayedImageName,
+                    title: displayedTitle,
+                    time: displayedTimeRange,
+                    duration: displayedDuration,
+                    level: displayedLevel,
+                    trainer: displayedTrainer,
+                    room: displayedRoom,
+                    description: displayedDescription,
+                    participants: displayedParticipants,
+                    maxParticipants: displayedMaxParticipants,
+                    isBooked: hasBooking,
+                    onShowBookings: onShowBookings,
+                    courseDate: displayedDate
+                )
+
+            } label: {
+
+                PrimaryButton(
+                    title: buttonTitle,
+                    icon: hasBooking
+                        ? "checkmark.circle.fill"
+                        : "calendar"
+                )
+            }
+            .buttonStyle(.plain)
+
+        } else {
 
             PrimaryButton(
-                title: buttonTitle,
-                icon: hasBooking
-                    ? "checkmark.circle.fill"
-                    : "calendar"
+                title: "Kein Kurs verfügbar",
+                icon: "calendar.badge.exclamationmark"
             )
+            .opacity(0.55)
+            .allowsHitTesting(false)
         }
     }
 }

@@ -30,7 +30,7 @@ struct ParticipantListView: View {
 
             VStack(spacing: 0) {
 
-                VStack(spacing: 8) {
+                VStack(spacing: 10) {
 
                     Text(courseTitle.uppercased())
                         .font(.caption)
@@ -47,13 +47,28 @@ struct ParticipantListView: View {
                             )
                         )
                         .foregroundColor(.yogaGreen)
+                        .padding(.bottom, 20)
 
                     Text("\(participants.count) Teilnehmer")
                         .font(.subheadline)
-                        .foregroundColor(.gray)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.yogaGreen)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 8)
+                        .background(
+                            Color.white.opacity(0.82)
+                        )
+                        .clipShape(Capsule())
+                        .overlay(
+                            Capsule()
+                                .stroke(
+                                    Color.yogaGold.opacity(0.35),
+                                    lineWidth: 1
+                                )
+                        )
                 }
                 .padding(.top, 60)
-                .padding(.bottom, 20)
+              
 
                 LinearGradient(
                        colors: [
@@ -78,6 +93,11 @@ struct ParticipantListView: View {
                         Text(participant)
 
                         Spacer()
+
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.title3)
+                            .foregroundColor(.green)
+
                     }
                 }
                 .listStyle(.plain)

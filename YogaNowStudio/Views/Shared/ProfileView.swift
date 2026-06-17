@@ -3,7 +3,7 @@ import SwiftUI
 struct ProfileView: View {
 
     // MARK: - Environment
-
+    @EnvironmentObject private var bookingStore: BookingStore
     @EnvironmentObject private var sessionStore: SessionStore
 
     // MARK: - Properties
@@ -65,7 +65,7 @@ struct ProfileView: View {
     }
 
     private var creditsValue: String {
-        "\(sessionStore.profile?.credits ?? 0)"
+        "\(bookingStore.credits)"
     }
 
     // MARK: - Body
@@ -371,4 +371,5 @@ struct ProfileView: View {
         )
     }
     .environmentObject(SessionStore())
+    .environmentObject(BookingStore())
 }

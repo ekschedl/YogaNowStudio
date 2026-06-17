@@ -255,6 +255,7 @@ struct CalendarView: View {
         return NavigationLink {
 
             CourseDetailView(
+                courseID: course.id,
                 role: role,
                 imageName:
                     course.imageName

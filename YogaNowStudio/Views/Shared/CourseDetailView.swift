@@ -13,7 +13,8 @@ struct CourseDetailView: View {
     @State private var isBooking = false
 
     // MARK: - Properties
-
+    let courseID: UUID
+    
     let role: UserRole
     let imageName: String
     let title: String
@@ -32,6 +33,7 @@ struct CourseDetailView: View {
     // MARK: - Initialization
 
     init(
+        courseID: UUID,
         role: UserRole,
         imageName: String,
         title: String,
@@ -47,6 +49,7 @@ struct CourseDetailView: View {
         onShowBookings: @escaping () -> Void = {},
         courseDate: Date = Date()
     ) {
+        self.courseID = courseID
         self.role = role
         self.imageName = imageName
         self.title = title
@@ -226,15 +229,7 @@ struct CourseDetailView: View {
             alignment: .topLeading
         )
         .background(
-            LinearGradient(
-                colors: [
-                    Color.white.opacity(0.98),
-                    Color.yogaCream.opacity(0.82),
-                    Color.white.opacity(0.95)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+            Color.yogaCream
         )
     }
 
@@ -243,21 +238,24 @@ struct CourseDetailView: View {
     private var titleSection: some View {
 
         HStack(
-            alignment: .firstTextBaseline,
-            spacing: 10
+            alignment: .center,
+            spacing: 12
         ) {
 
             Text(title)
                 .font(
                     .system(
-                        size: 34,
+                        size: 30,
                         weight: .semibold,
                         design: .serif
                     )
                 )
                 .foregroundColor(.yogaGreen)
                 .lineLimit(2)
-                .minimumScaleFactor(0.75)
+                .minimumScaleFactor(0.65)
+                .layoutPriority(1)
+
+            Spacer(minLength: 6)
 
             if role == .participant && isBooked {
 
@@ -269,18 +267,16 @@ struct CourseDetailView: View {
                 .fontWeight(.bold)
                 .foregroundColor(.green)
                 .padding(.horizontal, 10)
-                .padding(.vertical, 6)
+                .padding(.vertical, 7)
                 .background(
                     Color.green.opacity(0.10)
                 )
                 .clipShape(Capsule())
+                .fixedSize()
             }
-
-            Spacer()
         }
-        .padding(.bottom, 4)
+        .padding(.bottom, 6)
     }
-
     // MARK: - Detail Info Card
 
     private func detailInfoCard(
@@ -289,15 +285,18 @@ struct CourseDetailView: View {
         icon: String
     ) -> some View {
 
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(
+            alignment: .leading,
+            spacing: 7
+        ) {
 
             Label(
                 title.uppercased(),
                 systemImage: icon
             )
-            .font(.caption)
+            .font(.caption2)
             .fontWeight(.bold)
-            .tracking(3)
+            .tracking(2.5)
             .foregroundColor(.yogaGold)
 
             Text(value)
@@ -305,20 +304,20 @@ struct CourseDetailView: View {
                 .fontWeight(.semibold)
                 .foregroundColor(.yogaGreen)
                 .lineLimit(2)
-                .minimumScaleFactor(0.72)
+                .minimumScaleFactor(0.68)
         }
         .frame(
             maxWidth: .infinity,
-            minHeight: 88,
+            minHeight: 76,
             alignment: .leading
         )
-        .padding(.horizontal, 16)
-        .padding(.vertical, 14)
+        .padding(.horizontal, 15)
+        .padding(.vertical, 12)
         .background(
-            Color.white.opacity(0.78)
+            Color.white.opacity(0.82)
         )
         .clipShape(
-            RoundedRectangle(cornerRadius: 18)
+            RoundedRectangle(cornerRadius: 20)
         )
     }
 
@@ -446,11 +445,8 @@ struct CourseDetailView: View {
     private var bottomActionButton: some View {
 
         Group {
-
             if role == .participant {
-
                 if isBooked {
-
                     Button {
                         cancelBooking()
                     } label: {
@@ -459,9 +455,7 @@ struct CourseDetailView: View {
                             icon: "xmark.circle"
                         )
                     }
-
                 } else {
-
                     Button {
                         showBookingPopup = true
                     } label: {
@@ -473,17 +467,12 @@ struct CourseDetailView: View {
                     .disabled(freePlaces == 0)
                     .opacity(freePlaces == 0 ? 0.55 : 1)
                 }
-
             } else {
-
                 NavigationLink {
-
                     ParticipantListView(
                         courseTitle: title
                     )
-
                 } label: {
-
                     PrimaryButton(
                         title: "Teilnehmer anzeigen",
                         icon: "person.2.fill"
@@ -492,17 +481,10 @@ struct CourseDetailView: View {
             }
         }
         .padding(.horizontal)
-        .padding(.top, 10)
+        .padding(.top, 8)
         .padding(.bottom, 8)
         .background(
-            LinearGradient(
-                colors: [
-                    Color.white.opacity(0.96),
-                    Color.yogaCream.opacity(0.78)
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
+            Color.yogaCream
         )
     }
 
@@ -559,8 +541,10 @@ struct CourseDetailView: View {
         }
 
         isBooking = true
+        bookingStore.errorMessage = nil
 
         let success = await bookingStore.book(
+            courseID: courseID,
             course: course
         )
 
@@ -580,6 +564,7 @@ struct CourseDetailView: View {
     NavigationStack {
 
         CourseDetailView(
+            courseID: UUID(),
             role: .participant,
             imageName: "ImageCourse01",
             title: "Morning Flow",

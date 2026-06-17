@@ -154,6 +154,7 @@ struct MyBookingsView: View {
                 NavigationLink {
 
                     CourseDetailView(
+                        courseID: booking.courseID,
                         role: .participant,
                         imageName: booking.course.imageName,
                         title: booking.course.title,
