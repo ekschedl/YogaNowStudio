@@ -24,11 +24,13 @@ struct YogaLibraryView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 200)
+                    .padding(.top, 20)
 
                 Text("Yoga Library")
                     .font(.largeTitle)
                     .fontWeight(.semibold)
                     .foregroundColor(.yogaGreen)
+                    .padding(.top, -20)
 
                 // ASANAS Banner
                 NavigationLink {

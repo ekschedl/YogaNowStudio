@@ -4,6 +4,7 @@
 //
 //  Created by Kaaatkina on 16.06.26.
 //
+
 import Foundation
 import Combine
 
@@ -35,17 +36,15 @@ final class SessionStore: ObservableObject {
 
     var userRole: UserRole? {
 
-        switch profile?.role.lowercased() {
-
-        case "participant":
-            return .participant
-
-        case "trainer":
-            return .trainer
-
-        default:
+        guard let role = profile?.role else {
             return nil
         }
+
+        let normalizedRole = role
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
+
+        return UserRole(rawValue: normalizedRole)
     }
 
     // MARK: - Restore Session
@@ -55,9 +54,32 @@ final class SessionStore: ObservableObject {
         isLoading = true
         errorMessage = nil
 
+        defer {
+            isLoading = false
+        }
+
         do {
 
-            profile = try await authService.loadCurrentProfile()
+            let loadedProfile =
+                try await authService.loadCurrentProfile()
+
+            let normalizedRole = loadedProfile.role
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+                .lowercased()
+
+            guard UserRole(rawValue: normalizedRole) != nil else {
+
+                try? await authService.signOut()
+
+                profile = nil
+                email = nil
+                errorMessage =
+                    "Für dieses Benutzerkonto wurde keine gültige Rolle gefunden."
+
+                return
+            }
+
+            profile = loadedProfile
             email = authService.currentEmail
 
         } catch AuthServiceError.noActiveSession {
@@ -72,8 +94,6 @@ final class SessionStore: ObservableObject {
             errorMessage =
                 "Die gespeicherte Anmeldung konnte nicht geladen werden."
         }
-
-        isLoading = false
     }
 
     // MARK: - Sign In
@@ -83,28 +103,36 @@ final class SessionStore: ObservableObject {
         password: String
     ) async throws {
 
+        errorMessage = nil
+
         let loadedProfile = try await authService.signIn(
             email: email,
             password: password
         )
 
-        let normalizedRole = loadedProfile.role.lowercased()
+        let normalizedRole = loadedProfile.role
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
 
-        guard normalizedRole == "participant"
-                || normalizedRole == "trainer" else {
+        guard UserRole(rawValue: normalizedRole) != nil else {
 
             try? await authService.signOut()
+
+            profile = nil
+            self.email = nil
+
             throw AuthServiceError.invalidRole
         }
 
         profile = loadedProfile
         self.email = authService.currentEmail
-        errorMessage = nil
     }
 
     // MARK: - Sign Out
 
     func signOut() async {
+
+        errorMessage = nil
 
         do {
 
