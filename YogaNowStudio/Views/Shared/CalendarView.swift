@@ -5,6 +5,8 @@ struct CalendarView: View {
     // MARK: - Environment
 
     @EnvironmentObject private var bookingStore: BookingStore
+    @EnvironmentObject private var courseStore: CourseStore
+    @EnvironmentObject private var sessionStore: SessionStore
 
     // MARK: - Properties
 
@@ -12,68 +14,18 @@ struct CalendarView: View {
 
     // MARK: - State
 
-    @State private var selectedDate = Calendar.current.date(
-        from: DateComponents(
-            year: 2026,
-            month: 6,
-            day: 18
-        )
-    ) ?? Date()
-
-    // MARK: - Mock Courses
-
-    private var courses: [Course] {
-
-        [
-            Course(
-                title: "Morning Flow",
-                day: "Donnerstag",
-                date: makeDate(
-                    year: 2026,
-                    month: 6,
-                    day: 18
-                ),
-                time: "08:30 Uhr",
-                room: "Raum 1",
-                participants: 12,
-                imageName: "ImageCourse01"
-            ),
-            Course(
-                title: "Yin Yoga",
-                day: "Donnerstag",
-                date: makeDate(
-                    year: 2026,
-                    month: 6,
-                    day: 18
-                ),
-                time: "17:30 Uhr",
-                room: "Raum 1",
-                participants: 6,
-                imageName: "ImageCourse02"
-            ),
-            Course(
-                title: "Deep Balance",
-                day: "Freitag",
-                date: makeDate(
-                    year: 2026,
-                    month: 6,
-                    day: 19
-                ),
-                time: "19:00 Uhr",
-                room: "Raum 1",
-                participants: 8,
-                imageName: "ImageCourse03"
-            )
-        ]
-    }
+    @State private var selectedDate = Date()
 
     // MARK: - Computed Properties
 
-    private var coursesForSelectedDay: [Course] {
+    private var trainerName: String {
+        sessionStore.profile?.displayName ?? "Trainerin"
+    }
 
-        courses.filter {
+    private var coursesForSelectedDay: [SupabaseCourse] {
+        courseStore.courses.filter { course in
             Calendar.current.isDate(
-                $0.date,
+                course.startAt,
                 inSameDayAs: selectedDate
             )
         }
@@ -109,6 +61,9 @@ struct CalendarView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .task {
+            await loadCourses()
+        }
     }
 
     // MARK: - Header Section
@@ -160,7 +115,9 @@ struct CalendarView: View {
                         .weekday(.wide)
                         .day()
                         .month(.wide)
-                        .locale(Locale(identifier: "de_DE"))
+                        .locale(
+                            Locale(identifier: "de_DE")
+                        )
                 )
                 .uppercased()
             )
@@ -190,33 +147,23 @@ struct CalendarView: View {
 
     private var selectedDayHeader: some View {
 
-        VStack(alignment: .leading, spacing: 6) {
-
-            Text("AUSGEWÄHLTER TAG")
-                .font(.caption)
-                .fontWeight(.bold)
-                .tracking(4)
-                .foregroundColor(.yogaGold)
-
-            Text(
-                role == .participant
+        Text(
+            role == .participant
                 ? "Kurse an diesem Tag"
                 : "Deine Kurse"
+        )
+        .font(
+            .system(
+                size: 30,
+                weight: .semibold,
+                design: .serif
             )
-            .font(
-                .system(
-                    size: 30,
-                    weight: .semibold,
-                    design: .serif
-                )
-            )
-            .foregroundColor(.yogaGreen)
-        }
+        )
+        .foregroundColor(.yogaGreen)
         .frame(
             maxWidth: .infinity,
             alignment: .leading
         )
-        .padding(.top, 4)
     }
 
     // MARK: - Courses Section
@@ -224,7 +171,21 @@ struct CalendarView: View {
     @ViewBuilder
     private var coursesSection: some View {
 
-        if coursesForSelectedDay.isEmpty {
+        if courseStore.isLoading {
+
+            ProgressView("Kurse werden geladen …")
+                .padding(.vertical, 30)
+
+        } else if let errorMessage = courseStore.errorMessage {
+
+            Text(errorMessage)
+                .font(.footnote)
+                .foregroundColor(.red)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 30)
+
+        } else if coursesForSelectedDay.isEmpty {
 
             emptyState
 
@@ -245,9 +206,12 @@ struct CalendarView: View {
 
         VStack(spacing: 14) {
 
-            Image(systemName: "calendar.badge.exclamationmark")
-                .font(.system(size: 32))
-                .foregroundColor(.yogaGold)
+            Image(
+                systemName:
+                    "calendar.badge.exclamationmark"
+            )
+            .font(.system(size: 32))
+            .foregroundColor(.yogaGold)
 
             Text("Keine Kurse")
                 .font(
@@ -259,10 +223,14 @@ struct CalendarView: View {
                 )
                 .foregroundColor(.yogaGreen)
 
-            Text("Für diesen Tag sind aktuell keine Kurse eingetragen.")
-                .font(.footnote)
-                .foregroundColor(.gray)
-                .multilineTextAlignment(.center)
+            Text(
+                role == .trainer
+                    ? "Du hast an diesem Tag keine eigenen Kurse."
+                    : "Für diesen Tag sind aktuell keine Kurse eingetragen."
+            )
+            .font(.footnote)
+            .foregroundColor(.gray)
+            .multilineTextAlignment(.center)
         }
         .padding(26)
         .frame(maxWidth: .infinity)
@@ -277,66 +245,154 @@ struct CalendarView: View {
     // MARK: - Course Link
 
     private func courseLink(
-        course: Course
+        course: SupabaseCourse
     ) -> some View {
 
-        NavigationLink {
+        let booked =
+            role == .participant
+            && isCourseBooked(course)
+
+        return NavigationLink {
 
             CourseDetailView(
                 role: role,
-                imageName: course.imageName,
+                imageName:
+                    course.imageName
+                    ?? "ImageCourse01",
                 title: course.title,
-                time: course.time,
-                duration: "60 Min.",
-                level: "Alle Levels",
-                trainer: "Laura",
-                description: "Kursbeschreibung",
-                participants: course.participants,
-                maxParticipants: 15,
-                isBooked: isCourseBooked(course),
+                time: timeRange(for: course),
+                duration:
+                    "\(course.durationMinutes) Min.",
+                level:
+                    course.level
+                    ?? "Alle Levels",
+                trainer:
+                    role == .trainer
+                    ? trainerName
+                    : "YogaNow Trainerin",
+                room:
+                    course.room
+                    ?? "Raum 1",
+                description:
+                    course.description
+                    ?? "Keine Beschreibung hinterlegt.",
+                participants: 0,
+                maxParticipants:
+                    course.maxParticipants,
+                isBooked: booked,
                 onShowBookings: {},
-                courseDate: course.date
+                courseDate: course.startAt
             )
 
         } label: {
 
             CourseCalendarCardView(
-                imageName: course.imageName,
+                imageName:
+                    course.imageName
+                    ?? "ImageCourse01",
                 title: course.title,
-                time: course.time,
-                participants: course.participants,
-                isBooked: isCourseBooked(course)
+                time:
+                    "\(startTime(for: course)) Uhr",
+                participants: 0,
+                isBooked: booked
             )
         }
+        .buttonStyle(.plain)
+    }
+
+    // MARK: - Load Courses
+
+    private func loadCourses() async {
+
+        if role == .trainer {
+
+            guard let trainerID =
+                    sessionStore.profile?.id
+            else {
+                return
+            }
+
+            await courseStore.loadCourses(
+                for: trainerID
+            )
+
+        } else {
+
+            await courseStore.loadCourses()
+        }
+
+        if let firstCourse =
+            courseStore.courses.first {
+
+            selectedDate = firstCourse.startAt
+        }
+    }
+
+    // MARK: - Time Formatting
+
+    private func startTime(
+        for course: SupabaseCourse
+    ) -> String {
+
+        course.startAt.formatted(
+            .dateTime
+                .hour()
+                .minute()
+                .locale(
+                    Locale(identifier: "de_DE")
+                )
+        )
+    }
+
+    private func timeRange(
+        for course: SupabaseCourse
+    ) -> String {
+
+        let endDate =
+            Calendar.current.date(
+                byAdding: .minute,
+                value: course.durationMinutes,
+                to: course.startAt
+            ) ?? course.startAt
+
+        let start =
+            course.startAt.formatted(
+                .dateTime
+                    .hour()
+                    .minute()
+                    .locale(
+                        Locale(identifier: "de_DE")
+                    )
+            )
+
+        let end =
+            endDate.formatted(
+                .dateTime
+                    .hour()
+                    .minute()
+                    .locale(
+                        Locale(identifier: "de_DE")
+                    )
+            )
+
+        return "\(start) - \(end)"
     }
 
     // MARK: - Booking Check
+
     private func isCourseBooked(
-        _ course: Course
+        _ course: SupabaseCourse
     ) -> Bool {
+
         bookingStore.bookings.contains { booking in
-            booking.course.title == course.title &&
+
+            booking.course.title == course.title
+            &&
             Calendar.current.isDate(
                 booking.course.date,
-                inSameDayAs: course.date
+                inSameDayAs: course.startAt
             )
         }
-    }
-    // MARK: - Date Helper
-
-    private func makeDate(
-        year: Int,
-        month: Int,
-        day: Int
-    ) -> Date {
-
-        Calendar.current.date(
-            from: DateComponents(
-                year: year,
-                month: month,
-                day: day
-            )
-        ) ?? Date()
     }
 }
 
@@ -351,5 +407,7 @@ struct CalendarView: View {
         )
     }
     .environmentObject(BookingStore())
+    .environmentObject(SessionStore())
+    .environmentObject(CourseStore())
     .environment(FavoritesStore())
 }

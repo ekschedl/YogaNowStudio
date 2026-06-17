@@ -21,73 +21,92 @@ struct CourseCalendarCardView: View {
 
     var body: some View {
 
-        HStack(spacing: 14) {
+        ZStack {
 
-            Image(imageName)
-                .resizable()
-                .scaledToFill()
-                .frame(width: 140, height: 105)
-                .clipShape(
-                    RoundedRectangle(cornerRadius: 18)
-                )
+            RoundedRectangle(cornerRadius: 26)
+                .fill(Color.white)
 
-            VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 14) {
 
-                HStack(alignment: .center, spacing: 8) {
+                Image(imageName)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 140, height: 105)
+                    .clipped()
+                    .clipShape(
+                        RoundedRectangle(cornerRadius: 18)
+                    )
 
-                    Text(title)
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .foregroundColor(.yogaGreen)
-                        .lineLimit(1)
+                VStack(
+                    alignment: .leading,
+                    spacing: 10
+                ) {
 
-                    if isBooked {
+                    HStack(
+                        alignment: .center,
+                        spacing: 8
+                    ) {
 
-                        Image(systemName: "checkmark.circle.fill")
+                        Text(title)
                             .font(.title3)
-                            .foregroundColor(.green)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(Color.yogaGreen)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.75)
+
+                        if isBooked {
+
+                            Image(
+                                systemName: "checkmark.circle.fill"
+                            )
+                            .font(.title3)
+                            .foregroundStyle(.green)
                             .padding(6)
                             .background(
                                 Color.green.opacity(0.12)
                             )
                             .clipShape(Circle())
+                        }
+
+                        Spacer()
                     }
-                    Spacer()
+
+                    Text(time)
+                        .font(.title3)
+                        .foregroundStyle(Color.gray)
+
+                    HStack(spacing: 6) {
+
+                        Image(systemName: "person.2.fill")
+                            .foregroundStyle(Color.gray)
+
+                        Text("x \(participants)")
+                            .font(.subheadline)
+                            .foregroundStyle(Color.gray)
+                    }
                 }
 
-                Text(time)
+                Spacer(minLength: 0)
+
+                Image(systemName: "chevron.right")
                     .font(.title3)
-                    .foregroundColor(.gray)
-
-                HStack(spacing: 6) {
-
-                    Image(systemName: "person.2.fill")
-                        .foregroundColor(.gray)
-
-                    Text("x \(participants)")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                }
+                    .foregroundStyle(Color.yogaGold)
             }
-
-            Image(systemName: "chevron.right")
-                .font(.title3)
-                .foregroundColor(.yogaGold)
+            .padding()
         }
-        .padding()
         .frame(maxWidth: .infinity)
-        .background(
-            LinearGradient(
-                colors: [
-                    Color.white.opacity(0.92),
-                    Color.yogaCream.opacity(0.72)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-        )
         .clipShape(
             RoundedRectangle(cornerRadius: 26)
+        )
+        .contentShape(
+            RoundedRectangle(cornerRadius: 26)
+        )
+        .opacity(1)
+        .shadow(
+            color: Color.black.opacity(0.08),
+            radius: 7,
+            x: 0,
+            y: 3
         )
     }
 }
@@ -97,11 +116,11 @@ struct CourseCalendarCardView: View {
 #Preview {
 
     CourseCalendarCardView(
-        imageName: "ImageCourse01",
-        title: "Morning Flow",
-        time: "08:30 Uhr",
-        participants: 12,
-        isBooked: true
+        imageName: "ImageCourse02",
+        title: "Valerie Evening Relax",
+        time: "18:00 Uhr",
+        participants: 0,
+        isBooked: false
     )
     .padding()
     .background(Color.yogaCream)

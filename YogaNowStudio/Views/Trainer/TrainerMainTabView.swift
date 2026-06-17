@@ -22,16 +22,17 @@ struct TrainerMainTabView: View {
                 )
             }
             
-            CalendarView(
-                role: .trainer
-            )
+            NavigationStack {
+                CalendarView(
+                    role: .trainer
+                )
+            }
             .tabItem {
                 Label(
                     "Kalender",
                     systemImage: "calendar"
                 )
             }
-            
             NavigationStack {
                 
                 YogaLibraryView()
