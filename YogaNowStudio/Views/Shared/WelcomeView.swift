@@ -1,23 +1,28 @@
 //
-//  ContentView.swift
+//  WelcomeView.swift
 //  YogaNowStudio
 //
 //  Created by Kaaatkina on 01.06.26.
 //
+
 import SwiftUI
 
 struct WelcomeView: View {
-    
+
     var body: some View {
-        NavigationStack{
+
+        NavigationStack {
+
             ZStack {
-            
+
                 Image("BackgroundYoga")
                     .resizable()
                     .scaledToFill()
                     .ignoresSafeArea()
-                
-                VStack {
+
+                VStack(spacing: 0) {
+
+                    // MARK: - Language Button
                     HStack {
                         Spacer()
                         HStack(spacing: 6) {
@@ -27,20 +32,23 @@ struct WelcomeView: View {
                         .foregroundColor(.yogaGreen)
                         .padding(.horizontal, 10)
                         .padding(.vertical, 12)
-                        .background(.white.opacity(0.5))
+                        .background(
+                            Color.white.opacity(0.5)
+                        )
                         .clipShape(Capsule())
                     }
-                    .padding()
-                    
-                    Spacer()
-                    
+                    .padding(.top, 55)
+                    .padding(.trailing, 24)
+
+                    // MARK: - Logo
                     Image("LogoYogaNow")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 340)
-                    
+                        .frame(maxWidth: 420)
+
+                    // MARK: - Navigation
                     VStack(spacing: 20) {
-                        
+
                         NavigationLink {
                             YogaLibraryView()
                         } label: {
@@ -49,6 +57,8 @@ struct WelcomeView: View {
                                 iconName: "IconLibrary"
                             )
                         }
+                        .buttonStyle(.plain)
+
                         NavigationLink {
                             LoginView()
                         } label: {
@@ -57,17 +67,18 @@ struct WelcomeView: View {
                                 iconName: "IconCourse"
                             )
                         }
+                        .buttonStyle(.plain)
                     }
-                    .padding(30)
-             
-                    
-                    Spacer()
+                    .padding(.horizontal, 30)
+
                     Spacer()
                 }
             }
         }
     }
 }
+
+// MARK: - Preview
 
 #Preview {
 
@@ -76,5 +87,3 @@ struct WelcomeView: View {
         .environmentObject(BookingStore())
         .environmentObject(SessionStore())
 }
-
-

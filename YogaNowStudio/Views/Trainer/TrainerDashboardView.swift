@@ -92,7 +92,13 @@ struct TrainerDashboardView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .task {
-            await courseStore.loadCourses()
+            guard let trainerID = sessionStore.profile?.id else {
+                return
+            }
+
+            await courseStore.loadCourses(
+                for: trainerID
+            )
         }
     }
 
@@ -208,23 +214,18 @@ struct TrainerDashboardView: View {
 
                     CourseDetailView(
                         role: .trainer,
-                        imageName:
-                            course.imageName
-                            ?? "ImageCourse01",
+                        imageName: course.imageName ?? "ImageCourse01",
                         title: course.title,
                         time: timeRange(for: course),
-                        duration:
-                            "\(course.durationMinutes) Min.",
-                        level:
-                            course.level
-                            ?? "Alle Levels",
+                        duration: "\(course.durationMinutes) Min.",
+                        level: course.level ?? "Alle Levels",
                         trainer: userName,
+                        room: course.room ?? "Raum 1",
                         description:
                             course.description
                             ?? "Keine Beschreibung hinterlegt.",
                         participants: 0,
-                        maxParticipants:
-                            course.maxParticipants,
+                        maxParticipants: course.maxParticipants,
                         isBooked: true,
                         courseDate: course.startAt
                     )

@@ -21,6 +21,7 @@ struct CourseDetailView: View {
     let duration: String
     let level: String
     let trainer: String
+    let room: String
     let description: String
     let participants: Int
     let maxParticipants: Int
@@ -28,7 +29,7 @@ struct CourseDetailView: View {
     let onShowBookings: () -> Void
     let courseDate: Date
 
-    // MARK: - Init
+    // MARK: - Initialization
 
     init(
         role: UserRole,
@@ -38,6 +39,7 @@ struct CourseDetailView: View {
         duration: String,
         level: String,
         trainer: String,
+        room: String = "Raum 1",
         description: String,
         participants: Int,
         maxParticipants: Int,
@@ -52,6 +54,7 @@ struct CourseDetailView: View {
         self.duration = duration
         self.level = level
         self.trainer = trainer
+        self.room = room
         self.description = description
         self.participants = participants
         self.maxParticipants = maxParticipants
@@ -62,30 +65,58 @@ struct CourseDetailView: View {
 
     // MARK: - Computed Properties
 
-    private var course: Course {
-        Course(
-            title: title,
-            day: "Donnerstag",
-            date: courseDate,
-            time: time,
-            room: "Raum 1",
-            participants: participants,
-            imageName: imageName
+    private var courseDay: String {
+        courseDate.formatted(
+            .dateTime
+                .weekday(.wide)
+                .locale(Locale(identifier: "de_DE"))
         )
     }
 
     private var courseDateText: String {
-
         courseDate.formatted(
             .dateTime
                 .weekday(.short)
                 .day()
                 .month(.wide)
                 .locale(Locale(identifier: "de_DE"))
-
         )
-
     }
+
+    private var freePlaces: Int {
+        max(0, maxParticipants - participants)
+    }
+
+    private var participantText: String {
+        participants == 1
+            ? "1 Teilnehmer"
+            : "\(participants) Teilnehmer"
+    }
+
+    private var freePlacesText: String {
+        if freePlaces == 0 {
+            return "Ausgebucht"
+        }
+
+        if freePlaces == 1 {
+            return "1 von \(maxParticipants) frei"
+        }
+
+        return "\(freePlaces) von \(maxParticipants) frei"
+    }
+
+    private var course: Course {
+        Course(
+            title: title,
+            day: courseDay,
+            date: courseDate,
+            time: time,
+            room: room,
+            participants: participants,
+            imageName: imageName
+        )
+    }
+
     // MARK: - Body
 
     var body: some View {
@@ -112,7 +143,6 @@ struct CourseDetailView: View {
         .navigationDestination(
             isPresented: $showBookingSuccess
         ) {
-
             BookingSuccessView(
                 course: course,
                 onFinish: onShowBookings
@@ -137,40 +167,7 @@ struct CourseDetailView: View {
 
         VStack(alignment: .leading, spacing: 12) {
 
-            HStack(alignment: .firstTextBaseline, spacing: 10) {
-
-                Text(title)
-                    .font(
-                        .system(
-                            size: 34,
-                            weight: .semibold,
-                            design: .serif
-                        )
-                    )
-                    .foregroundColor(.yogaGreen)
-
-                if role == .participant && isBooked {
-
-                    Label(
-                        "Angemeldet",
-                        systemImage: "checkmark.circle.fill"
-                    )
-                    .font(.caption)
-                    .fontWeight(.bold)
-                    .foregroundColor(.green)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(
-                        Color.green.opacity(0.10)
-                    )
-                    .clipShape(
-                        Capsule()
-                    )
-                }
-
-                Spacer()
-            }
-            .padding(.bottom, 4)
+            titleSection
 
             HStack(spacing: 12) {
 
@@ -190,16 +187,27 @@ struct CourseDetailView: View {
             HStack(spacing: 12) {
 
                 detailInfoCard(
-                    title: "Dauer",
-                    value: duration,
-                    icon: "timer"
+                    title: "Level",
+                    value: level,
+                    icon: "figure.yoga"
                 )
 
-                detailInfoCard(
-                    title: "Trainer",
-                    value: trainer,
-                    icon: "person.fill"
-                )
+                if role == .trainer {
+
+                    detailInfoCard(
+                        title: "Raum",
+                        value: room,
+                        icon: "door.left.hand.open"
+                    )
+
+                } else {
+
+                    detailInfoCard(
+                        title: "Trainer",
+                        value: trainer,
+                        icon: "person.fill"
+                    )
+                }
             }
 
             descriptionCard
@@ -230,6 +238,49 @@ struct CourseDetailView: View {
         )
     }
 
+    // MARK: - Title Section
+
+    private var titleSection: some View {
+
+        HStack(
+            alignment: .firstTextBaseline,
+            spacing: 10
+        ) {
+
+            Text(title)
+                .font(
+                    .system(
+                        size: 34,
+                        weight: .semibold,
+                        design: .serif
+                    )
+                )
+                .foregroundColor(.yogaGreen)
+                .lineLimit(2)
+                .minimumScaleFactor(0.75)
+
+            if role == .participant && isBooked {
+
+                Label(
+                    "Angemeldet",
+                    systemImage: "checkmark.circle.fill"
+                )
+                .font(.caption)
+                .fontWeight(.bold)
+                .foregroundColor(.green)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(
+                    Color.green.opacity(0.10)
+                )
+                .clipShape(Capsule())
+            }
+
+            Spacer()
+        }
+        .padding(.bottom, 4)
+    }
+
     // MARK: - Detail Info Card
 
     private func detailInfoCard(
@@ -253,8 +304,8 @@ struct CourseDetailView: View {
                 .font(.headline)
                 .fontWeight(.semibold)
                 .foregroundColor(.yogaGreen)
-                .lineLimit(1)
-                .minimumScaleFactor(0.75)
+                .lineLimit(2)
+                .minimumScaleFactor(0.72)
         }
         .frame(
             maxWidth: .infinity,
@@ -316,10 +367,14 @@ struct CourseDetailView: View {
 
             Spacer()
 
-            Text("\(maxParticipants - participants)/\(participants) frei")
+            Text(freePlacesText)
                 .font(.title3)
                 .fontWeight(.semibold)
-                .foregroundColor(.yogaGreen)
+                .foregroundColor(
+                    freePlaces == 0
+                        ? .red
+                        : .yogaGreen
+                )
         }
         .padding(.horizontal, 18)
         .padding(.vertical, 16)
@@ -334,6 +389,7 @@ struct CourseDetailView: View {
             RoundedRectangle(cornerRadius: 20)
         )
     }
+
     // MARK: - Trainer Participant Card
 
     private var trainerParticipantCard: some View {
@@ -346,10 +402,14 @@ struct CourseDetailView: View {
                 .tracking(3)
                 .foregroundColor(.yogaGold)
 
-            Text("\(participants) Teilnehmer")
+            Text(participantText)
                 .font(.title3)
                 .fontWeight(.semibold)
                 .foregroundColor(.yogaGreen)
+
+            Text("\(freePlaces) Plätze verfügbar")
+                .font(.footnote)
+                .foregroundColor(.gray)
         }
         .padding(.horizontal, 18)
         .padding(.vertical, 16)
@@ -410,6 +470,8 @@ struct CourseDetailView: View {
                             icon: "calendar.badge.plus"
                         )
                     }
+                    .disabled(freePlaces == 0)
+                    .opacity(freePlaces == 0 ? 0.55 : 1)
                 }
 
             } else {
@@ -472,20 +534,29 @@ struct CourseDetailView: View {
 
     private func cancelBooking() {
 
-        if let booking = bookingStore.bookings.first(where: {
-            $0.course.title == course.title
-        }) {
-            Task {
-                await bookingStore.cancel(
-                    booking: booking
-                )
-
-                onShowBookings()
+        guard let booking = bookingStore.bookings.first(
+            where: {
+                $0.course.title == course.title
             }
+        ) else {
+            return
+        }
+
+        Task {
+
+            await bookingStore.cancel(
+                booking: booking
+            )
+
+            onShowBookings()
         }
     }
 
     private func confirmBooking() async {
+
+        guard freePlaces > 0 else {
+            return
+        }
 
         isBooking = true
 
@@ -516,12 +587,14 @@ struct CourseDetailView: View {
             duration: "60 Min.",
             level: "Alle Levels",
             trainer: "Laura",
-            description: "Starte deinen Tag mit einer belebenden Yoga-Praxis für Körper und Geist.",
+            room: "Raum 1",
+            description:
+                "Starte deinen Tag mit einer belebenden Yoga-Praxis für Körper und Geist.",
             participants: 12,
             maxParticipants: 15,
             isBooked: false,
             onShowBookings: {},
-            
+            courseDate: Date()
         )
     }
     .environment(FavoritesStore())

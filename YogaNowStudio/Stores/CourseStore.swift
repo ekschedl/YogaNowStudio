@@ -57,4 +57,26 @@ final class CourseStore: ObservableObject {
             print("Fehler beim Laden der Kurse: \(error)")
         }
     }
+    
+    func loadCourses(for trainerID: UUID) async {
+
+        isLoading = true
+        errorMessage = nil
+
+        defer {
+            isLoading = false
+        }
+
+        do {
+            courses = try await courseService.loadCourses(
+                for: trainerID
+            )
+
+        } catch {
+            courses = []
+            errorMessage = "Die Kurse konnten nicht geladen werden."
+
+            print("Fehler beim Laden der Trainer-Kurse: \(error)")
+        }
+    }
 }
