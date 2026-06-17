@@ -119,7 +119,7 @@ struct CalendarView: View {
 
             Spacer()
 
-            Text("Dein Kalender")
+            Text("Kalender")
                 .font(
                     .system(
                         size: 28,

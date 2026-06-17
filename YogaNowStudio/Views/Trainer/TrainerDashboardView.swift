@@ -3,13 +3,51 @@ import SwiftUI
 struct TrainerDashboardView: View {
 
     // MARK: - Environment
-
+    @EnvironmentObject private var courseStore: CourseStore
     @EnvironmentObject private var sessionStore: SessionStore
 
     // MARK: - User Information
-
+    private var courseCountText: String {
+        courseStore.courses.count == 1
+            ? "1 Kurs"
+            : "\(courseStore.courses.count) Kurse"
+    }
+    
     private var userName: String {
         sessionStore.profile?.displayName ?? "Trainerin"
+    }
+    
+    private func startTime(for course: SupabaseCourse) -> String {
+        course.startAt.formatted(
+            .dateTime
+                .hour()
+                .minute()
+                .locale(Locale(identifier: "de_DE"))
+        )
+    }
+
+    private func timeRange(for course: SupabaseCourse) -> String {
+        let endDate = Calendar.current.date(
+            byAdding: .minute,
+            value: course.durationMinutes,
+            to: course.startAt
+        ) ?? course.startAt
+
+        let start = course.startAt.formatted(
+            .dateTime
+                .hour()
+                .minute()
+                .locale(Locale(identifier: "de_DE"))
+        )
+
+        let end = endDate.formatted(
+            .dateTime
+                .hour()
+                .minute()
+                .locale(Locale(identifier: "de_DE"))
+        )
+
+        return "\(start) - \(end)"
     }
 
     // MARK: - Body
@@ -71,7 +109,7 @@ struct TrainerDashboardView: View {
 
                                 Spacer()
 
-                                Text("3 Kurse • 26 Teilnehmer")
+                                Text(courseCountText)
                                     .font(.footnote)
                                     .foregroundColor(.gray)
                             }
@@ -98,95 +136,53 @@ struct TrainerDashboardView: View {
                         .padding(.horizontal)
                         .padding(.top, 20)
 
-                        // MARK: - Morning Flow
+                        if courseStore.isLoading {
 
-                        NavigationLink {
+                            ProgressView("Kurse werden geladen …")
+                                .padding()
 
-                            CourseDetailView(
-                                role: .trainer,
-                                imageName: "ImageCourse01",
-                                title: "Morning Flow",
-                                time: "08:30 - 09:30",
-                                duration: "60 Min.",
-                                level: "Alle Levels",
-                                trainer: "Laura",
-                                description:
-                                    "Starte deinen Tag mit einer belebenden Yoga-Praxis für Körper und Geist.",
-                                participants: 12,
-                                maxParticipants: 15,
-                                isBooked: true
-                            )
+                        } else if let errorMessage = courseStore.errorMessage {
 
-                        } label: {
+                            Text(errorMessage)
+                                .font(.caption)
+                                .foregroundColor(.red)
+                                .multilineTextAlignment(.center)
 
-                            CourseCardView(
-                                imageName: "ImageCourse01",
-                                title: "Morning Flow",
-                                time: "08:30 Uhr",
-                                participants: 12
-                            )
+                        } else {
+
+                            ForEach(courseStore.courses) { course in
+
+                                NavigationLink {
+
+                                    CourseDetailView(
+                                        role: .trainer,
+                                        imageName: course.imageName ?? "ImageCourse01",
+                                        title: course.title,
+                                        time: timeRange(for: course),
+                                        duration: "\(course.durationMinutes) Min.",
+                                        level: course.level ?? "Alle Levels",
+                                        trainer: userName,
+                                        description:
+                                            course.description
+                                            ?? "Keine Beschreibung hinterlegt.",
+                                        participants: 0,
+                                        maxParticipants: course.maxParticipants,
+                                        isBooked: true
+                                    )
+
+                                } label: {
+
+                                    CourseCardView(
+                                        imageName: course.imageName ?? "ImageCourse01",
+                                        title: course.title,
+                                        time: "\(startTime(for: course)) Uhr",
+                                        participants: 0
+                                    )
+                                }
+                                .buttonStyle(.plain)
+                            }
                         }
-                        .buttonStyle(.plain)
-
-                        // MARK: - Yin Yoga
-
-                        NavigationLink {
-
-                            CourseDetailView(
-                                role: .trainer,
-                                imageName: "ImageCourse02",
-                                title: "Yin Yoga",
-                                time: "17:30 - 18:30",
-                                duration: "60 Min.",
-                                level: "Anfänger",
-                                trainer: "Sarah",
-                                description:
-                                    "Sanfte Yoga-Einheit für Entspannung und Beweglichkeit.",
-                                participants: 6,
-                                maxParticipants: 12,
-                                isBooked: true
-                            )
-
-                        } label: {
-
-                            CourseCardView(
-                                imageName: "ImageCourse02",
-                                title: "Yin Yoga",
-                                time: "17:30 Uhr",
-                                participants: 6
-                            )
-                        }
-                        .buttonStyle(.plain)
-
-                        // MARK: - Deep Balance
-
-                        NavigationLink {
-
-                            CourseDetailView(
-                                role: .trainer,
-                                imageName: "ImageCourse03",
-                                title: "Deep Balance",
-                                time: "19:00 - 20:00",
-                                duration: "60 Min.",
-                                level: "Fortgeschritten",
-                                trainer: "Emma",
-                                description:
-                                    "Balance, Kraft und Fokus für Körper und Geist.",
-                                participants: 8,
-                                maxParticipants: 12,
-                                isBooked: true
-                            )
-
-                        } label: {
-
-                            CourseCardView(
-                                imageName: "ImageCourse03",
-                                title: "Deep Balance",
-                                time: "19:00 Uhr",
-                                participants: 8
-                            )
-                        }
-                        .buttonStyle(.plain)
+                    
                     }
                     .padding(24)
 
@@ -196,6 +192,9 @@ struct TrainerDashboardView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .task {
+            await courseStore.loadCourses()
+        }
     }
 }
 
@@ -207,5 +206,7 @@ struct TrainerDashboardView: View {
         TrainerDashboardView()
     }
     .environmentObject(SessionStore())
+    .environmentObject(CourseStore())
     .environment(FavoritesStore())
+
 }

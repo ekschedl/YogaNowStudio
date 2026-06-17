@@ -12,7 +12,7 @@ struct YogaNowStudioApp: App {
     // MARK: - Stores
 
     @State private var favorites = FavoritesStore()
-
+    @StateObject private var courseStore = CourseStore()
     @StateObject private var bookingStore = BookingStore()
     @StateObject private var sessionStore = SessionStore()
 
@@ -26,6 +26,7 @@ struct YogaNowStudioApp: App {
                 .environment(favorites)
                 .environmentObject(bookingStore)
                 .environmentObject(sessionStore)
+                .environmentObject(courseStore)
         }
     }
 }

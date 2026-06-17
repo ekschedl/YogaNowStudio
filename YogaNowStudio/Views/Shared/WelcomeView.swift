@@ -26,7 +26,7 @@ struct WelcomeView: View {
                         }
                         .foregroundColor(.yogaGreen)
                         .padding(.horizontal, 10)
-                        .padding(.vertical, 8)
+                        .padding(.vertical, 12)
                         .background(.white.opacity(0.5))
                         .clipShape(Capsule())
                     }

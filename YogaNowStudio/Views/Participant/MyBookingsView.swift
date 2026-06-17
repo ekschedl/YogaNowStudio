@@ -59,7 +59,7 @@ struct MyBookingsView: View {
                             .tracking(3)
                             .foregroundColor(.yogaGold)
                     }
-                    .padding(.top, 70)
+                    .padding(.top, 80)
 
                     // MARK: Empty State
 
