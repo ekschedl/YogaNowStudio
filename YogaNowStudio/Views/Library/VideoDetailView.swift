@@ -28,8 +28,16 @@ struct VideoDetailView: View {
                 // Video-Player Bereich
                 Group {
                     if let localName = video.localVideoName {
-                        LocalVideoPlayerView(videoName: localName)
-                            .frame(height: 210)
+                        Color.clear
+                            .frame(maxWidth: .infinity)
+                            .aspectRatio(173.0 / 110.0, contentMode: .fit)
+                            .overlay {
+                                LocalVideoPlayerView(
+                                    videoName: localName,
+                                    overlayText: video.localVideoOverlay,
+                                    overlayAtBottom: video.localVideoOverlayBottom
+                                )
+                            }
                             .cornerRadius(20)
                     } else if let youtubeID = video.youtubeID {
                         Link(destination: URL(string: "https://www.youtube.com/watch?v=\(youtubeID)")!) {

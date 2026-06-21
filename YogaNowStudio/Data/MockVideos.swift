@@ -33,7 +33,6 @@ let mockVideos = [
         level: "Profi",
         duration: "65 Min",
         imageName: "Video1",
-        youtubeID: "WHvNfa5aNb8",
         highlights: [
             "Intensive Cardio-Sequenzen für maximalen Kalorienverbrauch",
             "Kraftaufbau durch dynamische Vinyasa-Abfolgen",

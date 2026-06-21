@@ -10,11 +10,13 @@ struct LocalVideoThumbnailView: View {
     let fallbackImage: String
     var overlayText: String? = nil
     var overlayAtBottom: Bool = false
+    var overlayFontSize: CGFloat = 14
 
     @State private var thumbnail: UIImage? = nil
 
     var body: some View {
         Color.clear
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background {
                 Group {
                     if let thumbnail {
@@ -34,7 +36,7 @@ struct LocalVideoThumbnailView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     ForEach(text.components(separatedBy: "\n"), id: \.self) { line in
                         Text(line.uppercased())
-                            .font(.custom("Palatino-Bold", size: 14))
+                            .font(.custom("Palatino-Bold", size: overlayFontSize))
                             .foregroundColor(.white)
                             .padding(.horizontal, 5)
                             .padding(.vertical, 2)
