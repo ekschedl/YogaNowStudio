@@ -27,7 +27,11 @@ struct VideoDetailView: View {
 
                 // Video-Player Bereich
                 Group {
-                    if let youtubeID = video.youtubeID {
+                    if let localName = video.localVideoName {
+                        LocalVideoPlayerView(videoName: localName)
+                            .frame(height: 210)
+                            .cornerRadius(20)
+                    } else if let youtubeID = video.youtubeID {
                         Link(destination: URL(string: "https://www.youtube.com/watch?v=\(youtubeID)")!) {
                             ZStack {
                                 AsyncImage(url: URL(string: "https://img.youtube.com/vi/\(youtubeID)/hqdefault.jpg")) { image in

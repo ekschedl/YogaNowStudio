@@ -92,49 +92,48 @@ let mockVideos = [
     // Anfänger
     Video(
         id: UUID(uuidString: "00000000-0000-0000-0000-000000000009")!,
-        title: "Frühling Gallenblasenmeridian",
-        subtitle: "Energie fließen lassen & den Frühling willkommen heißen",
+        title: "Sanfte Dehnung",
+        subtitle: "Weich und bewusst – Dehnen für Körper, Geist und Atemraum",
         level: "Anfänger",
         duration: "30 Min",
         imageName: "Video3",
-        youtubeID: "YBvo6dnc2Xo",
+        localVideoName: "signal-2026-06-21-12-54-10-551",
+        localVideoOverlay: "WARM UP",
         highlights: [
-            "Aktivierung des Gallenblasenmeridians für Entscheidungskraft & Leichtigkeit",
-            "Seitliche Dehnungen zur Förderung des Energieflusses",
-            "Frühlingserwachen für Körper, Geist und Meridiane"
+            "Sanfte Dehnübungen für den gesamten Körper",
+            "Bewusste Atemführung zur Vertiefung jeder Dehnung",
+            "Ideal für Einsteiger und zur Entspannung nach einem langen Tag"
         ]
     ),
     Video(
         id: UUID(uuidString: "00000000-0000-0000-0000-000000000010")!,
-        title: "Sanfte Dehnung",
-        subtitle: "Sanfte Bewegungen für Einsteiger.",
+        title: "Atem-Erdung",
+        subtitle: "Ankommen im Moment – Atemübungen zur tiefen Verwurzelung",
         level: "Anfänger",
         duration: "20 Min",
         imageName: "Video1",
-        youtubeID: "g_tea8ZNk5A"
-    ),
-    Video(
-        id: UUID(uuidString: "00000000-0000-0000-0000-000000000011")!,
-        title: "Erdelement zum Übergang Winter",
-        subtitle: "Verwurzelung & innere Wärme für den Jahreszeitenwechsel",
-        level: "Anfänger",
-        duration: "15 Min",
-        imageName: "Video2",
-        youtubeID: "yxtXSkvjEUA",
-        youtubeEnd: 285,
+        localVideoName: "signal-2026-06-21-12-08-54-893",
+        localVideoOverlay: "Breathe in\nBreathe out",
         highlights: [
-            "Erdende Posen für Stabilität und Verwurzelung",
-            "Atemübungen zur Aktivierung der inneren Wärme",
-            "Sanfte Sequenz für den Übergang in die Winterzeit"
+            "Bewusste Atemführung zur sofortigen Beruhigung des Nervensystems",
+            "Erdende Techniken für mehr Stabilität und Präsenz im Alltag",
+            "Sanfte Übungen zum Loslassen von Anspannung und Stress"
         ]
     ),
     Video(
-        id: UUID(uuidString: "00000000-0000-0000-0000-000000000012")!,
-        title: "Grundlagen Flow",
-        subtitle: "Die wichtigsten Posen für den Start.",
+        id: UUID(uuidString: "00000000-0000-0000-0000-000000000011")!,
+        title: "Sonnengruß Flow",
+        subtitle: "Energie & Lebensfreude – der klassische Sonnengruß für jeden Tag",
         level: "Anfänger",
-        duration: "25 Min",
-        imageName: "Video3",
-        youtubeID: "34My7cLtg6Y"
-    )
+        duration: "15 Min",
+        imageName: "Video2",
+        localVideoName: "signal-2026-06-21-16-33-43-397",
+        localVideoOverlay: "Grüß die Sonne",
+        localVideoOverlayBottom: true,
+        highlights: [
+            "Schritt-für-Schritt Anleitung zum klassischen Sonnengruß",
+            "Aktivierung des gesamten Körpers durch fließende Bewegung",
+            "Ideal als tägliches Morgenritual für mehr Energie & Klarheit"
+        ]
+    ),
 ]

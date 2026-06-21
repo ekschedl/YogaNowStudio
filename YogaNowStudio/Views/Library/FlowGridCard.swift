@@ -24,7 +24,9 @@ struct FlowGridCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Group {
-                if let youtubeID = video.youtubeID {
+                if let localName = video.localVideoName {
+                    LocalVideoThumbnailView(videoName: localName, fallbackImage: video.imageName, overlayText: video.localVideoOverlay, overlayAtBottom: video.localVideoOverlayBottom)
+                } else if let youtubeID = video.youtubeID {
                     AsyncImage(url: URL(string: "https://img.youtube.com/vi/\(youtubeID)/hqdefault.jpg")) { image in
                         image.resizable().scaledToFill()
                     } placeholder: {
@@ -34,7 +36,7 @@ struct FlowGridCard: View {
                     Image(video.imageName).resizable().scaledToFill()
                 }
             }
-            .frame(height: 110)
+            .frame(maxWidth: .infinity, minHeight: 110, maxHeight: 110)
             .clipped()
             .overlay(alignment: .topTrailing) {
                     Button {
@@ -79,6 +81,7 @@ struct FlowGridCard: View {
             }
             .padding(10)
         }
+        .frame(maxWidth: .infinity)
         .background(Color.white.opacity(0.95))
         .cornerRadius(embedded ? 0 : 16)
         .shadow(color: embedded ? .clear : .black.opacity(0.07), radius: embedded ? 0 : 5)

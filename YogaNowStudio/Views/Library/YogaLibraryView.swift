@@ -244,7 +244,9 @@ private struct MiniFlowCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Group {
-                if let youtubeID = video.youtubeID {
+                if let localName = video.localVideoName {
+                    LocalVideoThumbnailView(videoName: localName, fallbackImage: video.imageName, overlayText: video.localVideoOverlay, overlayAtBottom: video.localVideoOverlayBottom)
+                } else if let youtubeID = video.youtubeID {
                     AsyncImage(url: URL(string: "https://img.youtube.com/vi/\(youtubeID)/hqdefault.jpg")) { image in
                         image.resizable().scaledToFill()
                     } placeholder: {
