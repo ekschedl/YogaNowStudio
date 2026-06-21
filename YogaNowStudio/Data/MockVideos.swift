@@ -11,14 +11,6 @@ let mockVideos = [
 
     // Profi
     Video(
-        id: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!,
-        title: "Deep Backend Flow",
-        subtitle: "Öffne dein Herz und stärke deine Flexibilität.",
-        level: "Profi",
-        duration: "60 Min",
-        imageName: "Video1"
-    ),
-    Video(
         id: UUID(uuidString: "00000000-0000-0000-0000-000000000002")!,
         title: "Advanced Pranayama",
         subtitle: "Fortgeschrittene Atemtechniken und Bandhas.",
@@ -51,41 +43,48 @@ let mockVideos = [
 
     // Fortgeschritten
     Video(
-        id: UUID(uuidString: "00000000-0000-0000-0000-000000000005")!,
-        title: "Arm Balance Workshop",
-        subtitle: "Stärke deinen Fokus und deine Kraft.",
-        level: "Fortgeschritten",
-        duration: "45 Min",
-        imageName: "Video2"
-    ),
-    Video(
         id: UUID(uuidString: "00000000-0000-0000-0000-000000000006")!,
-        title: "Power Vinyasa",
-        subtitle: "Dynamische Abfolgen für mehr Ausdauer.",
+        title: "Frühlingspraxis",
+        subtitle: "Erwachen & Aufblühen – eine Yoga-Praxis für den Frühling",
         level: "Fortgeschritten",
         duration: "50 Min",
-        imageName: "Video1"
+        imageName: "Video1",
+        localVideoName: "signal-2026-06-21-17-12-09-916",
+        localVideoOverlay: "Frühlingspraxis",
+        highlights: [
+            "Öffnende Posen zur Aktivierung der Frühlingsenergie",
+            "Dynamische Sequenzen für mehr Leichtigkeit und Kraft",
+            "Verbindung mit der Natur durch bewusste Atemlenkung"
+        ]
     ),
     Video(
         id: UUID(uuidString: "00000000-0000-0000-0000-000000000007")!,
-        title: "Hip Opener Deep",
-        subtitle: "Intensive Hüftöffnung und Flexibilität.",
+        title: "Strong Flow",
+        subtitle: "Kraft trifft Fluss – intensive Praxis für Körper und Geist",
         level: "Fortgeschritten",
         duration: "40 Min",
-        imageName: "Video3"
+        imageName: "Video3",
+        localVideoName: "signal-2026-06-21-17-29-23-628",
+        localVideoOverlay: "Strong Flow",
+        highlights: [
+            "Kraftvolle Standposen und Armbalancen für mehr Stärke",
+            "Fließende Übergänge zur Steigerung von Ausdauer und Fokus",
+            "Intensive Praxis für ein starkes Körpergefühl"
+        ]
     ),
     Video(
         id: UUID(uuidString: "00000000-0000-0000-0000-000000000008")!,
-        title: "Yoga Detox Flow",
-        subtitle: "Stoffwechsel & Verdauung anregen, Entgiften und Stress abbauen.",
+        title: "Feel the Flow",
+        subtitle: "In Bewegung kommen & den eigenen Rhythmus spüren",
         level: "Fortgeschritten",
         duration: "35 Min",
         imageName: "Video2",
-        youtubeID: "hpCXz7taG2s",
+        localVideoName: "signal-2026-06-21-17-01-27-358",
+        localVideoOverlay: "Flow, Baby!",
         highlights: [
-            "Twists zur Anregung von Stoffwechsel & Verdauung",
-            "Gezielte Atemübungen zum Entgiften",
-            "Stressabbau durch bewusste Entspannung"
+            "Dynamische Vinyasa-Sequenzen zum Eintauchen in den Flow-Zustand",
+            "Verbindung von Atem und Bewegung für mehr Leichtigkeit",
+            "Stärke, Ausdauer und innere Freiheit in einer Praxis"
         ]
     ),
 
