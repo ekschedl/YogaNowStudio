@@ -170,7 +170,7 @@ struct MyBookingsView: View {
             Spacer()
             Spacer()
 
-            Text("Meine Buchungen")
+            Text("Buchungen")
                 .font(
                     .system(
                         size: 30,
