@@ -79,8 +79,8 @@ struct ParticipantDashboardView: View {
     }
 
     private var displayedLevel: String {
-        displayedDatabaseCourse?.level
-            ?? "Alle Levels"
+        displayedDatabaseCourse?.displayLevel
+            ?? "Nicht angegeben"
     }
 
     private var displayedLevelShort: String {
@@ -115,14 +115,9 @@ struct ParticipantDashboardView: View {
         displayedDatabaseCourse?.room ?? "Raum 1"
     }
 
-    /*
-     Der Trainername befindet sich momentan nicht direkt
-     im geladenen SupabaseCourse.
-
-     Dafür benötigen wir später eine Verknüpfung mit profiles.
-     */
     private var displayedTrainer: String {
-        "YogaNow Trainerin"
+        displayedDatabaseCourse?.trainerName
+            ?? "Kein Trainer zugeordnet"
     }
 
     private var displayedCourseDateText: String {

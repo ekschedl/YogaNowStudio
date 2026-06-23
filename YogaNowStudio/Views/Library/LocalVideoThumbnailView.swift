@@ -54,7 +54,7 @@ struct LocalVideoThumbnailView: View {
 
     private func generateThumbnail() async -> UIImage? {
         guard let url = Bundle.main.url(forResource: videoName, withExtension: "mp4") else { return nil }
-        let asset = AVAsset(url: url)
+        let asset = AVURLAsset(url: url)
         let generator = AVAssetImageGenerator(asset: asset)
         generator.appliesPreferredTrackTransform = true
         generator.maximumSize = CGSize(width: 400, height: 300)

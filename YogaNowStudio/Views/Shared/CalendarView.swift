@@ -18,10 +18,6 @@ struct CalendarView: View {
 
     // MARK: - Computed Properties
 
-    private var trainerName: String {
-        sessionStore.profile?.displayName ?? "Trainerin"
-    }
-
     private var coursesForSelectedDay: [SupabaseCourse] {
         courseStore.courses.filter { course in
             Calendar.current.isDate(
@@ -63,6 +59,9 @@ struct CalendarView: View {
         .navigationBarTitleDisplayMode(.inline)
         .task {
             await loadCourses()
+            if role == .participant {
+                await bookingStore.loadBookings()
+            }
         }
     }
 
@@ -225,7 +224,7 @@ struct CalendarView: View {
 
             Text(
                 role == .trainer
-                    ? "Du hast an diesem Tag keine eigenen Kurse."
+                    ? "Du hast an diesem Tag keine zugewiesenen Kurse."
                     : "Für diesen Tag sind aktuell keine Kurse eingetragen."
             )
             .font(.footnote)
@@ -264,13 +263,8 @@ struct CalendarView: View {
                 time: timeRange(for: course),
                 duration:
                     "\(course.durationMinutes) Min.",
-                level:
-                    course.level
-                    ?? "Alle Levels",
-                trainer:
-                    role == .trainer
-                    ? trainerName
-                    : "YogaNow Trainerin",
+                level: course.displayLevel,
+                trainer: course.trainerName,
                 room:
                     course.room
                     ?? "Raum 1",
@@ -321,11 +315,6 @@ struct CalendarView: View {
             await courseStore.loadCourses()
         }
 
-        if let firstCourse =
-            courseStore.courses.first {
-
-            selectedDate = firstCourse.startAt
-        }
     }
 
     // MARK: - Time Formatting
@@ -383,19 +372,11 @@ struct CalendarView: View {
     private func isCourseBooked(
         _ course: SupabaseCourse
     ) -> Bool {
-
         bookingStore.bookings.contains { booking in
-
-            booking.course.title == course.title
-            &&
-            Calendar.current.isDate(
-                booking.course.date,
-                inSameDayAs: course.startAt
-            )
+            booking.courseID == course.id
         }
     }
 }
-
 // MARK: - Preview
 
 #Preview {

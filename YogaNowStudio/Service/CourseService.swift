@@ -12,13 +12,33 @@ final class CourseService {
 
     private let client = SupabaseManager.client
 
+    // MARK: - Course Selection
+
+    private let courseSelection = """
+        id,
+        trainer_id,
+        title,
+        description,
+        start_at,
+        duration_minutes,
+        room,
+        level,
+        max_participants,
+        image_name,
+        created_at,
+        trainer_profile:profiles!courses_trainer_id_fkey (
+            id,
+            display_name
+        )
+        """
+
     // MARK: - Load All Courses
 
     func loadCourses() async throws -> [SupabaseCourse] {
 
         var courses: [SupabaseCourse] = try await client
             .from("courses")
-            .select()
+            .select(courseSelection)
             .order(
                 "start_at",
                 ascending: true
@@ -45,7 +65,7 @@ final class CourseService {
 
         var courses: [SupabaseCourse] = try await client
             .from("courses")
-            .select()
+            .select(courseSelection)
             .eq(
                 "trainer_id",
                 value: trainerID

@@ -36,7 +36,8 @@ struct InfoCard: View {
         }
         .frame(
             maxWidth: .infinity,
-            alignment: .leading
+            minHeight: 80,
+            alignment: .topLeading
         )
         .padding()
         .background(

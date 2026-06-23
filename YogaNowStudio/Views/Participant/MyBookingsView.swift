@@ -12,6 +12,7 @@ struct MyBookingsView: View {
     // MARK: - Environment
 
     @EnvironmentObject private var bookingStore: BookingStore
+    @EnvironmentObject private var courseStore: CourseStore
 
     // MARK: - State
 
@@ -244,16 +245,22 @@ struct MyBookingsView: View {
     }
 
     // MARK: - Booking Card
-
+    private func databaseCourse(
+        for booking: Booking
+    ) -> SupabaseCourse? {
+        courseStore.courses.first {
+            $0.id == booking.courseID
+        }
+    }
+    
     private func bookingCard(
         booking: Booking
     ) -> some View {
-
-        VStack(
-            alignment: .leading,
-            spacing: 14
-        ) {
-
+        let course = databaseCourse(for: booking)
+        return VStack(
+                alignment: .leading,
+                spacing: 14
+            ) {
             Text(booking.course.title)
                 .font(.title3)
                 .fontWeight(.semibold)
@@ -290,20 +297,32 @@ struct MyBookingsView: View {
                             booking.course.title,
                         time:
                             booking.course.time,
-                        duration: "60 Min.",
-                        level: "Alle Levels",
-                        trainer: "Laura",
+                        duration:
+                            course.map {
+                                "\($0.durationMinutes) Min."
+                            } ?? "60 Min.",
+                        level:
+                            course?.displayLevel
+                            ?? "Nicht angegeben",
+                        trainer:
+                            course?.trainerName
+                            ?? "Kein Trainer zugeordnet",
                         room:
                             booking.course.room,
                         description:
-                            "Kursbeschreibung",
+                            course?.description
+                            ?? "Keine Kursbeschreibung hinterlegt.",
                         participants:
-                            booking.course.participants,
-                        maxParticipants: 15,
+                            course?.participantCount
+                            ?? booking.course.participants,
+                        maxParticipants:
+                            course?.maxParticipants
+                            ?? 15,
                         isBooked: true,
                         onShowBookings: {},
                         courseDate:
-                            booking.course.date
+                            course?.startAt
+                            ?? booking.course.date
                     )
 
                 } label: {
