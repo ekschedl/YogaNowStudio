@@ -75,14 +75,18 @@ private struct AsanaCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Image(asana.imageName)
-                .resizable()
-                .scaledToFill()
+            Color.clear
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background {
+                    Image(asana.imageName)
+                        .resizable()
+                        .scaledToFill()
+                }
                 .frame(height: 110)
                 .clipped()
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(asana.name)
+                Text(asana.shortName ?? asana.name)
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .foregroundColor(.yogaGreen)
@@ -96,6 +100,7 @@ private struct AsanaCard: View {
             }
             .padding(10)
         }
+        .frame(maxWidth: .infinity)
         .background(Color.white.opacity(0.95))
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.07), radius: 5)

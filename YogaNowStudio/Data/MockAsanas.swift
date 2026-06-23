@@ -8,6 +8,7 @@ let mockAsanas: [Asana] = [
     Asana(
         id: UUID(uuidString: "A0000000-0000-0000-0000-000000000001")!,
         name: "Herabschauender Hund",
+        shortName: "Herab. Hund",
         sanskrit: "Adho Mukha Svanasana",
         description: "Eine der bekanntesten Yoga-Posen überhaupt. Sie dehnt den gesamten Körper, stärkt Arme und Beine und beruhigt gleichzeitig den Geist.",
         steps: [
@@ -18,7 +19,7 @@ let mockAsanas: [Asana] = [
             "Halte 5–10 Atemzüge"
         ],
         benefits: ["Dehnt Rücken und Oberschenkel", "Stärkt Arme und Schultern", "Fördert die Durchblutung"],
-        imageName: "BackgroundYoga2"
+        imageName: "AsanaHund"
     ),
     Asana(
         id: UUID(uuidString: "A0000000-0000-0000-0000-000000000002")!,
@@ -33,7 +34,7 @@ let mockAsanas: [Asana] = [
             "Halte 5 Atemzüge pro Seite"
         ],
         benefits: ["Stärkt Beine und Rumpf", "Öffnet Hüfte und Brust", "Verbessert Balance und Fokus"],
-        imageName: "ImageCourse01"
+        imageName: "AsanaKrieger"
     ),
     Asana(
         id: UUID(uuidString: "A0000000-0000-0000-0000-000000000003")!,
@@ -48,7 +49,7 @@ let mockAsanas: [Asana] = [
             "Halte 5–8 Atemzüge pro Seite"
         ],
         benefits: ["Verbessert Gleichgewicht und Stabilität", "Stärkt Bein- und Fußmuskeln", "Schult Konzentration"],
-        imageName: "ImageCourse02"
+        imageName: "AsanaBaum"
     ),
     Asana(
         id: UUID(uuidString: "A0000000-0000-0000-0000-000000000004")!,
@@ -63,7 +64,7 @@ let mockAsanas: [Asana] = [
             "Halte 3–5 Atemzüge"
         ],
         benefits: ["Stärkt die Rückenmuskulatur", "Öffnet Brust und Schultern", "Verbessert die Körperhaltung"],
-        imageName: "BackgroundYoga3"
+        imageName: "ImageCourse03"
     ),
     Asana(
         id: UUID(uuidString: "A0000000-0000-0000-0000-000000000005")!,
@@ -79,7 +80,7 @@ let mockAsanas: [Asana] = [
             "Herabschauender Hund"
         ],
         benefits: ["Aktiviert den gesamten Körper", "Synchronisiert Atem und Bewegung", "Baut Wärme und Energie auf"],
-        imageName: "ImageCourse03"
+        imageName: "AsanaSonnengruss"
     ),
     Asana(
         id: UUID(uuidString: "A0000000-0000-0000-0000-000000000006")!,
@@ -94,6 +95,6 @@ let mockAsanas: [Asana] = [
             "Atme tief durch den Rücken"
         ],
         benefits: ["Entspannt Rücken und Geist", "Dehnt Hüften und Oberschenkel", "Beruhigt das Nervensystem"],
-        imageName: "BackgroundYoga"
+        imageName: "ImageCourse01"
     )
 ]

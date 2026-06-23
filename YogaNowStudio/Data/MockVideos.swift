@@ -12,31 +12,49 @@ let mockVideos = [
     // Profi
     Video(
         id: UUID(uuidString: "00000000-0000-0000-0000-000000000002")!,
-        title: "Advanced Pranayama",
-        subtitle: "Fortgeschrittene Atemtechniken und Bandhas.",
+        title: "Deep Faszien Stretch",
+        subtitle: "Tief loslassen – Faszienarbeit für den ganzen Körper",
         level: "Profi",
         duration: "55 Min",
-        imageName: "Video3"
+        imageName: "Video3",
+        localVideoName: "signal-2026-06-23-19-50-27-897_003",
+        localVideoOverlay: "Faszien\nStretch",
+        localVideoOverlayBottom: true,
+        highlights: [
+            "Intensive Faszienarbeit zur Lösung von Spannungen und Verklebungen",
+            "Tiefes Dehnen für nachhaltig mehr Beweglichkeit und Körperwahrnehmung",
+            "Verbindung von Atemführung und Faszienrelease für Körper und Geist"
+        ]
     ),
     Video(
         id: UUID(uuidString: "00000000-0000-0000-0000-000000000003")!,
-        title: "Full Body Ashtanga",
-        subtitle: "Komplette Ashtanga-Primärsequenz.",
+        title: "Energizing Flow",
+        subtitle: "Kraft, Schwung & Lebensenergie – ein Flow für Körper und Geist",
         level: "Profi",
         duration: "75 Min",
-        imageName: "Video2"
+        imageName: "Video2",
+        localVideoName: "signal-2026-06-23-19-50-27-897_002",
+        localVideoOverlay: "Wake-Up Flow",
+        localVideoOverlayBottom: true,
+        highlights: [
+            "Kraftvolle Sequenzen zur Aktivierung deiner Lebensenergie",
+            "Dynamische Übergänge für Ausdauer, Fokus und innere Stärke",
+            "Intensiver Flow für ein tiefes Gefühl von Vitalität und Freiheit"
+        ]
     ),
     Video(
         id: UUID(uuidString: "00000000-0000-0000-0000-000000000004")!,
-        title: "Power Yoga Cardio Intensity",
-        subtitle: "Sweat and Reset",
+        title: "Intense Warm Up",
+        subtitle: "Feuer entfachen – intensive Aktivierung für Körper und Geist",
         level: "Profi",
         duration: "65 Min",
         imageName: "Video1",
+        localVideoName: "signal-2026-06-23-19-50-27-897",
+        localVideoOverlay: "Intense\nWarm Up",
         highlights: [
-            "Intensive Cardio-Sequenzen für maximalen Kalorienverbrauch",
-            "Kraftaufbau durch dynamische Vinyasa-Abfolgen",
-            "Cool-Down & Reset für Körper und Geist"
+            "Intensive Aufwärmsequenzen zur gezielten Aktivierung aller Muskelgruppen",
+            "Mentale Fokussierung für eine konzentrierte und bewusste Praxis",
+            "Optimale Vorbereitung für eine kraftvolle Yoga-Praxis"
         ]
     ),
 

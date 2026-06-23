@@ -37,9 +37,12 @@ class FavoritesStore {
     }
 
     func recentVideos(from all: [Video], count: Int = 4) -> [Video] {
-        orderedIDs.suffix(count).reversed().compactMap { id in
-            all.first { $0.id == id }
-        }
+        let validIDs = Set(all.map { $0.id })
+        return orderedIDs
+            .filter { validIDs.contains($0) }
+            .suffix(count)
+            .reversed()
+            .compactMap { id in all.first { $0.id == id } }
     }
 
     private func persist() {
