@@ -159,6 +159,11 @@ struct MyBookingsView: View {
                 bookingStore.errorMessage
                     ?? "Die Buchung konnte nicht storniert werden."
             )
+        }.task {
+            if courseStore.courses.isEmpty {
+                await courseStore.loadCourses()
+            }
+            await bookingStore.loadBookings()
         }
     }
 
@@ -292,9 +297,11 @@ struct MyBookingsView: View {
                         courseID: booking.courseID,
                         role: .participant,
                         imageName:
-                            booking.course.imageName,
+                            course?.imageName
+                            ?? booking.course.imageName,
                         title:
-                            booking.course.title,
+                            course?.title
+                            ?? booking.course.title,
                         time:
                             booking.course.time,
                         duration:
@@ -308,7 +315,8 @@ struct MyBookingsView: View {
                             course?.trainerName
                             ?? "Kein Trainer zugeordnet",
                         room:
-                            booking.course.room,
+                            course?.room
+                            ?? booking.course.room,
                         description:
                             course?.description
                             ?? "Keine Kursbeschreibung hinterlegt.",
@@ -416,5 +424,6 @@ struct MyBookingsView: View {
         MyBookingsView()
     }
     .environmentObject(BookingStore())
+    .environmentObject(CourseStore())
     .environment(FavoritesStore())
 }

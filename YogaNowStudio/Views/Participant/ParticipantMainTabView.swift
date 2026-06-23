@@ -111,8 +111,9 @@ struct ParticipantMainTabView: View {
 }
 
 #Preview {
-
     ParticipantMainTabView()
         .environment(FavoritesStore())
         .environmentObject(BookingStore())
+        .environmentObject(CourseStore())
+        .environmentObject(SessionStore())
 }

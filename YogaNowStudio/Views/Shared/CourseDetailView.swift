@@ -669,7 +669,7 @@ struct CourseDetailView: View {
             time: "08:30 - 09:30",
             duration: "60 Min.",
             level: "Alle Levels",
-            trainer: "Laura",
+            trainer: "Beispieltrainerin",
             room: "Raum 1",
             description:
                 "Starte deinen Tag mit einer belebenden Yoga-Praxis für Körper und Geist.",
