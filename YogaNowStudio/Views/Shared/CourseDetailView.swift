@@ -3,10 +3,12 @@ import SwiftUI
 struct CourseDetailView: View {
 
     // MARK: - Environment
+
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var bookingStore: BookingStore
 
     // MARK: - State
+
     @State private var cancellationRefunded = false
     @State private var showCancelConfirmation = false
     @State private var showCancelSuccess = false
@@ -71,6 +73,11 @@ struct CourseDetailView: View {
 
     // MARK: - Computed Properties
 
+    /// True, sobald der Kurs begonnen hat.
+    private var hasCourseStarted: Bool {
+        courseDate <= Date()
+    }
+
     private var courseDay: String {
         courseDate.formatted(
             .dateTime
@@ -100,7 +107,6 @@ struct CourseDetailView: View {
     }
 
     private var freePlacesText: String {
-
         if freePlaces == 0 {
             return "Ausgebucht"
         }
@@ -142,7 +148,7 @@ struct CourseDetailView: View {
         .ignoresSafeArea(edges: .top)
         .navigationBarTitleDisplayMode(.inline)
         .safeAreaInset(edge: .bottom) {
-            bottomActionButton
+            bottomActionArea
         }
         .overlay {
             bookingPopupOverlay
@@ -196,6 +202,7 @@ struct CourseDetailView: View {
             Button("OK") {
                 dismiss()
             }
+
         } message: {
 
             if cancellationRefunded {
@@ -216,12 +223,13 @@ struct CourseDetailView: View {
     // MARK: - Course Image
 
     private var courseImage: some View {
-
-        Image(imageName)
-            .resizable()
-            .scaledToFill()
-            .frame(height: 230)
-            .clipped()
+            Image(imageName)
+                .resizable()
+                .scaledToFill()
+                .frame(height: 230)
+                .clipped()
+                .saturation(hasCourseStarted ? 0.75 : 1)
+                .opacity(hasCourseStarted ? 0.72 : 1)
     }
 
     // MARK: - Content Section
@@ -291,9 +299,8 @@ struct CourseDetailView: View {
             maxWidth: .infinity,
             alignment: .topLeading
         )
-        .background(
-            Color.yogaCream
-        )
+        .background(Color.yogaCream)
+        .saturation(hasCourseStarted ? 0.55 : 1)
     }
 
     // MARK: - Title Section
@@ -313,14 +320,35 @@ struct CourseDetailView: View {
                         design: .serif
                     )
                 )
-                .foregroundColor(.yogaGreen)
+                .foregroundColor(
+                    hasCourseStarted
+                        ? .gray
+                        : .yogaGreen
+                )
                 .lineLimit(2)
                 .minimumScaleFactor(0.65)
                 .layoutPriority(1)
 
             Spacer(minLength: 6)
 
-            if role == .participant && isBooked {
+            if hasCourseStarted {
+
+                Label(
+                    "Abgeschlossen",
+                    systemImage: "clock.fill"
+                )
+                .font(.caption)
+                .fontWeight(.bold)
+                .foregroundColor(.gray)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 7)
+                .background(
+                    Color.gray.opacity(0.12)
+                )
+                .clipShape(Capsule())
+                .fixedSize()
+
+            } else if role == .participant && isBooked {
 
                 Label(
                     "Angemeldet",
@@ -361,12 +389,20 @@ struct CourseDetailView: View {
             .font(.caption2)
             .fontWeight(.bold)
             .tracking(2.5)
-            .foregroundColor(.yogaGold)
+            .foregroundColor(
+                hasCourseStarted
+                    ? .gray
+                    : .yogaGold
+            )
 
             Text(value)
                 .font(.headline)
                 .fontWeight(.semibold)
-                .foregroundColor(.yogaGreen)
+                .foregroundColor(
+                    hasCourseStarted
+                        ? .gray
+                        : .yogaGreen
+                )
                 .lineLimit(2)
                 .minimumScaleFactor(0.68)
         }
@@ -378,7 +414,9 @@ struct CourseDetailView: View {
         .padding(.horizontal, 15)
         .padding(.vertical, 12)
         .background(
-            Color.white.opacity(0.82)
+            Color.white.opacity(
+                hasCourseStarted ? 0.55 : 0.82
+            )
         )
         .clipShape(
             RoundedRectangle(cornerRadius: 20)
@@ -398,11 +436,19 @@ struct CourseDetailView: View {
                 .font(.caption)
                 .fontWeight(.bold)
                 .tracking(3)
-                .foregroundColor(.yogaGold)
+                .foregroundColor(
+                    hasCourseStarted
+                        ? .gray
+                        : .yogaGold
+                )
 
             Text(description)
                 .font(.body)
-                .foregroundColor(.primary)
+                .foregroundColor(
+                    hasCourseStarted
+                        ? .gray
+                        : .primary
+                )
                 .lineSpacing(3)
         }
         .padding(.horizontal, 18)
@@ -412,7 +458,9 @@ struct CourseDetailView: View {
             alignment: .leading
         )
         .background(
-            Color.white.opacity(0.72)
+            Color.white.opacity(
+                hasCourseStarted ? 0.5 : 0.72
+            )
         )
         .clipShape(
             RoundedRectangle(cornerRadius: 20)
@@ -425,22 +473,36 @@ struct CourseDetailView: View {
 
         HStack {
 
-            Text("PLÄTZE")
-                .font(.caption)
-                .fontWeight(.bold)
-                .tracking(3)
-                .foregroundColor(.yogaGold)
+            Text(
+                hasCourseStarted
+                    ? "KURSSTATUS"
+                    : "PLÄTZE"
+            )
+            .font(.caption)
+            .fontWeight(.bold)
+            .tracking(3)
+            .foregroundColor(
+                hasCourseStarted
+                    ? .gray
+                    : .yogaGold
+            )
 
             Spacer()
 
-            Text(freePlacesText)
-                .font(.title3)
-                .fontWeight(.semibold)
-                .foregroundColor(
-                    freePlaces == 0
+            Text(
+                hasCourseStarted
+                    ? "Abgeschlossen"
+                    : freePlacesText
+            )
+            .font(.title3)
+            .fontWeight(.semibold)
+            .foregroundColor(
+                hasCourseStarted
+                    ? .gray
+                    : freePlaces == 0
                         ? .red
                         : .yogaGreen
-                )
+            )
         }
         .padding(.horizontal, 18)
         .padding(.vertical, 16)
@@ -449,7 +511,9 @@ struct CourseDetailView: View {
             alignment: .leading
         )
         .background(
-            Color.white.opacity(0.72)
+            Color.white.opacity(
+                hasCourseStarted ? 0.5 : 0.72
+            )
         )
         .clipShape(
             RoundedRectangle(cornerRadius: 20)
@@ -469,16 +533,28 @@ struct CourseDetailView: View {
                 .font(.caption)
                 .fontWeight(.bold)
                 .tracking(3)
-                .foregroundColor(.yogaGold)
+                .foregroundColor(
+                    hasCourseStarted
+                        ? .gray
+                        : .yogaGold
+                )
 
             Text(participantText)
                 .font(.title3)
                 .fontWeight(.semibold)
-                .foregroundColor(.yogaGreen)
+                .foregroundColor(
+                    hasCourseStarted
+                        ? .gray
+                        : .yogaGreen
+                )
 
-            Text("\(freePlaces) Plätze verfügbar")
-                .font(.footnote)
-                .foregroundColor(.gray)
+            Text(
+                hasCourseStarted
+                    ? "Kurs abgeschlossen"
+                    : "\(freePlaces) Plätze verfügbar"
+            )
+            .font(.footnote)
+            .foregroundColor(.gray)
         }
         .padding(.horizontal, 18)
         .padding(.vertical, 16)
@@ -487,7 +563,9 @@ struct CourseDetailView: View {
             alignment: .leading
         )
         .background(
-            Color.white.opacity(0.72)
+            Color.white.opacity(
+                hasCourseStarted ? 0.5 : 0.72
+            )
         )
         .clipShape(
             RoundedRectangle(cornerRadius: 20)
@@ -502,74 +580,102 @@ struct CourseDetailView: View {
             .frame(height: 30)
     }
 
-    // MARK: - Bottom Action Button
+    // MARK: - Bottom Action Area
 
-    private var bottomActionButton: some View {
+    @ViewBuilder
+    private var bottomActionArea: some View {
+
+        if role == .participant {
+
+            /*
+             Für begonnene und vergangene Kurse wird
+             absichtlich kein Buchungs- oder Storno-Button angezeigt.
+             */
+            if !hasCourseStarted {
+                participantActionButton
+            }
+
+        } else {
+
+            trainerActionButton
+        }
+    }
+
+    // MARK: - Participant Action Button
+
+    private var participantActionButton: some View {
 
         Group {
 
-            if role == .participant {
+            if isBooked {
 
-                if isBooked {
+                Button {
+                    showCancelConfirmation = true
+                } label: {
 
-                    Button {
-                        showCancelConfirmation = true
-                    } label: {
-                        SecondaryButton(
-                            title:
-                                isCancelling
+                    SecondaryButton(
+                        title:
+                            isCancelling
                                 ? "Wird storniert ..."
                                 : "Buchung stornieren",
-                            icon: "xmark.circle"
-                        )
-                    }
-                    .disabled(isCancelling)
-                    .opacity(isCancelling ? 0.6 : 1)
-
-                } else {
-
-                    Button {
-                        bookingStore.errorMessage = nil
-                        showBookingPopup = true
-                    } label: {
-                        PrimaryButton(
-                            title: "Kurs buchen",
-                            icon: "calendar.badge.plus"
-                        )
-                    }
-                    .disabled(
-                        freePlaces == 0 || isBooking
-                    )
-                    .opacity(
-                        freePlaces == 0 || isBooking
-                            ? 0.55
-                            : 1
+                        icon: "xmark.circle"
                     )
                 }
+                .disabled(isCancelling)
+                .opacity(isCancelling ? 0.6 : 1)
 
             } else {
 
-                NavigationLink {
-
-                    ParticipantListView(
-                        courseTitle: title
-                    )
-
+                Button {
+                    bookingStore.errorMessage = nil
+                    showBookingPopup = true
                 } label: {
 
                     PrimaryButton(
-                        title: "Teilnehmer anzeigen",
-                        icon: "person.2.fill"
+                        title:
+                            freePlaces == 0
+                                ? "Kurs ausgebucht"
+                                : "Kurs buchen",
+                        icon: "calendar.badge.plus"
                     )
                 }
+                .disabled(
+                    freePlaces == 0 || isBooking
+                )
+                .opacity(
+                    freePlaces == 0 || isBooking
+                        ? 0.55
+                        : 1
+                )
             }
         }
         .padding(.horizontal)
         .padding(.top, 8)
         .padding(.bottom, 8)
-        .background(
-            Color.yogaCream
-        )
+        .background(Color.yogaCream)
+    }
+
+    // MARK: - Trainer Action Button
+
+    private var trainerActionButton: some View {
+
+        NavigationLink {
+
+            ParticipantListView(
+                courseTitle: title
+            )
+
+        } label: {
+
+            PrimaryButton(
+                title: "Teilnehmer anzeigen",
+                icon: "person.2.fill"
+            )
+        }
+        .padding(.horizontal)
+        .padding(.top, 8)
+        .padding(.bottom, 8)
+        .background(Color.yogaCream)
     }
 
     // MARK: - Booking Popup Overlay
@@ -577,7 +683,7 @@ struct CourseDetailView: View {
     @ViewBuilder
     private var bookingPopupOverlay: some View {
 
-        if showBookingPopup {
+        if showBookingPopup && !hasCourseStarted {
 
             BookingConfirmPopupView(
                 course: course,
@@ -598,7 +704,14 @@ struct CourseDetailView: View {
     }
 
     // MARK: - Cancel Booking
+
     private func cancelBooking() {
+
+        guard !hasCourseStarted else {
+            bookingStore.errorMessage =
+                "Bereits begonnene oder vergangene Kurse können nicht storniert werden."
+            return
+        }
 
         guard let booking = bookingStore.bookings.first(
             where: {
@@ -634,7 +747,15 @@ struct CourseDetailView: View {
 
     private func confirmBooking() async {
 
+        guard !hasCourseStarted else {
+            bookingStore.errorMessage =
+                "Bereits begonnene oder vergangene Kurse können nicht gebucht werden."
+            return
+        }
+
         guard freePlaces > 0 else {
+            bookingStore.errorMessage =
+                "Dieser Kurs ist bereits ausgebucht."
             return
         }
 
@@ -677,7 +798,7 @@ struct CourseDetailView: View {
             maxParticipants: 15,
             isBooked: true,
             onShowBookings: {},
-            courseDate: Date()
+            courseDate: Date().addingTimeInterval(-60 * 60)
         )
     }
     .environment(FavoritesStore())

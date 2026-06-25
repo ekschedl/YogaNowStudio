@@ -19,12 +19,20 @@ struct CalendarView: View {
     // MARK: - Computed Properties
 
     private var coursesForSelectedDay: [SupabaseCourse] {
-        courseStore.courses.filter { course in
-            Calendar.current.isDate(
-                course.startAt,
-                inSameDayAs: selectedDate
-            )
-        }
+
+        courseStore.courses
+            .filter { course in
+
+                Calendar.current.isDate(
+                    course.startAt,
+                    inSameDayAs: selectedDate
+                )
+            }
+            .sorted { firstCourse, secondCourse in
+
+                firstCourse.startAt
+                    < secondCourse.startAt
+            }
     }
 
     // MARK: - Body
@@ -58,7 +66,9 @@ struct CalendarView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .task {
+
             await loadCourses()
+
             if role == .participant {
                 await bookingStore.loadBookings()
             }
@@ -175,7 +185,8 @@ struct CalendarView: View {
             ProgressView("Kurse werden geladen …")
                 .padding(.vertical, 30)
 
-        } else if let errorMessage = courseStore.errorMessage {
+        } else if let errorMessage =
+                    courseStore.errorMessage {
 
             Text(errorMessage)
                 .font(.footnote)
@@ -251,6 +262,9 @@ struct CalendarView: View {
             role == .participant
             && isCourseBooked(course)
 
+        let isPastCourse =
+            course.startAt <= Date()
+
         return NavigationLink {
 
             CourseDetailView(
@@ -271,7 +285,8 @@ struct CalendarView: View {
                 description:
                     course.description
                     ?? "Keine Beschreibung hinterlegt.",
-                participants: course.participantCount,
+                participants:
+                    course.participantCount,
                 maxParticipants:
                     course.maxParticipants,
                 isBooked: booked,
@@ -282,14 +297,43 @@ struct CalendarView: View {
         } label: {
 
             CourseCalendarCardView(
+
                 imageName:
+
                     course.imageName
+
                     ?? "ImageCourse01",
+
                 title: course.title,
+
                 time:
-                    "\(startTime(for: course)) Uhr",
-                participants: course.participantCount,  isBooked: booked
+
+                    isPastCourse
+
+                        ? "Abgeschlossen · \(startTime(for: course)) Uhr"
+
+                        : "\(startTime(for: course)) Uhr",
+
+                participants:
+
+                    course.participantCount,
+
+                isBooked: booked
+
             )
+
+            .saturation(
+
+                isPastCourse ? 0.75 : 1
+
+            )
+
+            .opacity(
+
+                isPastCourse ? 0.72 : 1
+
+            )
+
         }
         .buttonStyle(.plain)
     }
@@ -314,7 +358,6 @@ struct CalendarView: View {
 
             await courseStore.loadCourses()
         }
-
     }
 
     // MARK: - Time Formatting
@@ -372,11 +415,13 @@ struct CalendarView: View {
     private func isCourseBooked(
         _ course: SupabaseCourse
     ) -> Bool {
+
         bookingStore.bookings.contains { booking in
             booking.courseID == course.id
         }
     }
 }
+
 // MARK: - Preview
 
 #Preview {

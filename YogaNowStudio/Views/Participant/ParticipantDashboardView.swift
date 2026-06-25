@@ -18,36 +18,69 @@ struct ParticipantDashboardView: View {
         sessionStore.profile?.displayName ?? "Benutzer"
     }
 
-    // MARK: - Booking Information
-    private var hasBooking: Bool {
-        guard let courseID = displayedDatabaseCourse?.id else {
-            return false
-        }
+    // MARK: - Future Bookings
 
-        return bookingStore.bookings.contains {
-            $0.courseID == courseID
-        }
+    /// Alle zukünftigen Buchungen, nächster Kurs zuerst.
+    private var upcomingBookings: [Booking] {
 
+        bookingStore.bookings
+            .filter { booking in
+                booking.course.date > Date()
+            }
+            .sorted { firstBooking, secondBooking in
+                firstBooking.course.date
+                    < secondBooking.course.date
+            }
     }
+
+    /// Die zeitlich nächste zukünftige Buchung.
+    private var nextBooking: Booking? {
+        upcomingBookings.first
+    }
+
+    /// Lokales Course-Modell der nächsten Buchung.
     private var bookedCourse: Course? {
-        bookingStore.bookings.first?.course
+        nextBooking?.course
+    }
+
+    // MARK: - Future Courses
+
+    /// Alle zukünftigen Datenbankkurse, nächster Kurs zuerst.
+    private var futureDatabaseCourses: [SupabaseCourse] {
+
+        courseStore.courses
+            .filter { course in
+                course.startAt > Date()
+            }
+            .sorted { firstCourse, secondCourse in
+                firstCourse.startAt
+                    < secondCourse.startAt
+            }
     }
 
     /*
-     Falls bereits eine lokale Buchung existiert, suchen wir
-     den passenden Datenbankkurs anhand des Titels.
+     Wenn eine zukünftige Buchung existiert, wird der passende
+     Datenbankkurs anhand der courseID gesucht.
 
-     Ohne Buchung wird zunächst der erste geladene Kurs empfohlen.
+     Wenn keine zukünftige Buchung existiert, wird der nächste
+     zukünftige Kurs empfohlen.
      */
     private var displayedDatabaseCourse: SupabaseCourse? {
 
-        if let bookedCourse {
-            return courseStore.courses.first {
-                $0.title == bookedCourse.title
+        if let nextBooking {
+
+            return courseStore.courses.first { course in
+                course.id == nextBooking.courseID
             }
         }
 
-        return courseStore.courses.first
+        return futureDatabaseCourses.first
+    }
+
+    // MARK: - Booking State
+
+    private var hasBooking: Bool {
+        nextBooking != nil
     }
 
     // MARK: - Display Values
@@ -71,6 +104,7 @@ struct ParticipantDashboardView: View {
     }
 
     private var displayedDuration: String {
+
         guard let course = displayedDatabaseCourse else {
             return "60 Min."
         }
@@ -121,12 +155,15 @@ struct ParticipantDashboardView: View {
     }
 
     private var displayedCourseDateText: String {
+
         displayedDate.formatted(
             .dateTime
                 .weekday(.short)
                 .day()
                 .month(.wide)
-                .locale(Locale(identifier: "de_DE"))
+                .locale(
+                    Locale(identifier: "de_DE")
+                )
         )
     }
 
@@ -140,7 +177,9 @@ struct ParticipantDashboardView: View {
             .dateTime
                 .hour()
                 .minute()
-                .locale(Locale(identifier: "de_DE"))
+                .locale(
+                    Locale(identifier: "de_DE")
+                )
         ) + " Uhr"
     }
 
@@ -150,25 +189,32 @@ struct ParticipantDashboardView: View {
             return bookedCourse?.time ?? "–"
         }
 
-        let endDate = Calendar.current.date(
-            byAdding: .minute,
-            value: course.durationMinutes,
-            to: course.startAt
-        ) ?? course.startAt
+        let endDate =
+            Calendar.current.date(
+                byAdding: .minute,
+                value: course.durationMinutes,
+                to: course.startAt
+            ) ?? course.startAt
 
-        let start = course.startAt.formatted(
-            .dateTime
-                .hour()
-                .minute()
-                .locale(Locale(identifier: "de_DE"))
-        )
+        let start =
+            course.startAt.formatted(
+                .dateTime
+                    .hour()
+                    .minute()
+                    .locale(
+                        Locale(identifier: "de_DE")
+                    )
+            )
 
-        let end = endDate.formatted(
-            .dateTime
-                .hour()
-                .minute()
-                .locale(Locale(identifier: "de_DE"))
-        )
+        let end =
+            endDate.formatted(
+                .dateTime
+                    .hour()
+                    .minute()
+                    .locale(
+                        Locale(identifier: "de_DE")
+                    )
+            )
 
         return "\(start) - \(end)"
     }
@@ -179,12 +225,6 @@ struct ParticipantDashboardView: View {
             : "EMPFOHLENER KURS"
     }
 
-    private var infoText: String? {
-        hasBooking
-            ? nil
-            : "Du hast aktuell noch keine Buchung.\nDieser Kurs könnte gut zu dir passen."
-    }
-    
     private var buttonTitle: String {
         hasBooking
             ? "Buchung ansehen"
@@ -224,8 +264,15 @@ struct ParticipantDashboardView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .task {
-            if let profileCredits = sessionStore.profile?.credits {
-                bookingStore.setInitialCredits(profileCredits)            }
+
+            if let profileCredits =
+                sessionStore.profile?.credits {
+
+                bookingStore.setInitialCredits(
+                    profileCredits
+                )
+            }
+
             await courseStore.loadCourses()
             await bookingStore.loadBookings()
         }
@@ -268,7 +315,8 @@ struct ParticipantDashboardView: View {
             ProgressView("Kurse werden geladen …")
                 .padding(.top, 40)
 
-        } else if let errorMessage = courseStore.errorMessage {
+        } else if let errorMessage =
+                    courseStore.errorMessage {
 
             Text(errorMessage)
                 .font(.footnote)
@@ -279,11 +327,7 @@ struct ParticipantDashboardView: View {
         } else if displayedDatabaseCourse == nil
                     && bookedCourse == nil {
 
-            Text("Aktuell sind keine Kurse verfügbar.")
-                .font(.footnote)
-                .foregroundColor(.gray)
-                .multilineTextAlignment(.center)
-                .padding(.top, 40)
+            noFutureCourseState
 
         } else {
 
@@ -292,7 +336,7 @@ struct ParticipantDashboardView: View {
                 if !hasBooking {
 
                     Text(
-                        "Du hast aktuell noch keine Buchung.\nDieser Kurs könnte gut zu dir passen."
+                        "Du hast aktuell keine kommende Buchung.\nDieser Kurs könnte gut zu dir passen."
                     )
                     .font(.footnote)
                     .foregroundColor(.gray)
@@ -304,6 +348,46 @@ struct ParticipantDashboardView: View {
                 courseDetailLink
             }
         }
+    }
+
+    // MARK: - No Future Course State
+
+    private var noFutureCourseState: some View {
+
+        VStack(spacing: 14) {
+
+            Image(
+                systemName:
+                    "calendar.badge.exclamationmark"
+            )
+            .font(.system(size: 36))
+            .foregroundColor(.yogaGold)
+
+            Text("Keine kommenden Kurse")
+                .font(
+                    .system(
+                        size: 26,
+                        weight: .semibold,
+                        design: .serif
+                    )
+                )
+                .foregroundColor(.yogaGreen)
+
+            Text(
+                "Aktuell sind keine zukünftigen Kurse verfügbar."
+            )
+            .font(.footnote)
+            .foregroundColor(.gray)
+            .multilineTextAlignment(.center)
+        }
+        .padding(28)
+        .frame(maxWidth: .infinity)
+        .background(
+            Color.white.opacity(0.82)
+        )
+        .clipShape(
+            RoundedRectangle(cornerRadius: 28)
+        )
     }
 
     // MARK: - Course Card
@@ -340,7 +424,8 @@ struct ParticipantDashboardView: View {
 
                     Label(
                         "Angemeldet",
-                        systemImage: "checkmark.circle.fill"
+                        systemImage:
+                            "checkmark.circle.fill"
                     )
                     .font(.caption)
                     .fontWeight(.bold)
@@ -389,9 +474,11 @@ struct ParticipantDashboardView: View {
 
             if hasBooking {
 
-                Text("Du bist für diesen Kurs angemeldet.")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
+                Text(
+                    "Du bist für diesen Kurs angemeldet."
+                )
+                .font(.footnote)
+                .foregroundColor(.gray)
             }
         }
         .frame(maxWidth: .infinity)
@@ -416,7 +503,8 @@ struct ParticipantDashboardView: View {
     @ViewBuilder
     private var courseDetailLink: some View {
 
-        if let databaseCourse = displayedDatabaseCourse {
+        if let databaseCourse =
+            displayedDatabaseCourse {
 
             NavigationLink {
 
@@ -430,11 +518,15 @@ struct ParticipantDashboardView: View {
                     level: displayedLevel,
                     trainer: displayedTrainer,
                     room: displayedRoom,
-                    description: displayedDescription,
-                    participants: displayedParticipants,
-                    maxParticipants: displayedMaxParticipants,
+                    description:
+                        displayedDescription,
+                    participants:
+                        displayedParticipants,
+                    maxParticipants:
+                        displayedMaxParticipants,
                     isBooked: hasBooking,
-                    onShowBookings: onShowBookings,
+                    onShowBookings:
+                        onShowBookings,
                     courseDate: displayedDate
                 )
 
@@ -442,7 +534,8 @@ struct ParticipantDashboardView: View {
 
                 PrimaryButton(
                     title: buttonTitle,
-                    icon: hasBooking
+                    icon:
+                        hasBooking
                         ? "checkmark.circle.fill"
                         : "calendar"
                 )
@@ -453,7 +546,8 @@ struct ParticipantDashboardView: View {
 
             PrimaryButton(
                 title: "Kein Kurs verfügbar",
-                icon: "calendar.badge.exclamationmark"
+                icon:
+                    "calendar.badge.exclamationmark"
             )
             .opacity(0.55)
             .allowsHitTesting(false)
