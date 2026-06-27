@@ -27,9 +27,26 @@ final class SupabaseBookingService: BookingService {
             case createdAt = "created_at"
             case course = "courses"
         }
+        
     }
+    func fetchParticipants(
+        for courseID: UUID
+    ) async throws -> [CourseParticipant] {
 
-    // MARK: - Fetch Bookings
+        let participants: [CourseParticipant] = try await client
+            .rpc(
+                "get_course_participants",
+                params: [
+                    "p_course_id": courseID.uuidString
+                ]
+            )
+            .execute()
+            .value
+
+        return participants
+    }
+    
+    //MARK: - Fetch Bookings
 
     func fetchBookings() async throws -> [Booking] {
 

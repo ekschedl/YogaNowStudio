@@ -4,7 +4,6 @@
 //
 //  Created by Kaaatkina on 12.06.26.
 //
-
 import Foundation
 
 protocol BookingService {
@@ -18,4 +17,8 @@ protocol BookingService {
     func cancelBooking(
         bookingID: UUID
     ) async throws -> CancelBookingResult
+
+    func fetchParticipants(
+        for courseID: UUID
+    ) async throws -> [CourseParticipant]
 }

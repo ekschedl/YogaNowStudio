@@ -6,7 +6,10 @@ import Combine
 final class BookingStore: ObservableObject {
 
     // MARK: - Published Properties
-
+    @Published var courseParticipants: [CourseParticipant] = []
+    @Published var isLoadingParticipants = false
+    @Published var participantsErrorMessage: String?
+    
     @Published private(set) var bookings: [Booking] = []
     @Published private(set) var credits: Int = 0
     @Published var errorMessage: String?
@@ -144,7 +147,33 @@ final class BookingStore: ObservableObject {
             )
         }
     }
+//
+    @MainActor
+    func loadParticipants(
+        for courseID: UUID
+    ) async {
 
+        isLoadingParticipants = true
+        participantsErrorMessage = nil
+        courseParticipants = []
+
+        do {
+
+            courseParticipants =
+                try await bookingService.fetchParticipants(
+                    for: courseID
+                )
+
+        } catch {
+
+            print("❌ Teilnehmer laden Fehler:", error.localizedDescription)
+
+            participantsErrorMessage =
+                "Teilnehmer konnten nicht geladen werden."
+        }
+
+        isLoadingParticipants = false
+    }
     // MARK: - Error Message
 
     private func bookingErrorMessage(

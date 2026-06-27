@@ -662,6 +662,8 @@ struct CourseDetailView: View {
         NavigationLink {
 
             ParticipantListView(
+                courseDate: courseDate,
+                courseID: courseID,
                 courseTitle: title
             )
 
