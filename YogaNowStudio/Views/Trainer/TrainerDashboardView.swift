@@ -240,8 +240,7 @@ struct TrainerDashboardView: View {
                         title: course.title,
                         time:
                             "\(startTime(for: course)) Uhr",
-                        participants: 0
-                    )
+                        participants: course.participantCount                    )
                 }
                 .buttonStyle(.plain)
             }
