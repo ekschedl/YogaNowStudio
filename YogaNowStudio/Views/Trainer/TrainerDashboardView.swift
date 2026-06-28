@@ -10,15 +10,23 @@ struct TrainerDashboardView: View {
     // MARK: - User Information
 
     private var courseCountText: String {
-        courseStore.courses.count == 1
+        todaysCourses.count == 1
             ? "1 Kurs"
-            : "\(courseStore.courses.count) Kurse"
+            : "\(todaysCourses.count) Kurse"
     }
 
     private var userName: String {
         sessionStore.profile?.displayName ?? "Trainerin"
     }
 
+    private var todaysCourses: [SupabaseCourse] {
+        courseStore.courses.filter { course in
+            Calendar.current.isDate(
+                course.startAt,
+                inSameDayAs: Date()
+            )
+        }
+    }
     // MARK: - Course Formatting
 
     private func startTime(
@@ -192,13 +200,13 @@ struct TrainerDashboardView: View {
                 .padding()
 
         } else if let errorMessage = courseStore.errorMessage {
-
+            
             Text(errorMessage)
                 .font(.caption)
                 .foregroundColor(.red)
                 .multilineTextAlignment(.center)
-
-        } else if courseStore.courses.isEmpty {
+            
+        } else if todaysCourses.isEmpty {
 
             Text("Für heute sind keine Kurse eingetragen.")
                 .font(.footnote)
@@ -208,7 +216,7 @@ struct TrainerDashboardView: View {
 
         } else {
 
-            ForEach(courseStore.courses) { course in
+            ForEach(todaysCourses) { course in
 
                 NavigationLink {
 
