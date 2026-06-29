@@ -489,11 +489,7 @@ struct CourseDetailView: View {
 
             Spacer()
 
-            Text(
-                hasCourseStarted
-                    ? "Abgeschlossen"
-                    : freePlacesText
-            )
+            Text(freePlacesText)
             .font(.title3)
             .fontWeight(.semibold)
             .foregroundColor(
@@ -524,44 +520,30 @@ struct CourseDetailView: View {
 
     private var trainerParticipantCard: some View {
 
-        VStack(
-            alignment: .leading,
-            spacing: 8
-        ) {
+        HStack {
 
-            Text("TEILNEHMER")
+            Text("PLÄTZE")
                 .font(.caption)
                 .fontWeight(.bold)
                 .tracking(3)
                 .foregroundColor(
-                    hasCourseStarted
-                        ? .gray
-                        : .yogaGold
+                    hasCourseStarted ? .gray : .yogaGold
                 )
 
-            Text(participantText)
-                .font(.title3)
-                .fontWeight(.semibold)
-                .foregroundColor(
-                    hasCourseStarted
-                        ? .gray
-                        : .yogaGreen
-                )
+            Spacer()
 
-            Text(
+            Text(freePlacesText)
+            .font(.title3)
+            .fontWeight(.semibold)
+            .foregroundColor(
                 hasCourseStarted
-                    ? "Kurs abgeschlossen"
-                    : "\(freePlaces) Plätze verfügbar"
+                    ? .gray
+                    : freePlaces == 0 ? .red : .yogaGreen
             )
-            .font(.footnote)
-            .foregroundColor(.gray)
         }
         .padding(.horizontal, 18)
         .padding(.vertical, 16)
-        .frame(
-            maxWidth: .infinity,
-            alignment: .leading
-        )
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             Color.white.opacity(
                 hasCourseStarted ? 0.5 : 0.72
