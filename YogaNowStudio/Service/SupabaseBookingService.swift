@@ -116,18 +116,20 @@ final class SupabaseBookingService: BookingService {
             )
 
             let course = Course(
+                id: databaseCourse.id,
                 title: databaseCourse.title,
                 day: day,
                 date: databaseCourse.startAt,
                 time: "\(startTime) - \(endTime)",
-                room: databaseCourse.room ?? "Raum 1",
-                participants: 0,
+                room: databaseCourse.room ?? "Nicht angegeben",
+                participants: databaseCourse.participantCount,
                 maxParticipants: databaseCourse.maxParticipants,
                 imageName:
                     databaseCourse.imageName
                     ?? "ImageCourse01"
             )
-
+            
+            
             return Booking(
                 id: row.id,
                 courseID: row.courseID,
@@ -175,18 +177,4 @@ final class SupabaseBookingService: BookingService {
     }
 }
 
-// MARK: - Booking Service Error
 
-enum BookingServiceError: LocalizedError {
-
-    case cancelNotImplemented
-
-    var errorDescription: String? {
-
-        switch self {
-
-        case .cancelNotImplemented:
-            return "Die Stornierung ist noch nicht mit Supabase verbunden."
-        }
-    }
-}
