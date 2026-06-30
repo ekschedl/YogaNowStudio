@@ -48,13 +48,7 @@ final class BookingStore: ObservableObject {
     private var creditsInitialized = false
 
     func setInitialCredits(_ value: Int) {
-
-        guard !creditsInitialized else {
-            return
-        }
-
         credits = value
-        creditsInitialized = true
     }
 
     func setCredits(_ value: Int) {

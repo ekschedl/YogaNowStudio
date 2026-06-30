@@ -58,12 +58,14 @@ struct BookingConfirmPopupView: View {
                     Text("Buchung bestätigen")
                         .font(
                             .system(
-                                size: 30,
+                                size: 26,
                                 weight: .semibold,
                                 design: .serif
                             )
                         )
                         .foregroundColor(.yogaGreen)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.75)
 
                     Text("MÖCHTEST DU DIESEN KURS BUCHEN?")
                         .font(.caption)
@@ -99,7 +101,7 @@ struct BookingConfirmPopupView: View {
 
                     infoRow(
                         icon: "person.2.fill",
-                        text: "\(freePlaces)/\(course.maxParticipants) Plätze frei"
+                        text: "\(freePlaces) von \(course.maxParticipants) Plätze frei"
                     )
                 }
                 .frame(

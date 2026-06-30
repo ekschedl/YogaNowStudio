@@ -287,12 +287,7 @@ struct CourseDetailView: View {
             }
 
             descriptionCard
-
-            if role == .participant {
-                participantBookingCard
-            } else {
-                trainerParticipantCard
-            }
+            placesCard
         }
         .padding(.horizontal, 26)
         .padding(.top, 28)
@@ -469,91 +464,30 @@ struct CourseDetailView: View {
         )
     }
 
-    // MARK: - Participant Booking Card
-
-    private var participantBookingCard: some View {
-
-        HStack {
-
-            Text(
-                hasCourseStarted
-                    ? "KURSSTATUS"
-                    : "PLÄTZE"
-            )
-            .font(.caption)
-            .fontWeight(.bold)
-            .tracking(3)
-            .foregroundColor(
-                hasCourseStarted
-                    ? .gray
-                    : .yogaGold
-            )
-
-            Spacer()
-
-            Text(freePlacesText)
-            .font(.title3)
-            .fontWeight(.semibold)
-            .foregroundColor(
-                hasCourseStarted
-                    ? .gray
-                    : freePlaces == 0
-                        ? .red
-                        : .yogaGreen
-            )
-        }
-        .padding(.horizontal, 18)
-        .padding(.vertical, 16)
-        .frame(
-            maxWidth: .infinity,
-            alignment: .leading
-        )
-        .background(
-            Color.white.opacity(
-                hasCourseStarted ? 0.5 : 0.72
-            )
-        )
-        .clipShape(
-            RoundedRectangle(cornerRadius: 20)
-        )
-    }
-
-    // MARK: - Trainer Participant Card
-
-    private var trainerParticipantCard: some View {
+// MARK: - placesCard
+    private var placesCard: some View {
 
         HStack {
-
             Text("PLÄTZE")
                 .font(.caption)
                 .fontWeight(.bold)
                 .tracking(3)
-                .foregroundColor(
-                    hasCourseStarted ? .gray : .yogaGold
-                )
-
+                .foregroundColor(hasCourseStarted ? .gray : .yogaGold)
             Spacer()
-
             Text(freePlacesText)
-            .font(.title3)
-            .fontWeight(.semibold)
-            .foregroundColor(
-                hasCourseStarted
-                    ? .gray
-                    : freePlaces == 0 ? .red : .yogaGreen
-            )
+                .font(.title3)
+                .fontWeight(.semibold)
+                .foregroundColor(
+                    hasCourseStarted
+                        ? .gray
+                        : freePlaces == 0 ? .red : .yogaGreen
+                )
         }
         .padding(.horizontal, 18)
         .padding(.vertical, 16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            Color.white.opacity(
-                hasCourseStarted ? 0.5 : 0.72
-            )
-        )
-        .clipShape(
-            RoundedRectangle(cornerRadius: 20)
-        )
+        .background(Color.white.opacity(hasCourseStarted ? 0.5 : 0.72))
+        .clipShape(RoundedRectangle(cornerRadius: 20))
     }
 
     // MARK: - Bottom Fade
@@ -792,4 +726,5 @@ struct CourseDetailView: View {
     }
     .environment(FavoritesStore())
     .environmentObject(BookingStore())
+    .environmentObject(CourseStore())
 }
