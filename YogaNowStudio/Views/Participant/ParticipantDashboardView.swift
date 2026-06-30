@@ -268,7 +268,7 @@ struct ParticipantDashboardView: View {
             if let profileCredits =
                 sessionStore.profile?.credits {
 
-                bookingStore.setInitialCredits(
+                bookingStore.setCredits(
                     profileCredits
                 )
             }
