@@ -72,7 +72,15 @@ struct TrainerMainTabView: View {
 }
 #Preview {
 
-    TrainerMainTabView()
-        .environment(FavoritesStore())
-        .environmentObject(BookingStore())
+    NavigationStack {
+
+        CalendarView(
+            role: .participant,
+            onBookingFinished: {}
+        )
+    }
+    .environmentObject(BookingStore())
+    .environmentObject(SessionStore())
+    .environmentObject(CourseStore())
+    .environment(FavoritesStore())
 }

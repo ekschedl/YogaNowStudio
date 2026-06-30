@@ -3,8 +3,8 @@ import SwiftUI
 struct BookingSuccessView: View {
 
     let course: Course
-    let onFinish: () -> Void
-    @State private var showMyBookings = false
+
+    let onFinished: () -> Void
 
     var body: some View {
 
@@ -18,8 +18,6 @@ struct BookingSuccessView: View {
             VStack(spacing: 30) {
 
                 Spacer()
-
-                // MARK: Success Icon
 
                 ZStack {
 
@@ -44,8 +42,6 @@ struct BookingSuccessView: View {
                         .foregroundColor(.green)
                 }
 
-                // MARK: Text
-
                 VStack(spacing: 12) {
 
                     Text("Kurs gebucht")
@@ -63,34 +59,45 @@ struct BookingSuccessView: View {
                         .fontWeight(.bold)
                         .tracking(4)
                         .foregroundColor(.yogaGold)
-
                 }
 
-                // MARK: Small Info
+                VStack(spacing: 6) {
 
-                Text("Du wirst automatisch zu deinen Buchungen weitergeleitet.")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 30)
+                    Text(course.title)
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.yogaGreen)
+
+                    Text("\(course.day), \(course.time)")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+
+                    Text(course.room)
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                }
+
+                Text(
+                    "Du wirst automatisch zu deinen Buchungen weitergeleitet."
+                )
+                .font(.footnote)
+                .foregroundColor(.gray)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 30)
 
                 Spacer()
             }
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
-        .navigationDestination(
-            isPresented: $showMyBookings
-        ) {
-            MyBookingsView()
-        }
         .task {
-
             try? await Task.sleep(
-                nanoseconds: 3_000_000_000
+                for: .seconds(2)
             )
-
-            showMyBookings = true
+            guard !Task.isCancelled else {
+                return
+            }
+            onFinished()
         }
     }
 }
@@ -103,15 +110,13 @@ struct BookingSuccessView: View {
             course: Course(
                 title: "Morning Flow",
                 day: "Donnerstag",
-                time: "08:30 Uhr",
+                time: "08:30 - 09:30",
                 room: "Raum 1",
                 participants: 12,
                 maxParticipants: 15,
                 imageName: "ImageCourse01"
             ),
-            onFinish: {}
+                 onFinished: {}
         )
     }
-    .environmentObject(BookingStore())
-    .environment(FavoritesStore())
 }

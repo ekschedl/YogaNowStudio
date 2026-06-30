@@ -467,7 +467,6 @@ struct MyBookingsView: View {
                                 course?.maxParticipants
                                 ?? 15,
                             isBooked: true,
-                            onShowBookings: {},
                             courseDate:
                                 course?.startAt
                                 ?? booking.course.date

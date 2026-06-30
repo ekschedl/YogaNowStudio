@@ -17,7 +17,6 @@ struct CourseDetailView: View {
     @State private var showBookingSuccess = false
     @State private var isBooking = false
     @State private var isCancelling = false
-
     // MARK: - Properties
 
     let courseID: UUID
@@ -33,9 +32,8 @@ struct CourseDetailView: View {
     let participants: Int
     let maxParticipants: Int
     let isBooked: Bool
-    let onShowBookings: () -> Void
     let courseDate: Date
-
+    let onBookingFinished: (() -> Void)?
     // MARK: - Initialization
 
     init(
@@ -52,8 +50,8 @@ struct CourseDetailView: View {
         participants: Int,
         maxParticipants: Int,
         isBooked: Bool,
-        onShowBookings: @escaping () -> Void = {},
-        courseDate: Date = Date()
+        courseDate: Date = Date(),
+        onBookingFinished: (() -> Void)? = nil
     ) {
         self.courseID = courseID
         self.role = role
@@ -68,9 +66,8 @@ struct CourseDetailView: View {
         self.participants = participants
         self.maxParticipants = maxParticipants
         self.isBooked = isBooked
-        self.onShowBookings = onShowBookings
         self.courseDate = courseDate
-    }
+        self.onBookingFinished = onBookingFinished    }
 
     // MARK: - Computed Properties
 
@@ -160,7 +157,9 @@ struct CourseDetailView: View {
         ) {
             BookingSuccessView(
                 course: course,
-                onFinish: onShowBookings
+                onFinished: {
+                    onBookingFinished?()
+                }
             )
         }
         .confirmationDialog(
@@ -720,9 +719,8 @@ struct CourseDetailView: View {
             participants: 12,
             maxParticipants: 15,
             isBooked: true,
-            onShowBookings: {},
-            courseDate: Date().addingTimeInterval(-60 * 60)
-        )
+            courseDate: Date().addingTimeInterval(-60 * 60),
+            onBookingFinished: {}        )
     }
     .environment(FavoritesStore())
     .environmentObject(BookingStore())

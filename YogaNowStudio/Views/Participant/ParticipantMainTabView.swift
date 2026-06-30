@@ -57,11 +57,7 @@ struct ParticipantMainTabView: View {
             NavigationStack(path: $dashboardPath) {
 
                 ParticipantDashboardView(
-                    onShowBookings: {
-                        dashboardPath = NavigationPath()
-                        bookingsPath = NavigationPath()
-                        selectedTab = .bookings
-                    }
+              
                 )
             }
             .tabItem {
@@ -71,7 +67,11 @@ struct ParticipantMainTabView: View {
 
             NavigationStack(path: $calendarPath) {
 
-                CalendarView(role: .participant)
+                CalendarView(
+                    role: .participant,
+                    onBookingFinished: {
+                          selectedTab = .bookings
+                      }                )
             }
             .tabItem {
                 Label("Kalender", systemImage: "calendar")

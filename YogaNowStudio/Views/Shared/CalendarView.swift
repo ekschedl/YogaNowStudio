@@ -11,7 +11,15 @@ struct CalendarView: View {
     // MARK: - Properties
 
     let role: UserRole
-
+    let onBookingFinished: (() -> Void)?
+    
+    init(
+        role: UserRole,
+        onBookingFinished: (() -> Void)? = nil
+    ) {
+        self.role = role
+        self.onBookingFinished = onBookingFinished
+    }
     // MARK: - State
 
     @State private var selectedDate = Date()
@@ -290,9 +298,10 @@ struct CalendarView: View {
                 maxParticipants:
                     course.maxParticipants,
                 isBooked: booked,
-                onShowBookings: {},
-                courseDate: course.startAt
-            )
+                courseDate: course.startAt,
+                onBookingFinished: {
+                    onBookingFinished?()
+                }          )
 
         } label: {
 
@@ -422,7 +431,8 @@ struct CalendarView: View {
     NavigationStack {
 
         CalendarView(
-            role: .participant
+            role: .participant,
+            onBookingFinished: {}
         )
     }
     .environmentObject(BookingStore())

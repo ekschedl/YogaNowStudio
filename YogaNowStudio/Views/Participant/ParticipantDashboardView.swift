@@ -8,10 +8,6 @@ struct ParticipantDashboardView: View {
     @EnvironmentObject private var sessionStore: SessionStore
     @EnvironmentObject private var courseStore: CourseStore
 
-    // MARK: - Properties
-
-    let onShowBookings: () -> Void
-
     // MARK: - User Information
 
     private var userName: String {
@@ -525,8 +521,6 @@ struct ParticipantDashboardView: View {
                     maxParticipants:
                         displayedMaxParticipants,
                     isBooked: hasBooking,
-                    onShowBookings:
-                        onShowBookings,
                     courseDate: displayedDate
                 )
 
@@ -562,7 +556,6 @@ struct ParticipantDashboardView: View {
     NavigationStack {
 
         ParticipantDashboardView(
-            onShowBookings: {}
         )
     }
     .environmentObject(BookingStore())
