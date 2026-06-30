@@ -6,6 +6,7 @@ struct ProfileView: View {
     @EnvironmentObject private var bookingStore: BookingStore
     @EnvironmentObject private var sessionStore: SessionStore
 
+    @EnvironmentObject private var courseStore: CourseStore
     // MARK: - Properties
 
     let role: UserRole
@@ -335,6 +336,9 @@ struct ProfileView: View {
 
             Task {
                 await sessionStore.signOut()
+
+                bookingStore.reset()
+                courseStore.reset()
             }
 
         } label: {
@@ -358,6 +362,8 @@ struct ProfileView: View {
         )
     }
     .environmentObject(SessionStore())
+    .environmentObject(BookingStore())
+    .environmentObject(CourseStore())
 }
 
 // MARK: - Trainer Preview
@@ -372,4 +378,5 @@ struct ProfileView: View {
     }
     .environmentObject(SessionStore())
     .environmentObject(BookingStore())
+    .environmentObject(CourseStore())
 }

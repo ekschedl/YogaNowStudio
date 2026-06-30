@@ -56,6 +56,16 @@ struct MyBookingsView: View {
         }
     }
 
+    //MARK: - bookCountText
+    private func bookingCountText(
+        count: Int,
+        singular: String,
+        plural: String
+    ) -> String {
+        count == 1
+            ? "1 \(singular)"
+            : "\(count) \(plural)"
+    }
     // MARK: - Date Formatting
 
     private func formattedDate(
@@ -225,8 +235,16 @@ struct MyBookingsView: View {
 
             Text(
                 selectedSegment == .upcoming
-                ? "\(upcomingBookings.count) KOMMENDE KURSE"
-                : "\(pastBookings.count) VERGANGENE KURSE"
+                ? bookingCountText(
+                    count: upcomingBookings.count,
+                    singular: "KOMMENDER KURS",
+                    plural: "KOMMENDE KURSE"
+                )
+                : bookingCountText(
+                    count: pastBookings.count,
+                    singular: "VERGANGENER KURS",
+                    plural: "VERGANGENE KURSE"
+                )
             )
             .font(.caption)
             .fontWeight(.bold)
@@ -490,15 +508,16 @@ struct MyBookingsView: View {
         }
         .padding()
         .background(
-            LinearGradient(
-                colors: [
-                    Color.white.opacity(isPast ? 0.72 : 0.95),
-                    Color.yogaCream.opacity(isPast ? 0.65 : 0.9)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+            Color.white.opacity(isPast ? 0.88 : 0.95)
         )
+        .overlay(
+            RoundedRectangle(cornerRadius: 24)
+                .stroke(
+                    Color.yogaGold.opacity(isPast ? 0.10 : 0.18),
+                    lineWidth: 1
+                )
+        )
+        .opacity(isPast ? 0.9 : 1)
         .clipShape(
             RoundedRectangle(
                 cornerRadius: 24

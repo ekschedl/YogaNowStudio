@@ -45,7 +45,7 @@ final class BookingStore: ObservableObject {
 
     // MARK: - Set Credits
 
-    private var creditsInitialized = false
+
 
     func setInitialCredits(_ value: Int) {
         credits = value
@@ -91,7 +91,17 @@ final class BookingStore: ObservableObject {
             return false
         }
     }
+    // MARK: - Reset
 
+    func reset() {
+        bookings = []
+        credits = 0
+        courseParticipants = []
+        errorMessage = nil
+        participantsErrorMessage = nil
+        isLoadingParticipants = false
+    }
+    
     // MARK: - Cancel Booking
     func cancel(
         booking: Booking

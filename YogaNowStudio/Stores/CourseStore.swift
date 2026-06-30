@@ -79,4 +79,15 @@ final class CourseStore: ObservableObject {
             print("Fehler beim Laden der Trainer-Kurse: \(error)")
         }
     }
+    // MARK: - Reset
+
+    func reset() {
+
+        courses = []
+
+        errorMessage = nil
+
+        isLoading = false
+
+    }
 }
