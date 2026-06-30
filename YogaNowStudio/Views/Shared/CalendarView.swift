@@ -281,7 +281,7 @@ struct CalendarView: View {
                 trainer: course.trainerName,
                 room:
                     course.room
-                    ?? "Raum 1",
+                ?? "Nicht angegeben",
                 description:
                     course.description
                     ?? "Keine Beschreibung hinterlegt.",
