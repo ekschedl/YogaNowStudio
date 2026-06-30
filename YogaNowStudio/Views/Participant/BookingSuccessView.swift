@@ -106,6 +106,7 @@ struct BookingSuccessView: View {
                 time: "08:30 Uhr",
                 room: "Raum 1",
                 participants: 12,
+                maxParticipants: 15,
                 imageName: "ImageCourse01"
             ),
             onFinish: {}

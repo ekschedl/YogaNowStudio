@@ -9,7 +9,9 @@ struct Course: Identifiable, Equatable {
     let time: String
     let room: String
     let participants: Int
+    let maxParticipants: Int
     let imageName: String
+
 
     init(
         id: UUID = UUID(),
@@ -19,7 +21,9 @@ struct Course: Identifiable, Equatable {
         time: String,
         room: String,
         participants: Int,
+        maxParticipants: Int,
         imageName: String
+     
     ) {
         self.id = id
         self.title = title
@@ -28,6 +32,8 @@ struct Course: Identifiable, Equatable {
         self.time = time
         self.room = room
         self.participants = participants
+        self.maxParticipants = maxParticipants
         self.imageName = imageName
+        
     }
 }

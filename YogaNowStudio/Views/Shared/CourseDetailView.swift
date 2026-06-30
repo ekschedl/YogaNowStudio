@@ -5,8 +5,9 @@ struct CourseDetailView: View {
     // MARK: - Environment
 
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var bookingStore: BookingStore
-
+    @EnvironmentObject private var bookingStore:
+    BookingStore
+    @EnvironmentObject private var courseStore: CourseStore
     // MARK: - State
 
     @State private var cancellationRefunded = false
@@ -126,6 +127,7 @@ struct CourseDetailView: View {
             time: time,
             room: room,
             participants: participants,
+            maxParticipants: maxParticipants,
             imageName: imageName
         )
     }
@@ -754,8 +756,11 @@ struct CourseDetailView: View {
         isBooking = false
 
         if success {
+            await bookingStore.loadBookings()
+            await courseStore.loadCourses()
             showBookingPopup = false
             showBookingSuccess = true
+
         }
     }
 }

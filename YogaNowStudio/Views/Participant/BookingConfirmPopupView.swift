@@ -21,7 +21,10 @@ struct BookingConfirmPopupView: View {
                 .locale(Locale(identifier: "de_DE"))
         )
     }
-
+    private var freePlaces: Int {
+        max(0, course.maxParticipants - course.participants)
+    }
+    
     private var canBook: Bool {
         credits > 0 && !isBooking
     }
@@ -96,7 +99,7 @@ struct BookingConfirmPopupView: View {
 
                     infoRow(
                         icon: "person.2.fill",
-                        text: "\(course.participants) Teilnehmer"
+                        text: "\(freePlaces)/\(course.maxParticipants) Plätze frei"
                     )
                 }
                 .frame(
@@ -119,10 +122,13 @@ struct BookingConfirmPopupView: View {
                             .foregroundColor(.yogaGreen)
 
                         Text(
+
                             "Für diese Buchung wird 1 Credit verwendet. Kostenlose Stornierung bis 24 Stunden vor Kursbeginn."
                         )
                         .font(.footnote)
                         .foregroundColor(.gray)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .multilineTextAlignment(.leading)
 
                     } else {
 
@@ -238,11 +244,12 @@ struct BookingConfirmPopupView: View {
     BookingConfirmPopupView(
         course: Course(
             title: "Morning Flow",
-            day: "Donnerstag",
-            time: "08:30",
-            room: "Raum 1",
-            participants: 12,
-            imageName: "ImageCourse01"
+               day: "Donnerstag",
+               time: "08:30",
+               room: "Raum 1",
+               participants: 12,
+               maxParticipants: 15,
+               imageName: "ImageCourse01"
         ),
         credits: 8,
         isBooking: false,

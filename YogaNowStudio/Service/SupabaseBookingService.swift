@@ -122,6 +122,7 @@ final class SupabaseBookingService: BookingService {
                 time: "\(startTime) - \(endTime)",
                 room: databaseCourse.room ?? "Raum 1",
                 participants: 0,
+                maxParticipants: databaseCourse.maxParticipants,
                 imageName:
                     databaseCourse.imageName
                     ?? "ImageCourse01"
