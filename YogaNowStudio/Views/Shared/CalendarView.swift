@@ -306,13 +306,7 @@ struct CalendarView: View {
 
                 title: course.title,
 
-                time:
-
-                    isPastCourse
-
-                        ? "Abgeschlossen · \(startTime(for: course)) Uhr"
-
-                        : "\(startTime(for: course)) Uhr",
+                time: "\(startTime(for: course)) Uhr",
 
                 participants:
 

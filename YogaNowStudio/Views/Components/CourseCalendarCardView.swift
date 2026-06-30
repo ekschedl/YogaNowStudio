@@ -71,9 +71,13 @@ struct CourseCalendarCardView: View {
                         Spacer()
                     }
 
-                    Text(time)
-                        .font(.title3)
-                        .foregroundStyle(Color.gray)
+                    HStack(spacing: 6) {
+                        Image(systemName: "clock.fill")
+                            .font(.headline)
+                        Text(time)
+                            .font(.headline)
+                    }
+                    .foregroundStyle(Color.gray)
 
                     HStack(spacing: 6) {
 
