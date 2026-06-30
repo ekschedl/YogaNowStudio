@@ -75,6 +75,16 @@ struct ProfileView: View {
         "\(bookingStore.credits)"
     }
 
+    private var participantLevel: String {
+        let level = sessionStore.profile?.yogaLevel?
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard let level, !level.isEmpty else {
+            return "Nicht hinterlegt"
+        }
+        return level
+    }
+    
     // MARK: - Body
 
     var body: some View {
@@ -174,7 +184,7 @@ struct ProfileView: View {
 
                 profileMetric(
                     title: "LEVEL",
-                    value: "Alle Levels"
+                    value: participantLevel
                 )
 
                 profileMetric(

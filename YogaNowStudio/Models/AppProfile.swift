@@ -22,7 +22,9 @@ struct AppProfile: Codable, Identifiable {
     let memberSince: String?
     let trainerSince: String?
     let yogaStyle: String?
+    let yogaLevel: String?
     let experienceYears: Int?
+    
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -34,7 +36,9 @@ struct AppProfile: Codable, Identifiable {
         case memberSince = "member_since"
         case trainerSince = "trainer_since"
         case yogaStyle = "yoga_style"
+        case yogaLevel = "yoga_level"
         case experienceYears = "experience_years"
+        
     }
 
     // Nur Vorname für Begrüßung
