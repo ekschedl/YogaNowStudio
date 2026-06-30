@@ -115,7 +115,12 @@ struct CourseDetailView: View {
 
         return "\(freePlaces) von \(maxParticipants) frei"
     }
-
+    
+    private var currentlyBooked: Bool {
+        bookingStore.isBooked(
+            courseID: courseID
+        )
+    }
     private var course: Course {
         Course(
             title: title,
@@ -344,7 +349,7 @@ struct CourseDetailView: View {
                 .clipShape(Capsule())
                 .fixedSize()
 
-            } else if role == .participant && isBooked {
+            } else if role == .participant && currentlyBooked {
 
                 Label(
                     "Angemeldet",
@@ -524,7 +529,7 @@ struct CourseDetailView: View {
 
         Group {
 
-            if isBooked {
+            if currentlyBooked {
 
                 Button {
                     showCancelConfirmation = true
