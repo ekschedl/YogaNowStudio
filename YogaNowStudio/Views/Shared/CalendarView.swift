@@ -405,14 +405,13 @@ struct CalendarView: View {
     }
 
     // MARK: - Booking Check
-
+    
     private func isCourseBooked(
         _ course: SupabaseCourse
     ) -> Bool {
-
-        bookingStore.bookings.contains { booking in
-            booking.courseID == course.id
-        }
+        bookingStore.isBooked(
+            courseID: course.id
+        )
     }
 }
 

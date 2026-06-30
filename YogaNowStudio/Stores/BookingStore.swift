@@ -139,16 +139,10 @@ final class BookingStore: ObservableObject {
     // MARK: - Booking Check
 
     func isBooked(
-        course: Course
+        courseID: UUID
     ) -> Bool {
-
         bookings.contains { booking in
-
-            booking.course.title == course.title &&
-            Calendar.current.isDate(
-                booking.course.date,
-                inSameDayAs: course.date
-            )
+            booking.courseID == courseID
         }
     }
 //
