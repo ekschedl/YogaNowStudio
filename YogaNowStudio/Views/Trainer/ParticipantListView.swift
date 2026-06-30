@@ -177,7 +177,7 @@ struct ParticipantListView: View {
                             : .yogaGold
                         )
 
-                    Text(participant.displayName)
+                    Text(participant.fullName)
                         .foregroundColor(
                             isPastCourse
                             ? .gray

@@ -18,7 +18,13 @@ struct ProfileView: View {
     }
 
     private var userName: String {
-        sessionStore.profile?.displayName ?? "Benutzer"
+        sessionStore.profile?.greetingName
+            ?? "Benutzer"
+    }
+
+    private var fullUserName: String {
+        sessionStore.profile?.fullName
+            ?? "Benutzer"
     }
 
     private var userEmail: String {
@@ -268,7 +274,7 @@ struct ProfileView: View {
 
             profileDataRow(
                 title: "NAME",
-                value: userName
+                value: fullUserName
             )
 
             profileDataRow(
