@@ -5,7 +5,6 @@
 //  Created by Kaaatkina on 16.06.26.
 //
 
-
 import Foundation
 import Supabase
 
@@ -29,6 +28,10 @@ final class AuthService {
             password: password
         )
 
+        guard !session.isExpired else {
+            throw AuthServiceError.noActiveSession
+        }
+
         return try await loadProfile(
             userID: session.user.id
         )
@@ -40,6 +43,10 @@ final class AuthService {
 
         guard let session = client.auth.currentSession else {
             throw AuthServiceError.noActiveSession
+        }
+
+        guard !session.isExpired else {
+            throw AuthServiceError.expiredSession
         }
 
         return try await loadProfile(
@@ -67,7 +74,13 @@ final class AuthService {
     // MARK: - Current Email
 
     var currentEmail: String? {
-        client.auth.currentSession?.user.email
+
+        guard let session = client.auth.currentSession,
+              !session.isExpired else {
+            return nil
+        }
+
+        return session.user.email
     }
 
     // MARK: - Sign Out
@@ -82,6 +95,7 @@ final class AuthService {
 enum AuthServiceError: LocalizedError {
 
     case noActiveSession
+    case expiredSession
     case invalidRole
 
     var errorDescription: String? {
@@ -90,6 +104,9 @@ enum AuthServiceError: LocalizedError {
 
         case .noActiveSession:
             return "Es ist keine aktive Anmeldung vorhanden."
+
+        case .expiredSession:
+            return "Die gespeicherte Anmeldung ist abgelaufen."
 
         case .invalidRole:
             return "Für dieses Benutzerkonto wurde keine gültige Rolle gefunden."

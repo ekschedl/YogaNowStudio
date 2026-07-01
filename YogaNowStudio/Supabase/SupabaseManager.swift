@@ -5,6 +5,9 @@
 //  Created by Kaaatkina on 16.06.26.
 //
 
+
+//
+
 import Foundation
 import Supabase
 
@@ -12,12 +15,17 @@ import Supabase
 
 enum SupabaseManager {
 
-    // MARK: Supabase Client
+    // MARK: - Supabase Client
 
     static let client = SupabaseClient(
         supabaseURL: URL(
             string: "https://jmvjrdmpbppzwotgkizy.supabase.co"
         )!,
-        supabaseKey: "sb_publishable_RcCzQ95SW2FAseaDWMd8LA__keHftV3"
+        supabaseKey: "sb_publishable_RcCzQ95SW2FAseaDWMd8LA__keHftV3",
+        options: SupabaseClientOptions(
+            auth: .init(
+                emitLocalSessionAsInitialSession: true
+            )
+        )
     )
 }

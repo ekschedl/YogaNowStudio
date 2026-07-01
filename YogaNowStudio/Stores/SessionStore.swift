@@ -6,19 +6,24 @@
 //
 
 import Foundation
-
 import Combine
 
 @MainActor
-
 final class SessionStore: ObservableObject {
+
+    // MARK: - Published Properties
+
     @Published private(set) var profile: AppProfile?
     @Published private(set) var email: String?
     @Published private(set) var isLoading = true
     @Published private(set) var errorMessage: String?
+
+    // MARK: - Properties
+
     private let authService: AuthService
 
     // MARK: - Initialization
+
     init(authService: AuthService) {
         self.authService = authService
     }
@@ -26,6 +31,8 @@ final class SessionStore: ObservableObject {
     init() {
         self.authService = AuthService()
     }
+
+    // MARK: - User Role
 
     var userRole: UserRole? {
         profile?.role
@@ -43,18 +50,22 @@ final class SessionStore: ObservableObject {
         }
 
         do {
+
             profile = try await authService.loadCurrentProfile()
             email = authService.currentEmail
 
         } catch AuthServiceError.noActiveSession {
 
-            profile = nil
-            email = nil
+            clearSession()
+
+        } catch AuthServiceError.expiredSession {
+
+            clearSession()
 
         } catch {
 
-            profile = nil
-            email = nil
+            clearSession()
+
             errorMessage =
                 "Die gespeicherte Anmeldung konnte nicht geladen werden."
         }
@@ -81,13 +92,25 @@ final class SessionStore: ObservableObject {
     // MARK: - Sign Out
 
     func signOut() async {
+
         errorMessage = nil
+
         do {
+
             try await authService.signOut()
+
         } catch {
+
             errorMessage =
                 "Die Abmeldung konnte nicht abgeschlossen werden."
         }
+
+        clearSession()
+    }
+
+    // MARK: - Clear Session
+
+    private func clearSession() {
         profile = nil
         email = nil
     }

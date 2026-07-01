@@ -408,6 +408,7 @@ struct LegalDocumentView: View {
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
+        .padding(.top, -50)
     }
 
     // MARK: - Document Card

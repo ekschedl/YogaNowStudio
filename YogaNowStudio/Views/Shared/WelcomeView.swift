@@ -100,66 +100,43 @@ struct WelcomeView: View {
 
     private var legalNavigation: some View {
 
-        HStack(spacing: 10) {
+        HStack(spacing: 12) {
 
-            legalLink(
-                title: "Datenschutz",
-                document: .privacy
-            )
-
-            Text("•")
-                .foregroundColor(
-                    .yogaGreen.opacity(0.45)
-                )
-
-            legalLink(
-                title: "Impressum",
-                document: .imprint
-            )
+            NavigationLink {
+                LegalDocumentView(document: .privacy)
+            } label: {
+                Text("Datenschutz")
+            }
 
             Text("•")
-                .foregroundColor(
-                    .yogaGreen.opacity(0.45)
-                )
 
-            legalLink(
-                title: "Support",
-                document: .support
-            )
+            NavigationLink {
+                LegalDocumentView(document: .imprint)
+            } label: {
+                Text("Impressum")
+            }
+
+            Text("•")
+
+            NavigationLink {
+                LegalDocumentView(document: .support)
+            } label: {
+                Text("Support")
+            }
         }
         .font(.caption)
+        .fontWeight(.medium)
+        .foregroundColor(.yogaGreen)
         .frame(maxWidth: .infinity)
-        .padding(.horizontal, 14)
         .padding(.vertical, 11)
         .background(
-            Color.white.opacity(0.72)
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white.opacity(0.72))
         )
-        .clipShape(Capsule())
-    }
-
-    // MARK: - Legal Link
-
-    private func legalLink(
-        title: String,
-        document: LegalDocument
-    ) -> some View {
-
-        NavigationLink {
-
-            LegalDocumentView(
-                document: document
-            )
-
-        } label: {
-
-            Text(title)
-                .fontWeight(.medium)
-                .foregroundColor(.yogaGreen)
-        }
         .buttonStyle(.plain)
+        .padding(.horizontal, 26)
     }
 }
-
 // MARK: - Preview
 
 #Preview {
