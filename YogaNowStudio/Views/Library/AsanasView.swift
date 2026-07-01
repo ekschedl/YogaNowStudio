@@ -59,7 +59,7 @@ struct AsanasView: View {
                 Button { dismiss() } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "chevron.left")
-                        Text("Zurück")
+                        
                     }
                     .foregroundColor(.yogaGreen)
                 }

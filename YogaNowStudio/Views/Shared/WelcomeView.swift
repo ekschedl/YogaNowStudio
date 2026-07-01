@@ -89,7 +89,7 @@ struct WelcomeView: View {
                     // MARK: - Legal Navigation
 
                     legalNavigation
-                        .padding(.horizontal, 20)
+                        .padding(.horizontal, 30)
                         .padding(.bottom, 24)
                 }
             }
@@ -132,11 +132,9 @@ struct WelcomeView: View {
         .padding(.horizontal, 14)
         .padding(.vertical, 11)
         .background(
-            Color.white.opacity(0.58)
+            Color.white.opacity(0.72)
         )
-        .clipShape(
-            Capsule()
-        )
+        .clipShape(Capsule())
     }
 
     // MARK: - Legal Link
