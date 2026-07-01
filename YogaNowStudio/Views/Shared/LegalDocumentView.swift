@@ -7,25 +7,33 @@ import SwiftUI
 
 // MARK: - Legal Document
 
-enum LegalDocument {
+enum LegalDocument: Equatable {
 
     case privacy
     case imprint
     case support
     case terms
 
+    // MARK: - Title Font Size
+
     var titleFontSize: CGFloat {
+
         switch self {
+
         case .privacy:
             return 29
+
         case .terms:
             return 30
+
         case .imprint,
              .support:
             return 35
         }
     }
-    
+
+    // MARK: - Title
+
     var title: String {
 
         switch self {
@@ -43,6 +51,8 @@ enum LegalDocument {
             return "Nutzungsbedingungen"
         }
     }
+
+    // MARK: - Subtitle
 
     var subtitle: String {
 
@@ -62,6 +72,8 @@ enum LegalDocument {
         }
     }
 
+    // MARK: - Icon
+
     var icon: String {
 
         switch self {
@@ -79,6 +91,8 @@ enum LegalDocument {
             return "doc.text.fill"
         }
     }
+
+    // MARK: - Sections
 
     var sections: [LegalSection] {
 
@@ -310,7 +324,11 @@ struct LegalSection: Identifiable {
 
 struct LegalDocumentView: View {
 
+    // MARK: - Properties
+
     let document: LegalDocument
+
+    // MARK: - Body
 
     var body: some View {
 
@@ -329,6 +347,10 @@ struct LegalDocumentView: View {
 
                     documentCard
 
+                    if document == .privacy {
+                        privacyLink
+                    }
+
                     Spacer()
                         .frame(height: 50)
                 }
@@ -336,6 +358,7 @@ struct LegalDocumentView: View {
                 .padding(.top, 85)
             }
         }
+        .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(
             .hidden,
             for: .navigationBar
@@ -390,7 +413,7 @@ struct LegalDocumentView: View {
                 .foregroundColor(.yogaGreen)
                 .multilineTextAlignment(.center)
                 .lineLimit(1)
-                .minimumScaleFactor(0.75)
+                .minimumScaleFactor(0.7)
                 .frame(maxWidth: .infinity)
 
             Text(document.subtitle)
@@ -402,9 +425,7 @@ struct LegalDocumentView: View {
                     )
                     .italic()
                 )
-                .foregroundColor(
-                    .yogaGold
-                )
+                .foregroundColor(.yogaGold)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
@@ -469,6 +490,76 @@ struct LegalDocumentView: View {
         )
     }
 
+    // MARK: - Privacy Link
+
+    private var privacyLink: some View {
+
+        Link(
+            destination: AppLinks.privacyPolicy
+        ) {
+
+            HStack(spacing: 12) {
+
+                ZStack {
+
+                    Circle()
+                        .fill(
+                            Color.yogaGold.opacity(0.12)
+                        )
+                        .frame(
+                            width: 38,
+                            height: 38
+                        )
+
+                    Image(systemName: "safari")
+                        .font(
+                            .system(
+                                size: 16,
+                                weight: .medium
+                            )
+                        )
+                        .foregroundColor(.yogaGold)
+                }
+
+                Text("Online-Datenschutzerklärung öffnen")
+                    .font(.body)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.yogaGreen)
+                    .multilineTextAlignment(.leading)
+
+                Spacer()
+
+                Image(systemName: "arrow.up.right")
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundColor(
+                        .yogaGreen.opacity(0.55)
+                    )
+            }
+            .padding(.horizontal, 18)
+            .padding(.vertical, 14)
+            .background(
+                Color.white.opacity(0.82)
+            )
+            .clipShape(
+                RoundedRectangle(
+                    cornerRadius: 20
+                )
+            )
+            .overlay {
+
+                RoundedRectangle(
+                    cornerRadius: 20
+                )
+                .stroke(
+                    Color.yogaGold.opacity(0.30),
+                    lineWidth: 1
+                )
+            }
+        }
+        .buttonStyle(.plain)
+    }
+
     // MARK: - Section View
 
     private func legalSectionView(
@@ -509,7 +600,27 @@ struct LegalDocumentView: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Previews
+
+#Preview("Datenschutz") {
+
+    NavigationStack {
+
+        LegalDocumentView(
+            document: .privacy
+        )
+    }
+}
+
+#Preview("Impressum") {
+
+    NavigationStack {
+
+        LegalDocumentView(
+            document: .imprint
+        )
+    }
+}
 
 #Preview("Support") {
 
@@ -517,6 +628,16 @@ struct LegalDocumentView: View {
 
         LegalDocumentView(
             document: .support
+        )
+    }
+}
+
+#Preview("Nutzungsbedingungen") {
+
+    NavigationStack {
+
+        LegalDocumentView(
+            document: .terms
         )
     }
 }

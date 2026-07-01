@@ -1,12 +1,18 @@
+//
+//  ProfileView.swift
+//  YogaNowStudio
+//
+
 import SwiftUI
 
 struct ProfileView: View {
 
     // MARK: - Environment
+
     @EnvironmentObject private var bookingStore: BookingStore
     @EnvironmentObject private var sessionStore: SessionStore
-
     @EnvironmentObject private var courseStore: CourseStore
+
     // MARK: - Properties
 
     let role: UserRole
@@ -28,7 +34,8 @@ struct ProfileView: View {
     }
 
     private var userEmail: String {
-        sessionStore.email ?? "Keine E-Mail verfügbar"
+        sessionStore.email
+            ?? "Keine E-Mail verfügbar"
     }
 
     private var roleTitle: String {
@@ -50,18 +57,23 @@ struct ProfileView: View {
     }
 
     private var memberValue: String {
+
         if currentRole == .trainer {
-            return sessionStore.profile?.trainerSince ?? "Noch nicht hinterlegt"
-        } else {
-            return sessionStore.profile?.memberSince ?? "Noch nicht hinterlegt"
+            return sessionStore.profile?.trainerSince
+                ?? "Noch nicht hinterlegt"
         }
+
+        return sessionStore.profile?.memberSince
+            ?? "Noch nicht hinterlegt"
     }
 
     private var yogaStyle: String {
-        sessionStore.profile?.yogaStyle ?? "Noch nicht hinterlegt"
+        sessionStore.profile?.yogaStyle
+            ?? "Noch nicht hinterlegt"
     }
 
     private var experienceValue: String {
+
         guard let years = sessionStore.profile?.experienceYears else {
             return "Noch nicht hinterlegt"
         }
@@ -76,15 +88,19 @@ struct ProfileView: View {
     }
 
     private var participantLevel: String {
+
         let level = sessionStore.profile?.yogaLevel?
-            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .trimmingCharacters(
+                in: .whitespacesAndNewlines
+            )
 
         guard let level, !level.isEmpty else {
             return "Nicht hinterlegt"
         }
+
         return level
     }
-    
+
     // MARK: - Body
 
     var body: some View {
@@ -103,8 +119,11 @@ struct ProfileView: View {
                     headerSection
 
                     roleInfoSection
+
                     personalDataSection
+
                     legalSection
+
                     logoutButton
 
                     Spacer()
@@ -149,23 +168,22 @@ struct ProfileView: View {
                 .font(.caption)
                 .fontWeight(.bold)
                 .tracking(5)
-                .foregroundColor(.yogaGreen.opacity(0.78))
+                .foregroundColor(
+                    .yogaGreen.opacity(0.78)
+                )
         }
         .frame(maxWidth: .infinity)
         .padding(.top, 80)
     }
 
-    // MARK: - Role Information Section
+    // MARK: - Role Information
 
     @ViewBuilder
     private var roleInfoSection: some View {
 
         if currentRole == .participant {
-
             participantInfoSection
-
         } else {
-
             trainerInfoSection
         }
     }
@@ -275,11 +293,9 @@ struct ProfileView: View {
             spacing: 22
         ) {
 
-            Text("PERSÖNLICHE DATEN")
-                .font(.caption)
-                .fontWeight(.bold)
-                .tracking(4)
-                .foregroundColor(.yogaGold)
+            sectionTitle(
+                "PERSÖNLICHE DATEN"
+            )
 
             profileDataRow(
                 title: "NAME",
@@ -311,8 +327,20 @@ struct ProfileView: View {
             Color.white.opacity(0.70)
         )
         .clipShape(
-            RoundedRectangle(cornerRadius: 30)
+            RoundedRectangle(
+                cornerRadius: 30
+            )
         )
+        .overlay {
+
+            RoundedRectangle(
+                cornerRadius: 30
+            )
+            .stroke(
+                Color.yogaGold.opacity(0.18),
+                lineWidth: 1
+            )
+        }
     }
 
     // MARK: - Profile Data Row
@@ -324,7 +352,7 @@ struct ProfileView: View {
 
         VStack(
             alignment: .leading,
-            spacing: 3
+            spacing: 4
         ) {
 
             Text(title)
@@ -336,11 +364,200 @@ struct ProfileView: View {
             Text(value)
                 .font(.body)
                 .foregroundColor(.yogaGreen)
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .leading
+                )
         }
-        .frame(
-            maxWidth: .infinity,
-            alignment: .leading
+    }
+
+    // MARK: - Legal Section
+
+    private var legalSection: some View {
+
+        VStack(
+            alignment: .leading,
+            spacing: 0
+        ) {
+
+            sectionTitle(
+                "RECHTLICHES & HILFE"
+            )
+            .padding(.bottom, 12)
+
+            privacyLinkRow
+
+            legalDivider
+
+            legalNavigationRow(
+                title: "Impressum",
+                icon: "building.2.fill",
+                document: .imprint
+            )
+
+            legalDivider
+
+            legalNavigationRow(
+                title: "Support & Kontakt",
+                icon: "envelope.fill",
+                document: .support
+            )
+
+            legalDivider
+
+            legalNavigationRow(
+                title: "Nutzungsbedingungen",
+                icon: "doc.text.fill",
+                document: .terms
+            )
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 22)
+        .background(
+            Color.white.opacity(0.70)
         )
+        .clipShape(
+            RoundedRectangle(
+                cornerRadius: 30
+            )
+        )
+        .overlay {
+
+            RoundedRectangle(
+                cornerRadius: 30
+            )
+            .stroke(
+                Color.yogaGold.opacity(0.18),
+                lineWidth: 1
+            )
+        }
+    }
+
+    // MARK: - Privacy Link
+
+    private var privacyLinkRow: some View {
+
+        Link(
+            destination: AppLinks.privacyPolicy
+        ) {
+
+            HStack(spacing: 14) {
+
+                legalIcon(
+                    "hand.raised.fill"
+                )
+
+                Text("Datenschutzerklärung")
+                    .font(.body)
+                    .fontWeight(.medium)
+                    .foregroundColor(.yogaGreen)
+
+                Spacer()
+
+                Image(systemName: "arrow.up.right")
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundColor(
+                        .yogaGreen.opacity(0.55)
+                    )
+            }
+            .padding(.vertical, 13)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
+    // MARK: - Legal Navigation Row
+
+    private func legalNavigationRow(
+        title: String,
+        icon: String,
+        document: LegalDocument
+    ) -> some View {
+
+        NavigationLink {
+
+            LegalDocumentView(
+                document: document
+            )
+
+        } label: {
+
+            HStack(spacing: 14) {
+
+                legalIcon(icon)
+
+                Text(title)
+                    .font(.body)
+                    .fontWeight(.medium)
+                    .foregroundColor(.yogaGreen)
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundColor(
+                        .yogaGreen.opacity(0.55)
+                    )
+            }
+            .padding(.vertical, 13)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
+    // MARK: - Legal Icon
+
+    private func legalIcon(
+        _ systemName: String
+    ) -> some View {
+
+        ZStack {
+
+            Circle()
+                .fill(
+                    Color.yogaGold.opacity(0.12)
+                )
+                .frame(
+                    width: 36,
+                    height: 36
+                )
+
+            Image(systemName: systemName)
+                .font(
+                    .system(
+                        size: 15,
+                        weight: .medium
+                    )
+                )
+                .foregroundColor(.yogaGold)
+        }
+        .frame(width: 36)
+    }
+
+    // MARK: - Legal Divider
+
+    private var legalDivider: some View {
+
+        Divider()
+            .overlay(
+                Color.yogaGold.opacity(0.18)
+            )
+            .padding(.leading, 50)
+    }
+
+    // MARK: - Section Title
+
+    private func sectionTitle(
+        _ title: String
+    ) -> some View {
+
+        Text(title)
+            .font(.caption)
+            .fontWeight(.bold)
+            .tracking(4)
+            .foregroundColor(.yogaGold)
     }
 
     // MARK: - Logout Button
@@ -350,6 +567,7 @@ struct ProfileView: View {
         Button {
 
             Task {
+
                 await sessionStore.signOut()
 
                 bookingStore.reset()
@@ -379,109 +597,6 @@ struct ProfileView: View {
     .environmentObject(SessionStore())
     .environmentObject(BookingStore())
     .environmentObject(CourseStore())
-}
-
-// MARK: - Legal Section
-
-private var legalSection: some View {
-
-    VStack(
-        alignment: .leading,
-        spacing: 4
-    ) {
-
-        Text("RECHTLICHES & HILFE")
-            .font(.caption)
-            .fontWeight(.bold)
-            .tracking(4)
-            .foregroundColor(.yogaGold)
-            .padding(.horizontal, 4)
-            .padding(.bottom, 10)
-
-        legalNavigationRow(
-            title: "Datenschutzerklärung",
-            icon: "hand.raised.fill",
-            document: .privacy
-        )
-
-        Divider()
-            .opacity(0.35)
-
-        legalNavigationRow(
-            title: "Impressum",
-            icon: "building.2.fill",
-            document: .imprint
-        )
-
-        Divider()
-            .opacity(0.35)
-
-        legalNavigationRow(
-            title: "Support & Kontakt",
-            icon: "envelope.fill",
-            document: .support
-        )
-
-        Divider()
-            .opacity(0.35)
-
-        legalNavigationRow(
-            title: "Nutzungsbedingungen",
-            icon: "doc.text.fill",
-            document: .terms
-        )
-    }
-    .padding(.horizontal, 20)
-    .padding(.vertical, 20)
-    .background(
-        Color.white.opacity(0.70)
-    )
-    .clipShape(
-        RoundedRectangle(cornerRadius: 30)
-    )
-}
-
-// MARK: - Legal Navigation Row
-
-private func legalNavigationRow(
-    title: String,
-    icon: String,
-    document: LegalDocument
-) -> some View {
-
-    NavigationLink {
-
-        LegalDocumentView(
-            document: document
-        )
-
-    } label: {
-
-        HStack(spacing: 14) {
-
-            Image(systemName: icon)
-                .font(.system(size: 17))
-                .foregroundColor(.yogaGold)
-                .frame(width: 24)
-
-            Text(title)
-                .font(.body)
-                .fontWeight(.medium)
-                .foregroundColor(.yogaGreen)
-
-            Spacer()
-
-            Image(systemName: "chevron.right")
-                .font(.caption)
-                .fontWeight(.semibold)
-                .foregroundColor(
-                    .yogaGreen.opacity(0.55)
-                )
-        }
-        .padding(.vertical, 12)
-        .contentShape(Rectangle())
-    }
-    .buttonStyle(.plain)
 }
 
 // MARK: - Trainer Preview

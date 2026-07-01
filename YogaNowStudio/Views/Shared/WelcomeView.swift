@@ -102,11 +102,12 @@ struct WelcomeView: View {
 
         HStack(spacing: 12) {
 
-            NavigationLink {
-                LegalDocumentView(document: .privacy)
-            } label: {
-                Text("Datenschutz")
-            }
+            Link(
+                "Datenschutz",
+                destination: AppLinks.privacyPolicy
+            )
+            .fontWeight(.medium)
+            .foregroundColor(.yogaGreen)
 
             Text("•")
 
