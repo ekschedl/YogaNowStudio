@@ -23,10 +23,15 @@ struct WelcomeView: View {
                 VStack(spacing: 0) {
 
                     // MARK: - Language Button
+
                     HStack {
+
                         Spacer()
+
                         HStack(spacing: 6) {
+
                             Image(systemName: "globe")
+
                             Text("DE")
                         }
                         .foregroundColor(.yogaGreen)
@@ -41,17 +46,22 @@ struct WelcomeView: View {
                     .padding(.trailing, 24)
 
                     // MARK: - Logo
+
                     Image("LogoYogaNow")
                         .resizable()
                         .scaledToFit()
                         .frame(maxWidth: 420)
 
-                    // MARK: - Navigation
+                    // MARK: - Main Navigation
+
                     VStack(spacing: 20) {
 
                         NavigationLink {
+
                             YogaLibraryView()
+
                         } label: {
+
                             NavigationCard(
                                 title: "Yoga Library",
                                 iconName: "IconLibrary"
@@ -60,8 +70,11 @@ struct WelcomeView: View {
                         .buttonStyle(.plain)
 
                         NavigationLink {
+
                             LoginView()
+
                         } label: {
+
                             NavigationCard(
                                 title: "YogaNow Plattform",
                                 iconName: "IconCourse"
@@ -72,9 +85,80 @@ struct WelcomeView: View {
                     .padding(.horizontal, 30)
 
                     Spacer()
+
+                    // MARK: - Legal Navigation
+
+                    legalNavigation
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, 24)
                 }
             }
         }
+    }
+
+    // MARK: - Legal Navigation
+
+    private var legalNavigation: some View {
+
+        HStack(spacing: 10) {
+
+            legalLink(
+                title: "Datenschutz",
+                document: .privacy
+            )
+
+            Text("•")
+                .foregroundColor(
+                    .yogaGreen.opacity(0.45)
+                )
+
+            legalLink(
+                title: "Impressum",
+                document: .imprint
+            )
+
+            Text("•")
+                .foregroundColor(
+                    .yogaGreen.opacity(0.45)
+                )
+
+            legalLink(
+                title: "Support",
+                document: .support
+            )
+        }
+        .font(.caption)
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 14)
+        .padding(.vertical, 11)
+        .background(
+            Color.white.opacity(0.58)
+        )
+        .clipShape(
+            Capsule()
+        )
+    }
+
+    // MARK: - Legal Link
+
+    private func legalLink(
+        title: String,
+        document: LegalDocument
+    ) -> some View {
+
+        NavigationLink {
+
+            LegalDocumentView(
+                document: document
+            )
+
+        } label: {
+
+            Text(title)
+                .fontWeight(.medium)
+                .foregroundColor(.yogaGreen)
+        }
+        .buttonStyle(.plain)
     }
 }
 
