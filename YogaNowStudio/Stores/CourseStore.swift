@@ -5,11 +5,6 @@
 //  Created by Kaaatkina on 17.06.26.
 //
 
-//CourseStore, der die Kurse aus CourseService lädt und für die Views bereitstellt.
-//  CourseStore.swift
-//  YogaNowStudio
-//
-
 import Foundation
 import Combine
 
