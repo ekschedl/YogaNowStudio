@@ -370,6 +370,10 @@ struct LoginView: View {
         isLoading = true
         errorMessage = nil
 
+        defer {
+            isLoading = false
+        }
+
         do {
 
             try await sessionStore.signIn(
@@ -377,15 +381,35 @@ struct LoginView: View {
                 password: password
             )
 
+        } catch let urlError as URLError {
+
+            switch urlError.code {
+
+            case .notConnectedToInternet:
+                errorMessage =
+                    "Keine Internetverbindung. Bitte überprüfe deine Verbindung."
+
+            case .cannotFindHost,
+                 .cannotConnectToHost,
+                 .dnsLookupFailed:
+                errorMessage =
+                    "Der YogaNow-Server ist derzeit nicht erreichbar. Bitte versuche es später erneut."
+
+            case .timedOut:
+                errorMessage =
+                    "Die Verbindung dauert zu lange. Bitte versuche es erneut."
+
+            default:
+                errorMessage =
+                    "Die Verbindung zum Server konnte nicht hergestellt werden."
+            }
+
         } catch {
 
             errorMessage =
-                "Die Anmeldung ist fehlgeschlagen. Bitte überprüfe deine E-Mail-Adresse und dein Passwort."
+                "Die Anmeldung ist fehlgeschlagen. Bitte überprüfe deine Zugangsdaten."
         }
-
-        isLoading = false
     }
-    
 }
 // MARK: - Preview
 
